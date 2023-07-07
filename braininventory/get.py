@@ -27,6 +27,12 @@ def today():
 def __get_number_of_datasets(df):
      return len(df)
 
+def __get_completeness_score(df):
+      return df['score'].sum()/len(df)
+
+def __get_metadata_version(df):
+    return df['metadata_version'] .value_counts().to_dict()
+
 def report():
     # Get today's date
 	tdate = date.today()
@@ -39,5 +45,7 @@ def report():
 	report = {}
 	report['date'] = tdate
 	report['number_of_datasets'] = __get_number_of_datasets(df)
+	report['completeness_score'] = __get_completeness_score(df)
+	report['metadata_version'] = __get_metadata_version(df)
 
 	return report
