@@ -89,3 +89,4 @@ def report():
         report['locations'] = __get_locations(df)
      
 	return report
+
