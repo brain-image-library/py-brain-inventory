@@ -6,3 +6,8 @@ BIL serves a geographically distributed customer base including large confocal i
 
 The Brain Image Library is operated as a partnership between the Biomedical Applications Group at the [Pittsburgh Supercomputing Center](https://www.psc.edu/) and the Center for Biological Imaging at the University of Pittsburgh. 
 
+---
+Copyright © 2023 Pittsburgh Supercomputing Center. All Rights Reserved.
+
+The [Biomedical Applications Group](https://www.psc.edu/biomedical-applications/) at the [Pittsburgh Supercomputing
+Center](http://www.psc.edu) in the [Mellon College of Science](https://www.cmu.edu/mcs/) at [Carnegie Mellon University](http://www.cmu.edu).
