@@ -33,6 +33,36 @@ def __get_completeness_score(df):
 def __get_metadata_version(df):
     return df['metadata_version'] .value_counts().to_dict()
 
+def __get_contributor(df):
+    return df['contributor'].value_counts().to_dict()
+
+def __get_affilation(df):
+    return df['affiliation'].value_counts().to_dict()
+
+def __get_award_number(df):
+    return df['award_number'].value_counts().to_dict()
+
+def __get_species(df):
+    return df['species'].value_counts().to_dict()
+
+def __ get_cnbtaxonomy(df):
+    return df['cnbtaxonomy'].value_counts().to_dict()
+
+def __get_samplelocalid(df):
+    return df['samplelocalid'].value_counts().to_dict()
+
+def __get_genotype(df):
+    return df['genotype'].value_counts().to_dict()
+
+def __get_generalmodality(df):
+    return df['generalmodality'].value_counts().to_dict()
+
+def __get_technique(df):
+    return df['technique'].value_counts().to_dict()
+
+def __get_locations(df):
+    return df['locations'].value_counts().to_dict()
+
 def report():
     # Get today's date
 	tdate = date.today()
@@ -47,5 +77,15 @@ def report():
 	report['number_of_datasets'] = __get_number_of_datasets(df)
 	report['completeness_score'] = __get_completeness_score(df)
 	report['metadata_version'] = __get_metadata_version(df)
-
+        report['contributor'] =  __get_contributor(df)
+        report['affiliation'] =  __get_affilation(df)
+        report['award_number'] = __get_award_number(df)
+        report['species'] = __get_species(df)
+        report['cnbtaxonomy'] = __ get_cnbtaxonomy(df)
+        report['samplelocalid'] = __get_samplelocalid(df)
+        report['genotype'] = __get_genotype(df)
+        report['generalmodality'] = __get_generalmodality(df)
+        report['technique'] = __get_technique(df)
+        report['locations'] = __get_locations(df)
+     
 	return report
