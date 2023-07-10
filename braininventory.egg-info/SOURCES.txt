@@ -1,8 +1,0 @@
-README.md
-setup.py
-braininventory/__init__.py
-braininventory/get.py
-braininventory.egg-info/PKG-INFO
-braininventory.egg-info/SOURCES.txt
-braininventory.egg-info/dependency_links.txt
-braininventory.egg-info/top_level.txt
