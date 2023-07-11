@@ -16,6 +16,8 @@
 
 **Stakeholders**: [List the stakeholders who would benefit from being aware of this statistic]
 
+**Viz**: [List the potential visualizations that could be used with this statistic. Check this [link](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/) for additional information]
+
 **Impact**: [Discuss the potential impact of adding this statistic, such as its usefulness for analysis, research, or decision-making]
 
 **Contributor**: [Mention if you are interested in working on this feature yourself or if you are seeking collaboration from others]
