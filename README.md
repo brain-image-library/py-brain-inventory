@@ -4,12 +4,10 @@ The Brain Image Library (BIL) is a national public resource enabling researchers
 
 BIL serves a geographically distributed customer base including large confocal imaging centers that are generating petabytes of confocal imaging datasets per year. For these customers, the library serves as an archive facility for whole brain volumetric datasets from mammals. BIL also serves geographically distributed researchers who want to interact with and download library datasets.
 
-The Brain Image Library is operated as a partnership between the Biomedical Applications Group at the [Pittsburgh Supercomputing Center](https://www.psc.edu/) and the Center for Biological Imaging at the University of Pittsburgh. 
+The Brain Image Library is operated as a partnership between the [Biomedical Applications Group](https://www.psc.edu/biomedical-applications/) at the [Pittsburgh Supercomputing Center](https://www.psc.edu/) and the [Center for Biological Imaging](https://cbi-pitt.webflow.io/) at the [University of Pittsburgh](https://www.pitt.edu/). 
 
 ## About the authors
 This open-source code repository consists of contributions from a diverse group of authors, including undergraduate students, graduate students and pre-college students. These individuals demonstrate their passion for coding and their eagerness to learn and collaborate in the world of open-source development. 
-
-Despite their relatively early stages in their academic journeys, they actively contribute to the repository, showcasing their creativity, problem-solving skills, and dedication to advancing technology.
 
 For a full list of authors explore the `AUTHORS` file.
 
