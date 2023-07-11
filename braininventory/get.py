@@ -25,7 +25,11 @@ def today():
         return pd.DataFrame()
     
 def __get_number_of_datasets(df):
-     return len(df)
+     '''
+     Write documentation here.
+     '''
+	
+     raise NotImplementedError()
 
 def __get_completeness_score(df):
       return df['score'].sum()/len(df)
@@ -85,16 +89,16 @@ def report():
 	report['number_of_datasets'] = __get_number_of_datasets(df)
 	report['completeness_score'] = __get_completeness_score(df)
 	report['metadata_version'] = __get_metadata_version(df)
-    report['contributor'] =  __get_contributor(df)
-    report['affiliation'] =  __get_affilation(df)
-    report['award_number'] = __get_award_number(df)
-    report['species'] = __get_species(df)
-    report['cnbtaxonomy'] = __get_cnbtaxonomy(df)
-    report['samplelocalid'] = __get_samplelocalid(df)
-    report['genotype'] = __get_genotype(df)
-    report['generalmodality'] = __get_generalmodality(df)
-    report['technique'] = __get_technique(df)
-    report['locations'] = __get_locations(df)
+	report['contributor'] =  __get_contributor(df)
+	report['affiliation'] =  __get_affilation(df)
+	report['award_number'] = __get_award_number(df)
+	report['species'] = __get_species(df)
+	report['cnbtaxonomy'] = __get_cnbtaxonomy(df)
+	report['samplelocalid'] = __get_samplelocalid(df)
+	report['genotype'] = __get_genotype(df)
+	report['generalmodality'] = __get_generalmodality(df)
+	report['technique'] = __get_technique(df)
+	report['locations'] = __get_locations(df)
      
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 
