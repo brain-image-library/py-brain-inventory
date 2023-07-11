@@ -1,5 +1,4 @@
-![](images/logo.jpg)
-# Brain Image Library
+<img src="images/logo.jpg" width="150%">
 
 The Brain Image Library (BIL) is a national public resource enabling researchers to deposit, analyze, mine, share and interact with large brain image datasets. BIL encompasses the deposition of datasets, the integration of datasets into a searchable web-accessible system, the redistribution of datasets, and a computational enclave to allow researchers to process datasets in-place and share restricted and pre-release datasets.
 
