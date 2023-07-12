@@ -100,3 +100,13 @@ def report():
 
 	return report
 
+def __get_projects(df):
+  return df['project'].unique()
+projects = __get_projects(df)
+print(projects)
+
+def __get_number_of_projects(df):
+  return len(df['project'].unique())
+number_of_projects = __get_number_of_projects(df)
+print(number_of_projects)
+
