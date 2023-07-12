@@ -38,7 +38,7 @@ def __is_reachable(url):
 	else:
 		return False
 
-#function 
+#Average socre fucntion 
 def __get_average_score(df):
   return df['score'].mean()
 
