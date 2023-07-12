@@ -2,6 +2,23 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+import pandas as pd
+import urllib.request
+import matplotlib.pyplot as plt
+
+
+url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
+file_path, _ = urllib.request.urlretrieve(url)
+df = pd.read_json(file_path)
+items = df.affiliation.unique()
+frequency = {}
+
+for item in items:
+    if item in frequency:
+        frequency[item] += 1
+    else:
+        frequency[item] = 1
+print(frequency)
 
 def today():
     """
