@@ -50,6 +50,9 @@ def __get_affilation(df):
 def __get_award_number(df):
     return df['award_number'].value_counts().to_dict()
 
+def __get_complete_number_of_datasets(df):
+  return len(df[df['score'] == 1.0]) 
+	
 def __get_species(df):
     return df['species'].value_counts().to_dict()
 
