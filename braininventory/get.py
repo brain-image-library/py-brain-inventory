@@ -100,3 +100,5 @@ def report():
 
 	return report
 
+df['generalmodality'].value_counts()
+
