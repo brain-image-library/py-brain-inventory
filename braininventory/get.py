@@ -99,4 +99,7 @@ def report():
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 
 	return report
+def __get_project_names(df):
+	return df['project'].unique()
+	
 
