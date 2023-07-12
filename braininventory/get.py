@@ -38,6 +38,10 @@ def __is_reachable(url):
 	else:
 		return False
 
+#function 
+def __get_average_score(df):
+  return df['score'].mean()
+
 def __get_metadata_version(df):
     return df['metadata_version'] .value_counts().to_dict()
 
