@@ -42,6 +42,10 @@ def __is_reachable(url):
 def __get_average_score(df):
   return df['score'].mean()
 
+score = _get_score(df)
+print(score)
+df['score'].mean()
+
 def __get_metadata_version(df):
     return df['metadata_version'] .value_counts().to_dict()
 
