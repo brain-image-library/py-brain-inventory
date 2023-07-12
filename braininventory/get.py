@@ -70,6 +70,13 @@ def __get_technique(df):
 
 def __get_locations(df):
     return df['locations'].value_counts().to_dict()
+	
+def __get_contributors(df): 
+"""
+returns an array of contributor names
+	"""
+  return df['contributorname'].unique()
+	
 
 def report():
     # Get today's date
