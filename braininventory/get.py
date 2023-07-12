@@ -100,3 +100,5 @@ def report():
 
 	return report
 
+def __get_awards(df):
+    return df['award_number'].unique()
