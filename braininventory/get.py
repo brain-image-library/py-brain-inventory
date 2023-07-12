@@ -100,3 +100,5 @@ def report():
 
 	return report
 
+def __get_project(df):
+    return df['project'].value_counts().to_dict()
