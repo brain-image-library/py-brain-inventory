@@ -72,10 +72,10 @@ def __get_locations(df):
     return df['locations'].value_counts().to_dict()
 	
 def __get_contributors(df): 
-"""
-returns an array of contributor names
+    """
+	This returns an array of contributor names from the contributorname column.
 	"""
-  return df['contributorname'].unique()
+	return df['contributorname'].unique()
 	
 
 def report():
