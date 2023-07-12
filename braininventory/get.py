@@ -51,6 +51,9 @@ def __get_award_number(df):
     return df['award_number'].value_counts().to_dict()
 
 def __get_complete_number_of_datasets(df):
+ '''
+ the complete data set is the whole set but the one we wanted was how many had a score of 1.0. == gets the number of how mnay scores are 1.0 on the dataset
+ '''
   return len(df[df['score'] == 1.0]) 
 	
 def __get_species(df):
