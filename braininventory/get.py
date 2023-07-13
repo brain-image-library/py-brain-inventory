@@ -3,12 +3,14 @@ import pandas as pd
 import json
 from datetime import date
 
+link = "https://download.brainimagelibrary.org"
+
 def today():
     """
 	Get today's snapshot of Brain Image Library.
 	"""
 
-    server = "https://download.brainimagelibrary.org/inventory/daily/reports/"
+    server = f"{link}/inventory/daily/reports/"
     filename = "today.json"
 
     response = requests.get(f"{server}{filename}")
@@ -70,6 +72,20 @@ def __get_technique(df):
 
 def __get_locations(df):
     return df['locations'].value_counts().to_dict()
+
+def __get_json_file(df):
+    """
+	Retrieve the json_file from the Brain Image Library of a dataset.
+	"""
+	
+    # Make sure there is data to request
+    assert df['score'].values[0] != 0
+
+    # Create working link
+    url = sample['json_file'].values[0].replace('/bil/data', link)
+    response = requests.get(url)
+
+    return response.json()
 
 def report():
     # Get today's date
