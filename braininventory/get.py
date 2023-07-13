@@ -100,6 +100,10 @@ def report():
 
 	return report
 
+##The point of the code is to show the dictionary of general modality which documents the labels under general modality and documents the number of entries under each label.
 def get_number_of_modalities(df):
-    return df['generalmodality'].value_counts()
+    return (df['generalmodality'].value_counts()).to_dict()
+
+print(get_number_of_modalities(df))
+
 
