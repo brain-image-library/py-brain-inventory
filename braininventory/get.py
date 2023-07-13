@@ -97,6 +97,15 @@ def report():
     report['locations'] = __get_locations(df)
      
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
+import pandas as pd
+def technique_frequency(df):
+  number_of_techniques = len(_get_technique_(df))
+  print("Number of Techniques: ",number_of_techniques )
+  technique_counts = df['technique'].value_counts()
+  for technique, count in technique_counts.items():
+    print(f"Technique: {technique}, Count: {count}")
+
+print(technique_frequency(df))
 
 	return report
 
