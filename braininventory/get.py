@@ -100,10 +100,24 @@ def report():
 
 	return report
 
-# Get the list of names for unique projects 
-def __get_projects(df):
-  return df['project'].unique()
+#  
+def __get_list_of_projects(df):
+    '''
+    Get the list of names for unique projects
 
-# Get the number of unique projects 
+    Input parameter: dataframe
+    Output:  list of projects
+    '''
+    
+    return df['project'].unique().to_dict()
+
+# 
 def __get_number_of_projects(df):
-  return len(df['project'].unique())=
+    '''
+    Get the number of unique projects
+
+    Input parameter: dataframe
+    Output:  number of projects
+    '''
+    
+    return len(df['project'].unique())
