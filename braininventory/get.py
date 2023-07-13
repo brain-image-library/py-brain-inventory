@@ -98,6 +98,10 @@ def report():
      
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 import pandas as pd
+def _get_technique_(df):
+  return df['technique'].unique()
+number_of_techniques = len(_get_technique_(df))
+
 def technique_frequency(df):
   number_of_techniques = len(_get_technique_(df))
   print("Number of Techniques: ",number_of_techniques )
@@ -105,7 +109,8 @@ def technique_frequency(df):
   for technique, count in technique_counts.items():
     print(f"Technique: {technique}, Count: {count}")
 
-print(technique_frequency(df))
+technique_frequency(df)
+
 
 	return report
 
