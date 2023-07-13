@@ -98,5 +98,10 @@ def report():
      
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 
+df = pd.DataFrame('genotypes')
+genotype_frequency = df['genotypes'].value_counts()
+print("Genotype Frequency:")
+print(genotype_frequency)
+
 	return report
 
