@@ -7,18 +7,14 @@ import urllib.request
 import matplotlib.pyplot as plt
 
 
-url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
-file_path, _ = urllib.request.urlretrieve(url)
-df = pd.read_json(file_path)
-items = df.affiliation.unique()
-frequency = {}
+def __get_affiliation_frequency(df):
+    '''
+    Get affiliation frequency.
 
-for item in items:
-    if item in frequency:
-        frequency[item] += 1
-    else:
-        frequency[item] = 1
-print(frequency)
+    Input: dataframe
+    Output: a frequency dictionary
+    '''
+    return df['affiliation'].value_counts().to_dict()
 
 def today():
     """
