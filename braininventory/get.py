@@ -103,14 +103,12 @@ def report():
 #The following block is a function that finds the number of rows that have 'true' under the key 'exists'.
 def __get_exists_true(df):
   return len(df[df['exists']== True]) #The true listed in the dataframe is the Boolean true value.
-exists_true = __get_exists_true(df) #This line assigns the returned value to a variable and print the value using the variable name.
-print(exists_true)
+print(__get_exists_true(df))
 
 #The following block is a function that finds the number of total rows.
 def __get_exists_total(df):
   return len(df) #len counts the number of rows in the dataframe.
-exists_total = __get_exists_total(df) #The value of the total number of rows is now stored to the variable exists_total.
-print (exists_total)
+print(__get_exists_total(df))
 
 #Now that we have the total number of exists and the total number of rows in the dataframe we can find the fraction of the total that exist using simple division.
 proportion = exists_true/exists_total 
