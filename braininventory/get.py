@@ -94,6 +94,35 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
+def __get_project_names(df):
+	'''
+	Gets the unique list of project names.
+
+    Input: dataframe
+    Output: list 
+    '''
+	return df['project'].unique()
+
+def __get_list_of_projects(df):
+    '''
+    Get the list of names for unique projects
+
+    Input parameter: dataframe
+    Output:  list of projects
+    '''
+    
+    return df['project'].unique().to_dict()
+
+def __get_number_of_projects(df):
+    '''
+    Get the number of unique projects
+
+    Input parameter: dataframe
+    Output:  number of projects
+    '''
+    
+    return len(df['project'].unique())
+
 def report():
     # Get today's date
     tdate = date.today()
