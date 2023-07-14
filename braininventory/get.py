@@ -101,4 +101,7 @@ def report():
 	return report
 
 def __get_project(df): 
-    return df['project'].value_counts().to_dict() #returns an int of the number of unique projects in the dataframe
+    '''
+    Returns the number of unique projects in dataframe.
+    '''
+    return df['project'].value_counts().to_dict() 
