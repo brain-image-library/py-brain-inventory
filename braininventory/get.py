@@ -121,3 +121,8 @@ def __get_number_of_projects(df):
     '''
     
     return len(df['project'].unique())
+
+
+def __get__metadata_version_1(df):
+  return len(df[df['metadata_version'] == 1]) / len(df)
+
