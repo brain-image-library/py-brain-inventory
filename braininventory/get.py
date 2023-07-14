@@ -99,4 +99,6 @@ def report():
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 
 	return report
-
+# prints the the average number of the sha score 
+average = df['sha256_coverage'].mean()
+print(average)
