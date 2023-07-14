@@ -20,9 +20,3 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
 )
-
-def __get_awards(df):
-  return df['award_number'].unique()
-
-awards = __get_awards(df)
-print(awards)
