@@ -99,6 +99,15 @@ def report():
 	report['is_reachable'] = df['URL'].apply(__is_reachable)
 
 	return report
+def __get_project_names(df):
+	'''
+	Gets the unique list of project names.
+
+ 	Input: dataframe
+  	Output: list 
+ 	'''
+	return df['project'].unique()
+	
 
 #  
 def __get_list_of_projects(df):
