@@ -125,7 +125,10 @@ def __get_number_of_projects(df):
 
 def __get__percentage_of_metadata_version_1(df):
   '''
-  Add documentation here.
+  Get the percentage/ratio of metadata version 1 from all datasets
+
+  Input: dataframe
+  Output: an integer 
   '''
   return len(df[df['metadata_version'] == 1])/len(df)
 
