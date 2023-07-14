@@ -100,7 +100,7 @@ def report():
 
 	return report
 
-def __get_project(df): 
+def __get_num_of_projects(df): 
     '''
     Returns the number of unique projects in dataframe.
     '''
