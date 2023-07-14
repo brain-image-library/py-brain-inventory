@@ -100,6 +100,12 @@ def report():
 
 	return report
 def __get_project_names(df):
+	'''
+	Gets the unique list of project names.
+
+ 	Input: dataframe
+  	Output: list 
+ 	'''
 	return df['project'].unique()
 	
 
