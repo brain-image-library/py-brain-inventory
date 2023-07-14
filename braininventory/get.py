@@ -71,6 +71,35 @@ def __get_technique(df):
 def __get_locations(df):
     return df['locations'].value_counts().to_dict()
 
+def __get_project_names(df):
+	'''
+	Gets the unique list of project names.
+
+    Input: dataframe
+    Output: list 
+    '''
+	return df['project'].unique()
+
+def __get_list_of_projects(df):
+    '''
+    Get the list of names for unique projects
+
+    Input parameter: dataframe
+    Output:  list of projects
+    '''
+    
+    return df['project'].unique().to_dict()
+
+def __get_number_of_projects(df):
+    '''
+    Get the number of unique projects
+
+    Input parameter: dataframe
+    Output:  number of projects
+    '''
+    
+    return len(df['project'].unique())
+
 def report():
     # Get today's date
 	tdate = date.today()
@@ -86,6 +115,7 @@ def report():
 	report['completeness_score'] = __get_completeness_score(df)
 	report['metadata_version'] = __get_metadata_version(df)
     report['contributor'] =  __get_contributor(df)
+    report['projects'] = __get_list_of_projects(df)
     report['affiliation'] =  __get_affilation(df)
     report['award_number'] = __get_award_number(df)
     report['species'] = __get_species(df)
@@ -95,38 +125,6 @@ def report():
     report['generalmodality'] = __get_generalmodality(df)
     report['technique'] = __get_technique(df)
     report['locations'] = __get_locations(df)
-     
-	report['is_reachable'] = df['URL'].apply(__is_reachable)
+	#report['is_reachable'] = df['URL'].apply(__is_reachable)
 
 	return report
-def __get_project_names(df):
-	'''
-	Gets the unique list of project names.
-
- 	Input: dataframe
-  	Output: list 
- 	'''
-	return df['project'].unique()
-	
-
-#  
-def __get_list_of_projects(df):
-    '''
-    Get the list of names for unique projects
-
-    Input parameter: dataframe
-    Output:  list of projects
-    '''
-    
-    return df['project'].unique().to_dict()
-
-# 
-def __get_number_of_projects(df):
-    '''
-    Get the number of unique projects
-
-    Input parameter: dataframe
-    Output:  number of projects
-    '''
-    
-    return len(df['project'].unique())
