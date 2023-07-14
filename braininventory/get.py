@@ -54,6 +54,8 @@ def __get_contributor(df):
 def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
+def __get_awards(df):
+    return df["award_number"].unique()
 
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
@@ -85,7 +87,6 @@ def __get_technique(df):
 
 def __get_locations(df):
     return df["locations"].value_counts().to_dict()
-
 
 def __get_contributors(df):
     """
