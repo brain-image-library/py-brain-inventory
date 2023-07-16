@@ -2,8 +2,44 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+import calendar
+import pandas as pd
+import urllib.request
+import random
+import requests
+import calendar
 
 
+url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
+file_path, _ = urllib.request.urlretrieve(url)
+df = pd.read_json(file_path)
+
+def get_jsonFile(df):
+    	"""
+    	Input: dataframe
+    	Output:open the jsonFile that was located in datasets Brain Image Library dataframe
+    	"""
+    	isNotZero = df[df["score"] != 0.0] #only have files with the correct data
+    	randomRow = isNotZero.iloc[random.randint(0, len(isNotZero))] #select a random row of random index
+    	jsonFileLink = randomRow.json_file.replace("/bil/data", "https://download.brainimagelibrary.org", 1) #create the link
+    	result = requests.get(jsonFileLink)
+
+    	return result.json()
+
+def get_date(df):
+	"""
+ 	Input: dateframe
+  	Output: date data was created in year-day-month format
+   	"""
+	jsonFile = get_jsonFile(df) #get the jsonFile information with get_jsonFile() function
+	dateList = jsonFile['creation_date'].split() #get creation_date
+    	mntList = dict((month, index) for index, month in enumerate(calendar.month_abbr) if month) #month abbr to number
+    	yr = dateList[4] #get year
+    	mnt= mntList[dateList[1]] #get month
+    	day = dateList[2] #get day
+    	print(f"{yr}-{day}-{mnt}") #format in year-day-month
+    
+    
 def today():
     """
 	Get today's snapshot of Brain Image Library.
