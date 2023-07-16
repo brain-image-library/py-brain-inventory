@@ -3,6 +3,16 @@ import pandas as pd
 import json
 from datetime import date
 
+def get_jsonFile(df):
+    """
+    Input: dataframe
+    Expected Output: link that opens the jsonFile that was located in the randomly chosen row
+    Current Output: broken link resulting in Error 404 on the webpage
+    """
+    isNotZero = df[df["score"] != 0.0] #only select rows != 0
+    randomRow = isNotZero.iloc[random.randint(0, len(isNotZero))] #select a random row of random index bt 0 and len of isNotZero
+    jsonFile = randomRow.json_file.replace("/bil/data", "https://brainimagelibrary.org", 1) #replace (/bil/data) from the json_file
+    print(jsonFile) #ERROR 404
 
 def today():
     """
