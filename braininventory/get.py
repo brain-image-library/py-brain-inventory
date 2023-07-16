@@ -6,14 +6,15 @@ from datetime import date
 def get_jsonFile(df):
     """
     Input: dataframe
-    Expected Output: link that opens the jsonFile that was located in the randomly chosen row
-    Current Output: broken link resulting in Error 404 on the webpage
+    Output:open  the jsonFile that was located in datasets Brain Image Library dataframe
     """
-    isNotZero = df[df["score"] != 0.0] #only select rows != 0
-    randomRow = isNotZero.iloc[random.randint(0, len(isNotZero))] #select a random row of random index bt 0 and len of isNotZero
-    jsonFile = randomRow.json_file.replace("/bil/data", "https://brainimagelibrary.org", 1) #replace (/bil/data) from the json_file
-    print(jsonFile) #ERROR 404
+    isNotZero = df[df["score"] != 0.0] #only have files with the correct data
+    randomRow = isNotZero.iloc[random.randint(0, len(isNotZero))] #select a random row of random index
+    jsonFileLink = randomRow.json_file.replace("/bil/data", "https://download.brainimagelibrary.org", 1) #create the link
+    result = requests.get(jsonFileLink)
 
+    return result.json()
+    
 def today():
     """
 	Get today's snapshot of Brain Image Library.
