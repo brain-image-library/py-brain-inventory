@@ -37,7 +37,7 @@ def get_date(df):
     	yr = dateList[4] #get year
     	mnt= mntList[dateList[1]] #get month
     	day = dateList[2] #get day
-    	print(f"{yr}-{day}-{mnt}") #format in year-day-month
+    	return f"{yr}-{day}-{mnt}" #format in year-day-month
     
     
 def today():
