@@ -6,8 +6,8 @@ from datetime import date
 
 def today():
     """
-	Get today's snapshot of Brain Image Library.
-	"""
+    Get today's snapshot of Brain Image Library.
+    """
 
     server = "https://download.brainimagelibrary.org/inventory/daily/reports/"
     filename = "today.json"
@@ -54,8 +54,10 @@ def __get_contributor(df):
 def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
+
 def __get_awards(df):
     return df["award_number"].unique()
+
 
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
@@ -88,6 +90,7 @@ def __get_technique(df):
 def __get_locations(df):
     return df["locations"].value_counts().to_dict()
 
+
 def __get_contributors(df):
     """
     This returns an array of contributor names from the contributorname column.
@@ -96,33 +99,36 @@ def __get_contributors(df):
 
 
 def __get_project_names(df):
-	'''
-	Gets the unique list of project names.
+    """
+    Gets the unique list of project names.
 
     Input: dataframe
-    Output: list 
-    '''
-	return df['project'].unique()
+    Output: list
+    """
+    return df["project"].unique()
+
 
 def __get_list_of_projects(df):
-    '''
+    """
     Get the list of names for unique projects
 
     Input parameter: dataframe
     Output:  list of projects
-    '''
-    
-    return df['project'].unique().to_dict()
+    """
+
+    return df["project"].unique().to_dict()
+
 
 def __get_number_of_projects(df):
-    '''
+    """
     Get the number of unique projects
 
     Input parameter: dataframe
     Output:  number of projects
-    '''
-    
-    return len(df['project'].unique())
+    """
+
+    return len(df["project"].unique())
+
 
 def report():
     # Get today's date
@@ -136,6 +142,7 @@ def report():
     report = {}
     report["date"] = tdate
     report["number_of_datasets"] = __get_number_of_datasets(df)
+    report["number_of_project"] = __get_number_of_projects(df)
     report["completeness_score"] = __get_completeness_score(df)
     report["metadata_version"] = __get_metadata_version(df)
     report["contributor"] = __get_contributor(df)
@@ -148,6 +155,5 @@ def report():
     report["generalmodality"] = __get_generalmodality(df)
     report["technique"] = __get_technique(df)
     report["locations"] = __get_locations(df)
-    report["is_reachable"] = df["URL"].apply(__is_reachable)
 
     return report
