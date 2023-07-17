@@ -151,3 +151,25 @@ def report():
     report["is_reachable"] = df["URL"].apply(__is_reachable)
 
     return report
+
+import pandas as pd
+import urllib.request
+
+url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
+file_path, _ = urllib.request.urlretrieve(url)
+
+df = pd.read_json(file_path)
+df
+
+import folium
+
+map = folium.Map()
+
+from tqdm import tqdm
+
+for index, row in tqdm(df.iterrows()):
+  city = row['city']
+  lat = row['lat']
+  lon = row['lng']
+  folium.Marker([lat, lon], popup=city).add_to(map)
+map.save('project_map.html')
