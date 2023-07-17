@@ -6,8 +6,8 @@ from datetime import date
 
 def today():
     """
-	Get today's snapshot of Brain Image Library.
-	"""
+    Get today's snapshot of Brain Image Library.
+    """
 
     server = "https://download.brainimagelibrary.org/inventory/daily/reports/"
     filename = "today.json"
@@ -54,8 +54,10 @@ def __get_contributor(df):
 def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
+
 def __get_awards(df):
     return df["award_number"].unique()
+
 
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
@@ -69,12 +71,18 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
-def __get_samplelocalid(df):
-    return df["samplelocalid"].value_counts().to_dict()
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
 
 
-def __get_genotype(df):
-    return df["genotype"].value_counts().to_dict()
+def __get_genotype_frequency(df):
+    """
+    Write documentation here.
+    """
+    return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
@@ -88,6 +96,7 @@ def __get_technique(df):
 def __get_locations(df):
     return df["locations"].value_counts().to_dict()
 
+
 def __get_contributors(df):
     """
     This returns an array of contributor names from the contributorname column.
@@ -95,34 +104,27 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-def __get_project_names(df):
-	'''
-	Gets the unique list of project names.
-
-    Input: dataframe
-    Output: list 
-    '''
-	return df['project'].unique()
-
 def __get_list_of_projects(df):
-    '''
+    """
     Get the list of names for unique projects
 
     Input parameter: dataframe
     Output:  list of projects
-    '''
-    
-    return df['project'].unique().to_dict()
+    """
+
+    return df["project"].unique().to_dict()
+
 
 def __get_number_of_projects(df):
-    '''
+    """
     Get the number of unique projects
 
     Input parameter: dataframe
     Output:  number of projects
-    '''
-    
-    return len(df['project'].unique())
+    """
+
+    return len(df["project"].unique())
+
 
 def report():
     # Get today's date
