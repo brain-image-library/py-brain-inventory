@@ -9,6 +9,9 @@ The Brain Image Library is operated as a partnership between the [Biomedical App
 ## About the authors
 This open-source code repository consists of contributions from a diverse group of authors, including undergraduate students, graduate students and pre-college students. These individuals demonstrate their passion for coding and their eagerness to learn and collaborate in the world of open-source development. 
 
+## Reminder
+today.json build in vm013
+
 For a full list of authors explore the `AUTHORS` file.
 
 ---
