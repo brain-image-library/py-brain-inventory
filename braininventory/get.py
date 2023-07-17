@@ -54,10 +54,12 @@ def __get_contributor(df):
 def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
+def __get_awards(df):
+    return df["award_number"].unique()
 
-def __get_award_numbers(df):
+
+def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
-
 
 def __get_species(df):
     return df["species"].value_counts().to_dict()
@@ -66,18 +68,21 @@ def __get_species(df):
 def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
 
-def __get_samplelocalid(df):
-    return df["samplelocalid"].value_counts().to_dict()
-
-
-def __get_genotype(df):
-    return df["genotype"].value_counts().to_dict()
+def __get_genotype_frequency(df):
+    """
+    Write documentation here.
+    """
+    return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
     return df["generalmodality"].value_counts().to_dict()
-
 
 def __get_techniques(df):
     """
@@ -92,13 +97,36 @@ def techniques_frequency(df):
     """
     return df["technique"].value_counts().to_dict()
 
-
 def __get_locations(df):
     return df["locations"].value_counts().to_dict()
 
+def __get_contributors(df):
+    """
+    This returns an array of contributor names from the contributorname column.
+    """
+    return df["contributorname"].unique()
 
-technique_frequency(df)
 
+def __get_list_of_projects(df):
+    """
+    Get the list of names for unique projects
+
+    Input parameter: dataframe
+    Output:  list of projects
+    """
+
+    return df["project"].unique().to_dict()
+
+
+def __get_number_of_projects(df):
+    """
+    Get the number of unique projects
+
+    Input parameter: dataframe
+    Output:  number of projects
+    """
+
+    return len(df["project"].unique())
 
 def report():
     # Get today's date
