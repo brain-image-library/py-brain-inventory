@@ -57,6 +57,10 @@ def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
 
+def __get_awards(df):
+    return df["award_number"].unique()
+
+
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
 
@@ -69,19 +73,35 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
-def __get_samplelocalid(df):
-    return df["samplelocalid"].value_counts().to_dict()
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
 
 
-def __get_genotype(df):
-    return df["genotype"].value_counts().to_dict()
+def __get_genotype_frequency(df):
+    """
+    Write documentation here.
+    """
+    return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
     return df["generalmodality"].value_counts().to_dict()
 
 
-def __get_technique(df):
+def __get_techniques(df):
+    """
+    Write documentation here.
+    """
+    return df["technique"].unique().to_dict()
+
+
+def techniques_frequency(df):
+    """
+    Write documentation here.
+    """
     return df["technique"].value_counts().to_dict()
 
 
