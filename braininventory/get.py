@@ -71,12 +71,18 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
-def __get_samplelocalid(df):
-    return df["samplelocalid"].value_counts().to_dict()
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
 
 
-def __get_genotype(df):
-    return df["genotype"].value_counts().to_dict()
+def __get_genotype_frequency(df):
+    """
+    Write documentation here.
+    """
+    return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
@@ -96,16 +102,6 @@ def __get_contributors(df):
     This returns an array of contributor names from the contributorname column.
     """
     return df["contributorname"].unique()
-
-
-def __get_project_names(df):
-    """
-        Gets the unique list of project names.
-
-    Input: dataframe
-    Output: list
-    """
-    return df["project"].unique()
 
 
 def __get_list_of_projects(df):
@@ -138,12 +134,6 @@ def report():
     tdate = tdate.strftime("%Y-%m-%d")
 
     df = today()
-
-    def __get_genotype_frequency(df):
-        """
-        Write documentation here.
-        """
-        return df["genotypes"].value_counts().to_dict()
 
     report = {}
     report["date"] = tdate
