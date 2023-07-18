@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+import squarify
+import matplotlib.pyplot as plt
 
 
 def today():
@@ -54,12 +56,14 @@ def __get_contributor(df):
 def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
+
 def __get_awards(df):
     return df["award_number"].unique()
 
 
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
+
 
 def __get_species(df):
     return df["species"].value_counts().to_dict()
@@ -68,11 +72,13 @@ def __get_species(df):
 def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
+
 def __get_genotypes(df):
     """
     Write documentation here.
     """
     return df["genotype"].unique()
+
 
 def __get_genotype_frequency(df):
     """
@@ -83,6 +89,7 @@ def __get_genotype_frequency(df):
 
 def __get_generalmodality(df):
     return df["generalmodality"].value_counts().to_dict()
+
 
 def __get_techniques(df):
     """
@@ -97,8 +104,10 @@ def techniques_frequency(df):
     """
     return df["technique"].value_counts().to_dict()
 
+
 def __get_locations(df):
     return df["locations"].value_counts().to_dict()
+
 
 def __get_contributors(df):
     """
@@ -128,34 +137,22 @@ def __get_number_of_projects(df):
 
     return len(df["project"].unique())
 
-import squarify 
-import urllib.request
-import matplotlib.pyplot as plt 
-import pandas as pd 
-'''
-Import modules to create treemap of the frenquency of projects in the dataset 
-'''
-url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
-file_path, _ = urllib.request.urlretrieve(url)
-df = pd.read_json(file_path)
-'''
-Link for the data that will be used
-'''
-def get_projects_treemaps(df):
-    ''' 
-    name function for treemap of projects
-    '''
-    df = df['project'].value_counts().to_dict()
+
+def get_projects_treemap(df):
+    """
+    Created a code for the visualization of projects frequency 
+
+    Input: project values 
+    Output: treemap graph of projects frequency
+    """
+
+    df = df["project"].value_counts().to_dict()
     sizes_list = list(df.values())
     names_list = list(df.keys())
     squarify.plot(sizes_list)
-    plt.show()
-    '''
-    Input: project values 
-    Output: treemap graph of projects frequency
-    Created a code for the visualization of projects frequency 
-    '''
-get_projects_treemaps(df)
+
+    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig("path/to/save/plot.png")
 
 
 def report():
@@ -182,5 +179,8 @@ def report():
     report["generalmodality"] = __get_generalmodality(df)
     report["technique"] = __get_technique(df)
     report["locations"] = __get_locations(df)
+
+    # plots
+    get_projects_treemap(df)
 
     return report
