@@ -3,7 +3,25 @@ import pandas as pd
 import json
 from datetime import date
 
+import urllib.request
+import matplotlib.pyplot as plt
 
+def __get_general_modality_plot(df):
+    modality_counts = df['generalmodality'].value_counts()
+    
+    plt.figure(figsize=(10,6))
+    color = plt.cm.tab20c.colors
+
+    ax = modality_counts.plot(kind='bar', color=color, edgecolor='black')
+    plt.xlabel("General Modality", fontsize=12)
+    plt.ylabel("Frequency", fontsize=12)
+    plt.title("Frequency of General Modality", fontsize=14)
+    plt.xticks(rotation=45, ha='right',fontsize=10)
+    plt.yticks(fontsize=10)
+
+    plt.tight_layout()
+    plt.show()
+    
 def today():
     """
     Get today's snapshot of Brain Image Library.
