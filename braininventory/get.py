@@ -128,6 +128,24 @@ def __get_number_of_projects(df):
 
     return len(df["project"].unique())
 
+import squarify 
+import urllib.request
+import matplotlib.pyplot as plt 
+import pandas as pd 
+
+url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
+file_path, _ = urllib.request.urlretrieve(url)
+df = pd.read_json(file_path)
+
+def get_projects_treemaps(df):
+    df = df['project'].value_counts().to_dict()
+    sizes_list = list(df.values())
+    names_list = list(df.keys())
+    squarify.plot(sizes_list)
+    plt.show()
+get_projects_treemaps(df)
+
+
 def report():
     # Get today's date
     tdate = date.today()
