@@ -3,6 +3,57 @@ import pandas as pd
 import json
 from datetime import date
 
+import geoip2.database
+from geopy.geocoders import Nominatim
+import folium
+import math
+import urllib.request
+
+"""print(c.get_country_cities(country_code_iso="DE"))""" 
+"""
+Geopy: input: University #correct some data (do later) Output: Address, lat, lon
+folium or Ivan's
+Must choose module to make the map
+"""
+
+def __get_affiliations(df):
+    return df['affiliation'].value_counts().keys()
+
+def __get_coordin(university):
+    geolocator = Nominatim(user_agent="my_geocoding_app")
+    try:
+        location = geolocator.geocode(university)
+        if location:
+            return location.latitude, location.longitude
+        else:
+            return (0,0)
+    except:
+        print(f"Geocoding service is unavailable for {university}")
+        return 0, 0
+
+def get_zero_coords(affiliation_coordinates):
+    total = 0
+    zeros = 0
+    for university in affiliation_coordinates:
+        if affiliation_coordinates[university] == (0 ,0):
+            zeros +=1
+            print(affiliation_coordinates[university],university,"ain't working")
+        total += 1
+    return zeros, total, math.ceil(zeros/total*100)/100
+
+def __get_affilation_coordinates(df):
+    affiliations_dict = {}
+    for university in __get_affiliations(df):
+        latitude, longitude = __get_coordin(university)
+        if latitude is not None and longitude is not None:
+            affiliations_dict[university] = (latitude, longitude)
+    return affiliations_dict
+
+if __name__ == "__main__":
+    affiliation_coordinates = __get_affilation_coordinates(df)
+    print(affiliation_coordinates)
+    print(get_zero_coords(affiliation_coordinates))
+
 
 def today():
     """
