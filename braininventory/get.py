@@ -132,17 +132,29 @@ import squarify
 import urllib.request
 import matplotlib.pyplot as plt 
 import pandas as pd 
-
+'''
+Import modules to create treemap of the frenquency of projects in the dataset 
+'''
 url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
 file_path, _ = urllib.request.urlretrieve(url)
 df = pd.read_json(file_path)
-
+'''
+Link for the data that will be used
+'''
 def get_projects_treemaps(df):
+    ''' 
+    name function for treemap of projects
+    '''
     df = df['project'].value_counts().to_dict()
     sizes_list = list(df.values())
     names_list = list(df.keys())
     squarify.plot(sizes_list)
     plt.show()
+    '''
+    Input: project values 
+    Output: treemap graph of projects frequency
+    Created a code for the visualization of projects frequency 
+    '''
 get_projects_treemaps(df)
 
 
