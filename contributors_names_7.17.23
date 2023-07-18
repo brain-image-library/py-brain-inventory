@@ -1,0 +1,115 @@
+
+#len(df[df['contributorname']=='Ting, Jonathan'])
+#len(df[df['contributorname']=='Lein, Ed'])
+#len(df[df['contributorname']=='Arlotta, Paola'])
+#len(df[df['contributorname']=='Kronauer, Daniel'])
+#len(df[df['contributorname']=='Devor, Anna'])
+#len(df[df['contributorname']=='Yang, X. William'])
+#len(df[df['contributorname']=='Osten, Pavel'])
+#len(df[df['contributorname']=='Luo, Qingming'])
+#len(df[df['contributorname']=='Xiaowei Zhuang and Catherine Dulac'])
+#len(df[df['contributorname']=='X. William Yang'])
+#len(df[df['contributorname']=='Xiaoyin Chen'])
+#len(df[df['contributorname']=='Zador, Anthony'])
+#len(df[df['contributorname']=='Hong-Wei Dong'])
+#len(df[df['contributorname']=='Zeng, Hongkui '])
+#len(df[df['contributorname']=='Chen, Xiaoyin'])
+#len(df[df['contributorname']=='Zeng, Hongkui'])
+#len(df[df['contributorname']=='Reid, Clay'])
+#len(df[df['contributorname']=='Hongkui Zeng'])
+#len(df[df['contributorname']=='Z. Josh Huang'])
+#len(df[df['contributorname']=='Ulrich Mueller'])
+#len(df[df['contributorname']=='Yongsoo Kim'])
+#len(df[df['contributorname']=='Bosiljka Tasic'])
+#len(df[df['contributorname']=='Guoping Feng'])
+#len(df[df['contributorname']=='Pavel Osten'])
+#len(df[df['contributorname']=='Qingming Luo'])
+#len(df[df['contributorname']=='Ed Lein'])
+#len(df[df['contributorname']=='Guoping Fneg'])
+#len(df[df['contributorname']=='Hongwei Dong'])
+#len(df[df['contributorname']=='Evan Macosko'])
+#len(df[df['contributorname']=='Guoqiang Bi'])
+#len(df[df['contributorname']=='Li Zhang'])
+#len(df[df['contributorname']=='Long Cai'])
+#len(df[df['contributorname']=='Mitra'])
+#len(df[df['contributorname']=='Xiaowei Zhuang and Catherine Dulac '])
+#len(df[df['contributorname']=='Xiaowei Zhuang and Yi Zhang'])
+#len(df[df['contributorname']=='Xiaowei Zhuang'])
+#len(df[df['contributorname']=='Andreas Tolias'])
+#len(df[df['contributorname']=='Wong, Kin Lam Kenneth'])
+#len(df[df['contributorname']=='Seeds, Andrew'])
+#len(df[df['contributorname']=='Seeds, Andrew '])
+#len(df[df['contributorname']=='Tasic, Bosiljka'])
+#len(df[df['contributorname']=='Kriegstein, Arnold'])
+#len(df[df['contributorname']=='Daigle, Tanya'])
+#len(df[df['contributorname']=='Zhang, Li'])
+#len(df[df['contributorname']=='Zhuang, Xiaowei'])
+#len(df[df['contributorname']=='Feng, Guoping'])
+#len(df[df['contributorname']=='Dong, Hongwei'])
+#len(df[df['contributorname']=='Gradinaru Lab'])
+#len(df[df['contributorname']=='Brian Cleary'])
+#len(df[df['contributorname']=='Robert Cudmore'])
+#len(df[df['contributorname']=='AIBS/Seung/Tolias'])
+#len(df[df['contributorname']=='Suzanne Haber'])
+#len(df[df['contributorname']=='Haining Zhong, Tianyi Mao'])
+
+
+
+
+#Ting, Jonathan is 30
+#Lein, Ed is 644
+#Arlotta, Paola is 2
+#Kronauer, Daniel is 1
+#Devor, Anna is 11
+#Yang, X. William is 1
+#Osten, Pavel is 13
+#Pavel Osten is 361
+#Luo, Qingming is 59
+#X.William Yang is 77
+#Zador, Anthony
+#Hong-Wei Dong is 392
+#Hongwei Dong is 33
+#Dong, Hongwei is 2
+#Zeng, Hongkui  is 21
+#Zeng, Hongkui is 126
+#Hongkui Zeng is 2971
+#Z. Josh Huang is 345
+#Chen, Xiaoyin is 3
+#Xiaoyin Chen is 9
+#Reid, Clay is 1
+#Z. Josh Huang is 345
+#Ulrich Mueller is 4
+#Yongsoo Kim is 614
+#Yongsoo Kim Lab is 93
+#Xiaowei Zhuang is 2
+#Xiaowei Zhuang and Catherine Dulac is 2
+#Xiaowei Zhuang and Catherine Dulac  is 1
+#Xiaowei Zhuang and Yi Zhang is 1
+#Zhuang, Xiaowei is 16
+#Mitra, Partha is 1
+#Mitra is 1
+#Bosiljka Tasic is 202
+#Ed Lein is 405
+#Qingming Luo is 25
+#Guoping Feng is 216
+#Guoping Fneg is 36
+#Feng, Guoping is 1
+#Pavel Osten is 361
+#Evan Macosko is 33
+#Guoqiang Bi is 54
+#Li Zhang is 3
+#Zhang, Li is 11
+#Long Cai is 5
+#Andreas Tolias is 1
+#Wong, Kin Lam Kenneth is 35
+#Seeds, Andrew is 80
+#Seeds, Andrew  is 53
+#Tasic, Bosiljka is 29
+#Kriegstein, Arnold is 3
+#Daigle, Tanya is 7
+#Gradinaru Lab is 5
+#Brian Cleary is 12
+#Robert Cudmore is 2
+#AIBS/Seung/Tolias is 301
+#Suzanne Haber is 3
+#Haining Zhong, Tianyi Mao is 2
