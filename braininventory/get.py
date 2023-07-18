@@ -154,14 +154,21 @@ def report():
 
 import pandas as pd
 import urllib.request
+import geoip2.database
+from geopy.geocoders import Nominatim
+import folium
+'''
+Import modules that will be used to create the world map, find coordinates of affiliations, and 
+''' 
 
 url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
 file_path, _ = urllib.request.urlretrieve(url)
-
 df = pd.read_json(file_path)
 df
-
-import folium
+"""
+Geopy - Input: University Output: Address, lat, lon
+Folium - visual map creator 
+"""
 
 map = folium.Map()
 
