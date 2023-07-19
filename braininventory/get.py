@@ -2,12 +2,14 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+import squarify
+import matplotlib.pyplot as plt
 
 
 def today():
     """
-	Get today's snapshot of Brain Image Library.
-	"""
+    Get today's snapshot of Brain Image Library.
+    """
 
     server = "https://download.brainimagelibrary.org/inventory/daily/reports/"
     filename = "today.json"
@@ -55,6 +57,10 @@ def __get_affilation(df):
     return df["affiliation"].value_counts().to_dict()
 
 
+def __get_awards(df):
+    return df["award_number"].unique()
+
+
 def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
 
@@ -67,19 +73,35 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
-def __get_samplelocalid(df):
-    return df["samplelocalid"].value_counts().to_dict()
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
 
 
-def __get_genotype(df):
-    return df["genotype"].value_counts().to_dict()
+def __get_genotype_frequency(df):
+    """
+    Write documentation here.
+    """
+    return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
     return df["generalmodality"].value_counts().to_dict()
 
 
-def __get_technique(df):
+def __get_techniques(df):
+    """
+    Write documentation here.
+    """
+    return df["technique"].unique().to_dict()
+
+
+def techniques_frequency(df):
+    """
+    Write documentation here.
+    """
     return df["technique"].value_counts().to_dict()
 
 
@@ -94,43 +116,54 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-def __get_project_names(df):
-	'''
-	Gets the unique list of project names.
-
-    Input: dataframe
-    Output: list 
-    '''
-	return df['project'].unique()
-
 def __get_list_of_projects(df):
-    '''
+    """
     Get the list of names for unique projects
 
     Input parameter: dataframe
     Output:  list of projects
-    '''
-    
-    return df['project'].unique().to_dict()
+    """
+
+    return df["project"].unique().to_dict()
+
 
 def __get_number_of_projects(df):
-    '''
+    """
     Get the number of unique projects
 
     Input parameter: dataframe
     Output:  number of projects
-    '''
-    
-    return len(df['project'].unique())
+    """
+
+    return len(df["project"].unique())
+
+
+def get_projects_treemap(df):
+    """
+    Created a code for the visualization of projects frequency 
+
+    Input: project values 
+    Output: treemap graph of projects frequency
+    """
+
+    df = df["project"].value_counts().to_dict()
+    sizes_list = list(df.values())
+    names_list = list(df.keys())
+    squarify.plot(sizes_list)
+
+    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig("path/to/save/plot.png")
+
 
 def __get__percentage_of_metadata_version_1(df):
-  '''
+    """
   Get the percentage/ratio of metadata version 1 from all datasets
 
   Input: dataframe
   Output: an integer 
-  '''
-  return len(df[df['metadata_version'] == 1])/len(df)
+  """
+    return len(df[df["metadata_version"] == 1]) / len(df)
+
 
 def report():
     # Get today's date
@@ -158,5 +191,8 @@ def report():
     report["locations"] = __get_locations(df)
     report["percentage_of_version_1"] = __get__percentage_of_metadata_version_1(df)
     report["is_reachable"] = df["URL"].apply(__is_reachable)
+
+    # plots
+    get_projects_treemap(df)
 
     return report
