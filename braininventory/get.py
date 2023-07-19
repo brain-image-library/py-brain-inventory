@@ -155,6 +155,16 @@ def get_projects_treemap(df):
     plt.savefig("path/to/save/plot.png")
 
 
+def __get__percentage_of_metadata_version_1(df):
+    """
+  Get the percentage/ratio of metadata version 1 from all datasets
+
+  Input: dataframe
+  Output: an integer 
+  """
+    return len(df[df["metadata_version"] == 1]) / len(df)
+
+
 def report():
     # Get today's date
     tdate = date.today()
@@ -179,6 +189,8 @@ def report():
     report["generalmodality"] = __get_generalmodality(df)
     report["technique"] = __get_technique(df)
     report["locations"] = __get_locations(df)
+    report["percentage_of_version_1"] = __get__percentage_of_metadata_version_1(df)
+    report["is_reachable"] = df["URL"].apply(__is_reachable)
 
     # plots
     get_projects_treemap(df)
