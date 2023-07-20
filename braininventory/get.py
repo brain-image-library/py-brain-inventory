@@ -155,15 +155,17 @@ def report():
 
     return report
 
+# Create the positions and label on the timeline
 positions = [1, 3, 4, 7, 8]
 labels = ['Event A', 'Event B', 'Event C', 'Event D', 'Event E']
 
+# Establish the dates, visual colors, and marker style 
 publish_dates = ['2022-01-01', '2022-02-15', '2022-04-10']
 line_color = '#007acc'
 marker_color = '#007acc'
 marker_style = 'o'
 
-#Create the figure and axes
+# Create the figure and axes
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -171,16 +173,16 @@ ax.spines['bottom'].set_visible(False)
 ax.spines['left'].set_visible(False)
 ax.get_yaxis().set_visible(False)
 
-#Plot the timeline
+# Plot the timeline
 ax.plot(positions, [0] * len(positions), linestyle='-', color=line_color, marker=marker_style, markersize=10, markerfacecolor=marker_color)
 
-#Add labels at each position
+# Add labels at each position
 for i, label in enumerate(labels):
     ax.text(positions[i], 0, label, ha='center', va='bottom', color=line_color)
 
-#Set plot title and axis labels
+# Set plot title and axis labels
 ax.set_title('Timeline', fontsize=16)
 ax.set_xlabel('Timeline Position', fontsize=12)
 
-plt.tight_layout()
-plt.show()
+filename = f'timeline-publication-dates-{datetime.now().strftime("%Y%m%d")}.png'
+plt.savefig("path/to/save/plot.png")
