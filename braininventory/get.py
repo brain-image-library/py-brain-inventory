@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+from difflib import SequenceMatcher
 import squarify
 import matplotlib.pyplot as plt
 
@@ -163,6 +164,36 @@ def __get__percentage_of_metadata_version_1(df):
   Output: an integer 
   """
     return len(df[df["metadata_version"] == 1]) / len(df)
+
+def __get_similar_columns(df, column):
+    """
+      Return a list of similar column values. For example, the "affiliation" column might include
+
+       ['University of California, Los Angeles',
+    'University of California, Los Angeles (UCLA)',
+    0.9135802469135802]]
+
+    """
+
+    df = df.dropna(subset=[column])  # drop null values
+    unique_values = df[column].unique()
+
+    completed_pairs = []
+    similar_pairs = []
+    for value in unique_values:
+        for compare_value in [
+            v for v in unique_values if v != value and (value, v) not in completed_pairs
+        ]:
+            similarity = SequenceMatcher(
+                None, value.lower(), compare_value.lower()
+            ).ratio()
+            if similarity > 0.85:
+                similar_pairs.append([value, compare_value, similarity])
+
+            completed_pairs.append((compare_value, value))
+
+    return similar_pairs
+
 
 
 def report():
