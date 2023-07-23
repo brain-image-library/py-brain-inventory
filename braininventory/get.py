@@ -412,7 +412,7 @@ def __get_awards(df):
     --------
     numpy.ndarray
         An array of unique award numbers.
-        
+
     Note:
     -----
     The input DataFrame `df` should have a column named "award_number" containing categorical data
@@ -647,6 +647,7 @@ def __get_affiliations(df):
     categorical data, where the function will count the occurrences of each unique value.
     """
     return df["affiliation"].value_counts().to_dict()
+
 
 def __get_contributors(df):
     """
