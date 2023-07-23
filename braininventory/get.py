@@ -69,6 +69,13 @@ def __get_general_modality_treemap(df):
 
     plt.show()
 
+import humanize
+
+def __get_pretty_size_statistics(df):
+  size_stats = __get_size_statistics(df)
+
+  return [humanize.naturalsize(size_stats[0]), humanize.naturalsize(size_stats[1]), humanize.naturalsize(size_stats[2]), humanize.naturalsize(size_stats[3])]
+    
 def __get_size_statistics(df):
   '''
   Helper method that returns size statistics from size column.
