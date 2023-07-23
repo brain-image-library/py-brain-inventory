@@ -58,7 +58,8 @@ def today():
     else:
         print("Error: Failed to fetch JSON data")
         return pd.DataFrame()
-      
+
+
 def __clean_affiliations(df):
     # Need to combine the universities so the pie chart shows a single university's total samples under the same area.
     # right now there is one area of the pie chart that says 'Allen Institute for Brain Science' and 'Allen Instititute for Brain Science ' (with a space!)
@@ -101,7 +102,7 @@ def __clean_affiliations(df):
     del affiliations["University of California, Los Angeles (UCLA)"]
     return affiliations
 
-  
+
 def __get_affiliation_frequency(df):
     """
     Get affiliation frequency.
@@ -110,6 +111,7 @@ def __get_affiliation_frequency(df):
     Output: a frequency dictionary
     """
     return df["affiliation"].value_counts().to_dict()
+
 
 def __get_number_of_datasets(df):
     return len(df)
@@ -221,10 +223,10 @@ def __get_contributors(df):
 
 def __get_project_names(df):
     """
-	  Gets the unique list of project names.
+          Gets the unique list of project names.
 
     Input: dataframe
-    Output: list 
+    Output: list
     """
     return df["project"].unique()
 
@@ -249,6 +251,7 @@ def __get_number_of_projects(df):
     """
 
     return len(df["project"].unique())
+
 
 def get_projects_treemap(df):
     """
@@ -275,6 +278,7 @@ def __get__percentage_of_metadata_version_1(df):
     Output: an integer
     """
     return len(df[df["metadata_version"] == 1]) / len(df)
+
 
 def report():
     # Get today's date
