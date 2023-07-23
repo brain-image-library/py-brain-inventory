@@ -151,6 +151,16 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
+def __get_project_names(df):
+    """
+    Gets the unique list of project names.
+
+    Input: dataframe
+    Output: list
+    """
+    return df["project"].unique()
+
+
 def __get_list_of_projects(df):
     """
     Get the list of names for unique projects
@@ -214,6 +224,7 @@ def report():
     report = {}
     report["date"] = tdate
     report["number_of_datasets"] = __get_number_of_datasets(df)
+    report["number_of_project"] = __get_number_of_projects(df)
     report["completeness_score"] = __get_completeness_score(df)
     report["metadata_version"] = __get_metadata_version(df)
     report["contributor"] = __get_contributor(df)
@@ -227,7 +238,7 @@ def report():
     report["technique"] = __get_technique(df)
     report["locations"] = __get_locations(df)
     report["percentage_of_version_1"] = __get__percentage_of_metadata_version_1(df)
-    report["is_reachable"] = df["URL"].apply(__is_reachable)
+    # report["is_reachable"] = df["URL"].apply(__is_reachable)
 
     # plots
     get_projects_treemap(df)
