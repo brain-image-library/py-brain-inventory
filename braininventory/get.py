@@ -60,6 +60,49 @@ def today():
         return pd.DataFrame()
 
 
+def __clean_affiliations(df):
+    # Need to combine the universities so the pie chart shows a single university's total samples under the same area.
+    # right now there is one area of the pie chart that says 'Allen Institute for Brain Science' and 'Allen Instititute for Brain Science ' (with a space!)
+    # we need it to recognize that the Allen Institue for Brain Science has contributed a total number of samples equal to the sum of both those areas in the pie chart
+    Allen = df[df["affiliation"] == "Allen Institute for Brain Science"]
+
+    # ^we set a variable 'Allen' equal to the dataframe limited to the rows where it said 'Allen Institute for Brain Science and asked for the count of those rows
+    # below, we did the same thing but with rows that had Allen with a space
+
+    Allen_with_space = df[df["affiliation"] == "Allen Institute for Brain Science "]
+
+    accurate_Allen = len(Allen) + len(Allen_with_space)
+
+    del affiliations["Allen Institute for Brain Science "]
+
+    # Now we can add the counts we had before. (We deleted Allen with a space, but we still have the number of Allen with a space)
+    # reassign the Allen Institute for Brain Science variable to the actual total number (4715)
+
+    affiliations["Allen Institute for Brain Science"] = len(Allen) + len(
+        Allen_with_space
+    )
+
+    # Now we need to do the same thing with UCLA
+    # 1) limit the dictionary to ones that read 'University of California, Los Angeles' and the one that says 'University of California, Los Angeles (UCLA)'
+
+    No_UCLA = affiliations["University of California, Los Angeles"]
+
+    UCLA_present = affiliations["University of California, Los Angeles (UCLA)"]
+
+    # 2) Now we found the counts of both. We have to set the college equal to the sum of the category with no UCLA and the catgory with UCLA and delete the one we don't want.
+
+    # del affiliations['University of California, Los Angeles (UCLA)']
+    # print(len(affiliations))
+
+    accurate_Uni = (
+        affiliations["University of California, Los Angeles"]
+        + affiliations["University of California, Los Angeles (UCLA)"]
+    )
+
+    del affiliations["University of California, Los Angeles (UCLA)"]
+    return affiliations
+
+
 def __get_affiliation_frequency(df):
     """
     Get affiliation frequency.
@@ -180,7 +223,7 @@ def __get_contributors(df):
 
 def __get_project_names(df):
     """
-    Gets the unique list of project names.
+          Gets the unique list of project names.
 
     Input: dataframe
     Output: list
