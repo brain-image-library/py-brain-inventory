@@ -192,10 +192,52 @@ def __get_number_of_datasets(df):
 
 
 def __get_completeness_score(df):
+    """
+    Calculate the completeness score for a given DataFrame.
+
+    The completeness score is computed as the sum of the values in the "score" column
+    divided by the total number of rows in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "score" which holds numerical values.
+
+    Returns:
+    --------
+    float
+        The completeness score of the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "score" containing numerical values.
+    The function calculates the completeness score as the sum of the values in the "score" column
+    divided by the total number of rows in the DataFrame.
+    """
     return df["score"].sum() / len(df)
 
 
 def __is_reachable(url):
+    """
+    Check if the given URL is reachable and returns a boolean value indicating its reachability.
+
+    Parameters:
+    -----------
+    url : str
+        The URL to be checked for reachability.
+
+    Returns:
+    --------
+    bool
+        True if the URL is reachable (status code 200), False otherwise.
+
+    Note:
+    -----
+    This function uses the `requests` library to send an HTTP GET request to the specified URL.
+    It checks the status code of the response, and if the status code is 200, it returns True,
+    indicating that the URL is reachable. Otherwise, it returns False to indicate that the URL
+    is not reachable or encountered an error.
+    """
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -205,59 +247,380 @@ def __is_reachable(url):
 
 
 def __are_reachable(df):
+    """
+    Compute the reachability of datasets specified in the DataFrame.
+
+    This method checks the reachability of each dataset URL in the "URL" column of the DataFrame
+    by invoking the __is_it_reachable function in parallel using the pandas parallel_apply method.
+    The reachability of each URL is stored in a new column named "is_reachable" in the DataFrame.
+    The method then returns the ratio of reachable datasets to the total number of datasets.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "URL" with dataset URLs to be checked.
+
+    Returns:
+    --------
+    float
+        The ratio of reachable datasets to the total number of datasets.
+
+    Note:
+    -----
+    This function requires the __is_it_reachable function to be defined separately, which checks
+    the reachability of a single URL. The DataFrame `df` should have a column named "URL" with the
+    dataset URLs to be checked for reachability. The method computes the ratio of reachable datasets
+    to the total number of datasets and returns this value as a float.
+    """
     print("Computing what datasets are reachable")
     df["is_reachable"] = df["URL"].parallel_apply(__is_it_reachable)
     return df["is_reachable"].sum() / len(df)
 
 
 def __get_metadata_version(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique metadata version.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "metadata_version" column. The result is returned as a dictionary,
+    where the keys represent unique metadata versions, and the values represent the count
+    of occurrences for each metadata version.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "metadata_version" with metadata version information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique metadata versions, and the values
+        represent the count of occurrences for each metadata version.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "metadata_version" containing
+    categorical data representing different versions of metadata. The function counts
+    the occurrences of each unique metadata version and returns the result as a dictionary.
+    """
+
     return df["metadata_version"].value_counts().to_dict()
 
 
 def __get_genotypes(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique genotype.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "genotype" column. The result is returned as a dictionary, where the
+    keys represent unique genotypes, and the values represent the count of occurrences for
+    each genotype.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "genotype" with genotype information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique genotypes, and the values represent
+        the count of occurrences for each genotype.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "genotype" containing categorical data
+    representing different genotypes. The function counts the occurrences of each unique genotype
+    and returns the result as a dictionary.
+    """
     return df["genotype"].value_counts().to_dict()
 
 
 def __get_contributor(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique contributor.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "contributor" column. The result is returned as a dictionary, where
+    the keys represent unique contributors, and the values represent the count of occurrences
+    for each contributor.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "contributor" with contributor information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique contributors, and the values represent
+        the count of occurrences for each contributor.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "contributor" containing categorical data
+    representing different contributors. The function counts the occurrences of each unique contributor
+    and returns the result as a dictionary.
+    """
     return df["contributor"].value_counts().to_dict()
 
 
 def __get_affilation(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique affiliation.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "affiliation" column. The result is returned as a dictionary, where
+    the keys represent unique affiliations, and the values represent the count of occurrences
+    for each affiliation.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "affiliation" with affiliation information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique affiliations, and the values represent
+        the count of occurrences for each affiliation.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "affiliation" containing categorical data
+    representing different affiliations. The function counts the occurrences of each unique affiliation
+    and returns the result as a dictionary.
+    """
     return df["affiliation"].value_counts().to_dict()
 
 
 def __get_awards(df):
+    """
+    Get an array containing unique award numbers.
+
+    This function takes a pandas DataFrame `df` as input and returns an array containing
+    the unique values found in the "award_number" column. Each value in the array represents
+    a unique award number associated with the data in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    numpy.ndarray
+        An array of unique award numbers.
+        
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function extracts the unique values from the "award_number"
+    column and returns them as an array.
+    """
     return df["award_number"].unique()
 
 
 def __get_award_number(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique award number.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "award_number" column. The result is returned as a dictionary, where
+    the keys represent unique award numbers, and the values represent the count of occurrences
+    for each award number.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique award numbers, and the values represent
+        the count of occurrences for each award number.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function counts the occurrences of each unique award number
+    and returns the result as a dictionary.
+    """
     return df["award_number"].value_counts().to_dict()
 
 
 def __get_species(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique species.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "species" column. The result is returned as a dictionary, where the
+    keys represent unique species, and the values represent the count of occurrences for
+    each species.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "species" with species information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique species, and the values represent
+        the count of occurrences for each species.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "species" containing categorical data
+    representing different species. The function counts the occurrences of each unique species
+    and returns the result as a dictionary.
+    """
     return df["species"].value_counts().to_dict()
 
 
 def __get_cnbtaxonomy(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique CNB taxonomy.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "cnbtaxonomy" column. The result is returned as a dictionary, where
+    the keys represent unique CNB taxonomies, and the values represent the count of occurrences
+    for each taxonomy.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "cnbtaxonomy" with CNB taxonomy information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique CNB taxonomies, and the values represent
+        the count of occurrences for each taxonomy.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "cnbtaxonomy" containing categorical data
+    representing different CNB taxonomies. The function counts the occurrences of each unique CNB taxonomy
+    and returns the result as a dictionary.
+    """
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
 def __get_genotype_frequency(df):
     """
-    Write documentation here.
+    Get a dictionary containing the count of occurrences of each unique genotype.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "genotypes" column. The result is returned as a dictionary, where the
+    keys represent unique genotypes, and the values represent the count of occurrences for
+    each genotype.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "genotypes" with genotype information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique genotypes, and the values represent
+        the count of occurrences for each genotype.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "genotypes" containing categorical data
+    representing different genotypes. The function counts the occurrences of each unique genotype
+    and returns the result as a dictionary.
     """
     return df["genotypes"].value_counts().to_dict()
 
 
 def __get_generalmodality(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique general modality.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "generalmodality" column. The result is returned as a dictionary,
+    where the keys represent unique general modalities, and the values represent the count
+    of occurrences for each general modality.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "generalmodality" with general modality information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique general modalities, and the values represent
+        the count of occurrences for each general modality.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "generalmodality" containing categorical data
+    representing different general modalities. The function counts the occurrences of each unique general
+    modality and returns the result as a dictionary.
+    """
     return df["generalmodality"].value_counts().to_dict()
 
 
 def __get_techniques(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique technique.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "technique" column. The result is returned as a dictionary, where the
+    keys represent unique techniques, and the values represent the count of occurrences for
+    each technique.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "technique" with technique information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique techniques, and the values represent
+        the count of occurrences for each technique.
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "technique" containing categorical data
+    representing different techniques. The function counts the occurrences of each unique technique
+    and returns the result as a dictionary.
+    """
     return df["technique"].value_counts().to_dict()
 
 
 def __get_award_numbers(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique award number.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "award_number" column. The result is returned as a dictionary, where
+    the keys represent unique award numbers, and the values represent the count of occurrences
+    for each award number.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique award numbers, and the values represent
+        the count of occurrences for each award number.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function counts the occurrences of each unique award number
+    and returns the result as a dictionary.
+    """
     return df["award_number"].value_counts().to_dict()
 
 
@@ -286,25 +649,126 @@ def __get_affiliations(df):
     return df["affiliation"].value_counts().to_dict()
 
 def __get_contributors(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique contributor name.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "contributorname" column. The result is returned as a dictionary,
+    where the keys represent unique contributor names, and the values represent the count
+    of occurrences for each contributor name.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "contributorname" with contributor name information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique contributor names, and the values represent
+        the count of occurrences for each contributor name.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "contributorname" containing categorical data
+    representing different contributor names. The function counts the occurrences of each unique
+    contributor name and returns the result as a dictionary.
+    """
     return df["contributorname"].value_counts().to_dict()
 
 
 def __get_projects(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique project.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "project" column. The result is returned as a dictionary, where the
+    keys represent unique projects, and the values represent the count of occurrences for
+    each project. Additionally, the unique values in the "technique" column are also added
+    to the same dictionary as a separate entry.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "project" with project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing two entries:
+        - "project": A dictionary where the keys represent unique projects, and the values
+                     represent the count of occurrences for each project.
+        - "technique": A dictionary where the keys represent unique techniques, and the values
+                       represent the count of occurrences for each technique.
+
+    Note:
+    -----
+    The input DataFrame `df` should have columns named "project" and "technique" containing categorical data
+    representing different projects and techniques, respectively. The function counts the occurrences of each
+    unique project and technique and returns them as part of a single dictionary.
+    """
     return df["project"].value_counts().to_dict()
-    """
-    Write documentation here.
-    """
     return df["technique"].unique().to_dict()
 
 
 def techniques_frequency(df):
     """
-    Write documentation here.
+    Get a dictionary containing the count of occurrences of each unique technique.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "technique" column. The result is returned as a dictionary, where the
+    keys represent unique techniques, and the values represent the count of occurrences for
+    each technique.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "technique" with technique information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique techniques, and the values represent
+        the count of occurrences for each technique.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "technique" containing categorical data
+    representing different techniques. The function counts the occurrences of each unique technique
+    and returns the result as a dictionary.
     """
     return df["technique"].value_counts().to_dict()
 
 
 def __get_locations(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique location.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "locations" column. The result is returned as a dictionary, where the
+    keys represent unique locations, and the values represent the count of occurrences for
+    each location.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "locations" with location information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique locations, and the values represent
+        the count of occurrences for each location.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "locations" containing categorical data
+    representing different locations. The function counts the occurrences of each unique location
+    and returns the result as a dictionary.
+    """
     return df["locations"].value_counts().to_dict()
 
 
