@@ -1,6 +1,7 @@
 import json
 from datetime import date
-
+import urllib.request
+import matplotlib.pyplot as plt
 import humanize
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -12,6 +13,25 @@ from pandarallel import pandarallel
 pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
+
+
+def __get_general_modality_plot(df):
+    modality_counts = df["generalmodality"].value_counts()
+
+    plt.figure(figsize=(10, 6))
+    color = plt.cm.tab20c.colors
+
+    ax = modality_counts.plot(kind="bar", color=color, edgecolor="black")
+    plt.xlabel("General Modality", fontsize=12)
+    plt.ylabel("Frequency", fontsize=12)
+    plt.title("Frequency of General Modality", fontsize=14)
+    plt.xticks(rotation=45, ha="right", fontsize=10)
+    plt.yticks(fontsize=10)
+
+    plt.tight_layout()
+
+    filename = f'general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
 
 
 def get_random_sample(df):
@@ -826,7 +846,7 @@ def get_projects_treemap(df):
     squarify.plot(sizes_list)
 
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig("path/to/save/plot.png")
+    plt.savefig(filename)
 
 
 def __get__percentage_of_metadata_version_1(df):
