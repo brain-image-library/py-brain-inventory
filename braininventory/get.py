@@ -11,11 +11,39 @@ import squarify
 import matplotlib.pyplot as plt
 
 
+def get_random_sample(df):
+    """
+    Returns a random sample from the dataframe from a dataset with non-zero score.
+
+    Input: dataframe
+    Output:open the json file that was located in datasets Brain Image Library dataframe
+    """
+
+    isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
+    randomRow = isNotZero.iloc[
+        random.randint(0, len(isNotZero))
+    ]  # select a random row of random index
+    jsonFileLink = randomRow.json_file.replace(
+        "/bil/data", "https://download.brainimagelibrary.org", 1
+    )  # create the link
+    result = requests.get(jsonFileLink)
+
+    return result.json()
+
+
 def today():
     """
     Get today's snapshot of Brain Image Library.
     """
 
+    # if file can be found locally, then load from disk
+    directory = "/bil/data/inventory/daily/reports/"
+    if Path(directory).exists():
+        data = json.loads(f"{directory}/today.json")
+        data = pd.DataFrame(data)
+        return data
+
+    # else get file from the web
     server = "https://download.brainimagelibrary.org/inventory/daily/reports/"
     filename = "today.json"
 
@@ -27,7 +55,6 @@ def today():
         data = json.loads(response.text)
         data = pd.DataFrame(data)
         return data
-
     else:
         print("Error: Failed to fetch JSON data")
         return pd.DataFrame()
