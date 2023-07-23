@@ -3,7 +3,6 @@ import pandas as pd
 import json
 from datetime import date
 import pandas as pd
-import urllib.request
 import matplotlib.pyplot as plt
 from pandarallel import pandarallel
 
@@ -34,16 +33,16 @@ def today():
         return pd.DataFrame()
 
 
-
 def __get_affiliation_frequency(df):
-    '''
+    """
     Get affiliation frequency.
 
     Input: dataframe
     Output: a frequency dictionary
-    '''
-    return df['affiliation'].value_counts().to_dict()
-  
+    """
+    return df["affiliation"].value_counts().to_dict()
+
+
 def __get_number_of_datasets(df):
     return len(df)
 
@@ -208,8 +207,10 @@ def report():
     # Convert date to string
     tdate = tdate.strftime("%Y%m%d")
 
+    # Get today's data info
     df = today()
 
+    # Build report
     report = {}
     report["date"] = tdate
     report["number_of_datasets"] = __get_number_of_datasets(df)
