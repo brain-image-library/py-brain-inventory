@@ -267,7 +267,7 @@ def get_projects_treemap(df):
     squarify.plot(sizes_list)
 
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig("path/to/save/plot.png")
+    plt.savefig(filename)
 
 
 def __get__percentage_of_metadata_version_1(df):
