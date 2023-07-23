@@ -1,14 +1,17 @@
-import requests
-import pandas as pd
 import json
 from datetime import date
-import pandas as pd
+
+import humanize
 import matplotlib.pyplot as plt
+import pandas as pd
+import requests
+import seaborn as sb
+import squarify
 from pandarallel import pandarallel
 
 pandarallel.initialize(nb_workers=8, progress_bar=True)
-import squarify
 import matplotlib.pyplot as plt
+import squarify
 
 
 def get_random_sample(df):
@@ -30,27 +33,25 @@ def get_random_sample(df):
 
     return result.json()
 
-import urllib.request
-import matplotlib.pyplot as plt
-import seaborn as sb
-import squarify
 
 def __get_lable_dict(name_lst):
     """
-        input: a list of University names
-        output: a dictionary with the names as keys and abbreviations that include the first letter of each University name
+    input: a list of University names
+    output: a dictionary with the names as keys and abbreviations that include the first letter of each University name
     """
-    return {uni_name: ''.join(word[0].upper() for word in uni_name.split()) for uni_name in name_lst}
+    return {
+        uni_name: "".join(word[0].upper() for word in uni_name.split())
+        for uni_name in name_lst
+    }
 
 
 def __get_general_modality_treemap(df):
     """
-        input: dataframe
-        output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
+    input: dataframe
+    output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
     """
-    modality_counts = df['generalmodality'].value_counts().to_dict()
-    
-    plt.figure(figsize=(14,10))
+    modality_counts = df["generalmodality"].value_counts().to_dict()
+    plt.figure(figsize=(14, 10))
     values = list(modality_counts.values())
     name = list(modality_counts.keys())
     abbrName = __get_lable_dict(name)
@@ -60,37 +61,50 @@ def __get_general_modality_treemap(df):
     print(num_labels)
 
     ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
-    ax.axis('off')
+    ax.axis("off")
     ax.invert_xaxis()
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
 
     legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
-    plt.legend(legend_patches, name, loc='upper left', bbox_to_anchor=(1, 1), fontsize='medium')\
-
+    plt.legend(
+        legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
+    )
     plt.show()
 
-import humanize
 
 def __get_pretty_size_statistics(df):
-  size_stats = __get_size_statistics(df)
+    """
+    Pretty version of __get_size_statistics
 
-  return [humanize.naturalsize(size_stats[0]), humanize.naturalsize(size_stats[1]), humanize.naturalsize(size_stats[2]), humanize.naturalsize(size_stats[3])]
-    
+    Input: dataframe
+    Output: list of strings
+    """
+    size_stats = __get_size_statistics(df)
+
+    return [
+        humanize.naturalsize(size_stats[0]),
+        humanize.naturalsize(size_stats[1]),
+        humanize.naturalsize(size_stats[2]),
+        humanize.naturalsize(size_stats[3]),
+    ]
+
+
 def __get_size_statistics(df):
-  '''
-  Helper method that returns size statistics from size column.
+    """
+    Helper method that returns size statistics from size column.
 
-  Input: dataframe
-  Output: list of numbers
-  '''
+    Input: dataframe
+    Output: list of numbers
+    """
 
-  min = df['size'].min()
-  max = df['size'].max()
-  average = df['size'].mean()
-  std = df['size'].std()
+    min = df["size"].min()
+    max = df["size"].max()
+    average = df["size"].mean()
+    std = df["size"].std()
 
-  return[min, max, average, std]
-    
+    return [min, max, average, std]
+
+
 def today():
     """
     Get today's snapshot of Brain Image Library.
