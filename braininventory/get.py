@@ -160,9 +160,21 @@ def __get__percentage_of_metadata_version_1(df):
   Get the percentage/ratio of metadata version 1 from all datasets
 
   Input: dataframe
-  Output: an integer 
+  Output: a float 
   """
     return len(df[df["metadata_version"] == 1]) / len(df)
+
+
+def __get__metadata_version_2(df):
+    
+  """
+  Get the percentage/ratio of metadata version 1 from all datasets
+
+  Input: dataframe
+  Output: a float 
+  """
+    
+  return len(df[df['metadata_version'] == 2]) / len(df)
 
 
 def report():
