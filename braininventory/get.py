@@ -30,6 +30,44 @@ def get_random_sample(df):
 
     return result.json()
 
+import urllib.request
+import matplotlib.pyplot as plt
+import seaborn as sb
+import squarify
+
+def __get_lable_dict(name_lst):
+    """
+        input: a list of University names
+        output: a dictionary with the names as keys and abbreviations that include the first letter of each University name
+    """
+    return {uni_name: ''.join(word[0].upper() for word in uni_name.split()) for uni_name in name_lst}
+
+
+def __get_general_modality_treemap(df):
+    """
+        input: dataframe
+        output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
+    """
+    modality_counts = df['generalmodality'].value_counts().to_dict()
+    
+    plt.figure(figsize=(14,10))
+    values = list(modality_counts.values())
+    name = list(modality_counts.keys())
+    abbrName = __get_lable_dict(name)
+    colors = sb.color_palette("ocean", len(values))
+
+    num_labels = len(df.keys())
+    print(num_labels)
+
+    ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
+    ax.axis('off')
+    ax.invert_xaxis()
+    ax.set_aspect('equal')
+
+    legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
+    plt.legend(legend_patches, name, loc='upper left', bbox_to_anchor=(1, 1), fontsize='medium')\
+
+    plt.show()
 
 def today():
     """
