@@ -69,6 +69,21 @@ def __get_general_modality_treemap(df):
 
     plt.show()
 
+def __get_size_statistics(df):
+  '''
+  Helper method that returns size statistics from size column.
+
+  Input: dataframe
+  Output: list of numbers
+  '''
+
+  min = df['size'].min()
+  max = df['size'].max()
+  average = df['size'].mean()
+  std = df['size'].std()
+
+  return[min, max, average, std]
+    
 def today():
     """
     Get today's snapshot of Brain Image Library.
