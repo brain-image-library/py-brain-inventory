@@ -278,30 +278,12 @@ def __get_affiliations(df):
         A dictionary where the keys represent unique values in the "affiliation"
         column, and the values represent the count of occurrences of each unique value.
 
-    Example:
-    --------
-    >>> import pandas as pd
-    >>> data = {
-    ...     "name": ["John", "Jane", "Michael", "Emily", "William"],
-    ...     "affiliation": ["Company A", "Company B", "Company A", "Company C", "Company B"]
-    ... }
-    >>> df = pd.DataFrame(data)
-    >>> result = __get_affiliation(df)
-    >>> print(result)
-    {
-        "Company A": 2,
-        "Company B": 2,
-        "Company C": 1
-    }
-
     Note:
     -----
     The input DataFrame `df` should have a column named "affiliation" containing
     categorical data, where the function will count the occurrences of each unique value.
     """
     return df["affiliation"].value_counts().to_dict()
-
-
 
 def __get_contributors(df):
     return df["contributorname"].value_counts().to_dict()
