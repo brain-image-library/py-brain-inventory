@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 import json
 from datetime import date
+import pandas as pd
+import matplotlib.pyplot as plt
 from pandarallel import pandarallel
 
 pandarallel.initialize(nb_workers=8, progress_bar=True)
@@ -29,6 +31,16 @@ def today():
     else:
         print("Error: Failed to fetch JSON data")
         return pd.DataFrame()
+
+
+def __get_affiliation_frequency(df):
+    """
+    Get affiliation frequency.
+
+    Input: dataframe
+    Output: a frequency dictionary
+    """
+    return df["affiliation"].value_counts().to_dict()
 
 
 def __get_number_of_datasets(df):
@@ -195,8 +207,10 @@ def report():
     # Convert date to string
     tdate = tdate.strftime("%Y%m%d")
 
+    # Get today's data info
     df = today()
 
+    # Build report
     report = {}
     report["date"] = tdate
     report["number_of_datasets"] = __get_number_of_datasets(df)
