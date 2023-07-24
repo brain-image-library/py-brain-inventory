@@ -16,12 +16,29 @@ import squarify
 
 def get_random_sample(df):
     """
-    Returns a random sample from the dataframe from a dataset with non-zero score.
+    Get a random sample from the DataFrame and retrieve JSON data from the corresponding link.
 
-    Input: dataframe
-    Output:open the json file that was located in datasets Brain Image Library dataframe
+    This function takes a pandas DataFrame `df` as input, filters out rows with a score of 0.0, and
+    randomly selects one row from the remaining data. It then constructs a download link for a JSON
+    file using the "json_file" column in the selected row. The function makes a request to the generated
+    link and returns the JSON data as a Python dictionary.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing information about JSON files and scores.
+
+    Returns:
+    --------
+    dict
+        A Python dictionary containing the JSON data retrieved from the randomly selected link.
+
+    Note:
+    -----
+    The input DataFrame `df` should contain a "json_file" column representing links to JSON files and a "score"
+    column representing scores associated with each file. The function filters out rows with a score of 0.0,
+    selects a random row from the remaining data, and retrieves JSON data from the link in that row.
     """
-
     isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
     randomRow = isNotZero.iloc[
         random.randint(0, len(isNotZero))
@@ -36,8 +53,28 @@ def get_random_sample(df):
 
 def __get_lable_dict(name_lst):
     """
-    input: a list of University names
-    output: a dictionary with the names as keys and abbreviations that include the first letter of each University name
+    Generate a dictionary of labeled names based on a list of university names.
+
+    This function takes a list of university names `name_lst` as input and generates a dictionary
+    where each university name is the key, and the corresponding value is a labeled version of the name.
+    The labeled version consists of the uppercase initials of each word in the university name.
+
+    Parameters:
+    -----------
+    name_lst : list
+        A list of strings representing university names.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys are university names, and the values are their corresponding labeled versions.
+
+    Note:
+    -----
+    The function takes each university name in the input list `name_lst`, splits it into individual words,
+    and extracts the first letter of each word as uppercase. It then concatenates these uppercase letters
+    to create a labeled version of the university name. The result is returned as a dictionary where the
+    original university names are the keys and the labeled versions are the values.
     """
     return {
         uni_name: "".join(word[0].upper() for word in uni_name.split())
@@ -47,8 +84,28 @@ def __get_lable_dict(name_lst):
 
 def __get_general_modality_treemap(df):
     """
-    input: dataframe
-    output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
+    Generate a treemap visualization of general modalities based on their counts.
+
+    This function takes a pandas DataFrame `df` as input, extracts the counts of each unique value
+    in the "generalmodality" column, and creates a treemap visualization to represent the relative
+    proportions of each modality. The treemap is displayed using the matplotlib and squarify libraries.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "generalmodality" with general modality information.
+
+    Returns:
+    --------
+    None
+        The function displays the treemap visualization using matplotlib.pyplot.show().
+
+        Note:
+    -----
+    The function calculates the counts of each unique general modality in the input DataFrame `df` and
+    visualizes the relative proportions using a treemap plot. The size of each rectangle in the treemap
+    is proportional to the count of the corresponding general modality. The treemap is labeled with the
+    abbreviated names of the general modalities, and a legend shows the full names and their associated colors.
     """
     modality_counts = df["generalmodality"].value_counts().to_dict()
     plt.figure(figsize=(14, 10))
@@ -74,10 +131,32 @@ def __get_general_modality_treemap(df):
 
 def __get_pretty_size_statistics(df):
     """
-    Pretty version of __get_size_statistics
+    Get human-readable size statistics for the data in the DataFrame.
 
-    Input: dataframe
-    Output: list of strings
+    This function takes a pandas DataFrame `df` as input and calculates size statistics based
+    on the data contained in the DataFrame using the function __get_size_statistics(df). The
+    size statistics are then formatted into human-readable representations using the `humanize`
+    library to display the size in a more understandable format.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing data for which size statistics are to be calculated.
+
+    Returns:
+    --------
+    list
+        A list containing human-readable representations of the size statistics in the following order:
+        - Total size (sum of all sizes)
+        - Mean size (average size)
+        - Minimum size
+        - Maximum size
+
+    Note:
+    -----
+    The function calculates the size statistics using __get_size_statistics(df) and converts the size values
+    into human-readable representations using the `humanize` library. The returned list contains the total size,
+    mean size, minimum size, and maximum size in human-readable format.
     """
     size_stats = __get_size_statistics(df)
 
@@ -91,12 +170,32 @@ def __get_pretty_size_statistics(df):
 
 def __get_size_statistics(df):
     """
-    Helper method that returns size statistics from size column.
+    Get basic size statistics from the DataFrame.
 
-    Input: dataframe
-    Output: list of numbers
+    This function takes a pandas DataFrame `df` as input and calculates basic size statistics
+    based on the "size" column in the DataFrame. The statistics computed include the minimum size,
+    maximum size, average size, and standard deviation of the sizes.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "size" with size information.
+
+    Returns:
+    --------
+    list
+        A list containing basic size statistics in the following order:
+        - Minimum size
+        - Maximum size
+        - Average size
+        - Standard deviation of the sizes
+
+    Note:
+    -----
+    The function calculates basic size statistics using the "size" column in the input DataFrame `df`.
+    The returned list contains the minimum size, maximum size, average size, and standard deviation
+    of the sizes.
     """
-
     min = df["size"].min()
     max = df["size"].max()
     average = df["size"].mean()
@@ -107,9 +206,29 @@ def __get_size_statistics(df):
 
 def today():
     """
-    Get today's snapshot of Brain Image Library.
-    """
+    Get the daily inventory report data for today.
 
+    This function attempts to fetch the daily inventory report data either from a local file
+    or from the web. If the data is available locally, it loads the data from the disk.
+    Otherwise, it makes a request to the server to fetch the data in JSON format, which is then
+    parsed into a pandas DataFrame.
+
+    Returns:
+    --------
+    pandas DataFrame
+        A pandas DataFrame containing the daily inventory report data for today. If the data
+        cannot be fetched, an empty DataFrame is returned.
+
+    Note:
+    -----
+    The function first checks if the daily report data is available locally by looking in the
+    directory "/bil/data/inventory/daily/reports/". If the data exists locally, it is loaded from
+    the disk into a pandas DataFrame. If the data is not available locally, the function makes a
+    request to the web server "https://download.brainimagelibrary.org/inventory/daily/reports/"
+    to fetch the "today.json" file. If the request is successful (status code 200), the JSON data
+    is parsed into a dictionary and converted into a pandas DataFrame. If the request fails, an
+    error message is printed, and an empty DataFrame is returned.
+    """
     # if file can be found locally, then load from disk
     directory = "/bil/data/inventory/daily/reports/"
     if Path(directory).exists():
@@ -135,6 +254,32 @@ def today():
 
 
 def __clean_affiliations(df):
+    """
+    Clean and aggregate the affiliation data in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and performs some data cleaning
+    and aggregation operations on the "affiliation" column. It addresses issues where there
+    may be multiple variations of the same affiliation name (e.g., with or without trailing
+    spaces) and combines the counts of such variations to have a single representation in
+    the final result.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing affiliation information.
+
+    Returns:
+    --------
+    pandas Series or DataFrame
+        A pandas Series or DataFrame with cleaned and aggregated affiliation data,
+        depending on the specific operations performed on the input DataFrame.
+
+    Note:
+    -----
+    The function aims to address cases where there are multiple variations of the same affiliation name
+    and combines their counts to provide a more accurate representation in the final result. The specific
+    operations and the final result may vary depending on the input DataFrame's content.
+    """
     # Need to combine the universities so the pie chart shows a single university's total samples under the same area.
     # right now there is one area of the pie chart that says 'Allen Institute for Brain Science' and 'Allen Instititute for Brain Science ' (with a space!)
     # we need it to recognize that the Allen Institue for Brain Science has contributed a total number of samples equal to the sum of both those areas in the pie chart
@@ -179,15 +324,55 @@ def __clean_affiliations(df):
 
 def __get_affiliation_frequency(df):
     """
-    Get affiliation frequency.
+    Get a dictionary containing the count of occurrences of each unique affiliation.
 
-    Input: dataframe
-    Output: a frequency dictionary
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "affiliation" column. The result is returned as a dictionary, where
+    the keys represent unique affiliations, and the values represent the count of occurrences
+    for each affiliation.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "affiliation" with affiliation information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique affiliations, and the values represent
+        the count of occurrences for each affiliation.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "affiliation" containing categorical data
+    representing different affiliations. The function counts the occurrences of each unique affiliation
+    and returns the result as a dictionary.
     """
     return df["affiliation"].value_counts().to_dict()
 
 
 def __get_number_of_datasets(df):
+    """
+    Get the total number of datasets in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and returns the total number of datasets
+    present in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing dataset information.
+
+    Returns:
+    --------
+    int
+        The total number of datasets in the DataFrame.
+
+    Note:
+    -----
+    The function simply returns the length of the DataFrame `df`, which corresponds to the total number
+    of datasets present in the DataFrame.
+    """
     return len(df)
 
 
@@ -775,51 +960,132 @@ def __get_locations(df):
 
 def __get_contributors(df):
     """
-    This returns an array of contributor names from the contributorname column.
+    Get a list of unique contributors from the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "contributorname" column. It returns a list containing the names of unique contributors.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing contributor information.
+
+    Returns:
+    --------
+    list
+        A list containing the names of unique contributors present in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "contributorname" containing names of contributors.
+    The function extracts the unique names from the column and returns them as a list.
     """
     return df["contributorname"].unique()
 
 
 def __get_project_names(df):
     """
-          Gets the unique list of project names.
+    Get a list of unique project names from the input DataFrame.
 
-    Input: dataframe
-    Output: list
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a list containing the names of unique projects.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    list
+        A list containing the names of unique projects present in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as a list.
     """
     return df["project"].unique()
 
 
 def __get_list_of_projects(df):
     """
-    Get the list of names for unique projects
+    Get a dictionary of unique project names from the input DataFrame.
 
-    Input parameter: dataframe
-    Output:  list of projects
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a dictionary where the keys represent the unique project names,
+    and the values are set to None.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the unique project names as keys and None as values.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as keys in
+    the dictionary. The values for all keys are set to None.
     """
-
     return df["project"].unique().to_dict()
 
 
 def __get_number_of_projects(df):
     """
-    Get the number of unique projects
+    Get the number of unique projects from the input DataFrame.
 
-    Input parameter: dataframe
-    Output:  number of projects
+    This function takes a pandas DataFrame `df` as input and calculates the number of unique
+    project names present in the "project" column.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    int
+        The number of unique projects in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function calculates the number of unique project names in the column and returns the count as an integer.
     """
-
     return len(df["project"].unique())
 
 
 def get_projects_treemap(df):
     """
-    Created a code for the visualization of projects frequency
+    Generate a treemap visualization for project counts in the input DataFrame.
 
-    Input: project values
-    Output: treemap graph of projects frequency
+    This function takes a pandas DataFrame `df` as input and creates a treemap visualization
+    to represent the relative proportions of each project based on their counts in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    None
+        The function displays the treemap visualization using matplotlib.pyplot.
+
+    Note:
+    -----
+    The function calculates the counts of each unique project in the input DataFrame `df` and
+    visualizes the relative proportions using a treemap plot. The size of each rectangle in the
+    treemap is proportional to the count of the corresponding project. The treemap is displayed
+    using the `squarify` and `matplotlib.pyplot` libraries. The plot is saved as a PNG file with a
+    filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
+    date when the function is executed.
     """
-
     df = df["project"].value_counts().to_dict()
     sizes_list = list(df.values())
     names_list = list(df.keys())
@@ -831,15 +1097,60 @@ def get_projects_treemap(df):
 
 def __get__percentage_of_metadata_version_1(df):
     """
-    Get the percentage/ratio of metadata version 1 from all datasets
+    Get the percentage of metadata version 1 samples in the input DataFrame.
 
-    Input: dataframe
-    Output: an integer
+    This function takes a pandas DataFrame `df` as input and calculates the percentage of samples
+    in the DataFrame that have a metadata version equal to 1.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing metadata information.
+
+    Returns:
+    --------
+    float
+        The percentage of samples with metadata version 1 as a decimal value.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "metadata_version" containing numeric values
+    representing the metadata version for each sample. The function calculates the percentage of samples
+    with metadata version 1 by dividing the count of samples with version 1 by the total number of samples.
+    The result is returned as a decimal value representing the percentage.
     """
     return len(df[df["metadata_version"] == 1]) / len(df)
 
 
 def report():
+    """
+    Generate a report summarizing data statistics for today's datasets.
+
+    This function generates a report summarizing various data statistics for today's datasets.
+    It retrieves today's date, collects data information for today using the `today()` function,
+    and computes various statistics related to the datasets. The statistics include the number
+    of datasets, number of unique projects, completeness score, metadata versions count,
+    contributor count, affiliation count, award numbers count, species count, CNB taxonomy count,
+    sample local ID count, genotype count, general modality count, technique count, location count,
+    and the percentage of datasets with metadata version 1. Additionally, it creates a treemap
+    visualization for project counts.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the generated report with various data statistics.
+
+    Note:
+    -----
+    The function generates a report summarizing data statistics for today's datasets. It collects
+    the required data using various helper functions and creates a dictionary containing the
+    computed statistics. The report includes information on the number of datasets, number of unique
+    projects, completeness score, metadata versions count, contributor count, affiliation count,
+    award numbers count, species count, CNB taxonomy count, sample local ID count, genotype count,
+    general modality count, technique count, location count, and the percentage of datasets with
+    metadata version 1. The treemap visualization for project counts is also generated as part of the
+    report.
+    """
     # Get today's date
     tdate = date.today()
 
