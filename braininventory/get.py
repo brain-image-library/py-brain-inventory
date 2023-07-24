@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import squarify
 
 ############################# METADATA_VERSION
-def __get_metadata_version(df):
+def __get_metadata_version(df): 
     """
     Get a dictionary containing the count of occurrences of each unique metadata version.
 
@@ -88,7 +88,7 @@ def __get__percentage_of_metadata_version_2(df):
         float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
     """
     return len(df[df["metadata_version"] == 2]) / len(df)
-
+  #_projects
 #################################################################################
 
 def __get_number_of_species(df):
