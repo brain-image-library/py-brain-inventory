@@ -211,6 +211,35 @@ def get_projects_treemap(df):
 def __get_affiliations(df):
     return df["affiliation"].value_counts().keys()
 
+def __get_affilation(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique affiliation.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "affiliation" column. The result is returned as a dictionary, where
+    the keys represent unique affiliations, and the values represent the count of occurrences
+    for each affiliation.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "affiliation" with affiliation information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique affiliations, and the values represent
+        the count of occurrences for each affiliation.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "affiliation" containing categorical data
+    representing different affiliations. The function counts the occurrences of each unique affiliation
+    and returns the result as a dictionary.
+    """
+    return df["affiliation"].value_counts().to_dict()
+
+
 def __clean_affiliations(df):
     """
     Clean and aggregate the affiliation data in the input DataFrame.
@@ -838,35 +867,6 @@ def __get_contributor(df):
     and returns the result as a dictionary.
     """
     return df["contributor"].value_counts().to_dict()
-
-
-def __get_affilation(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique affiliation.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "affiliation" column. The result is returned as a dictionary, where
-    the keys represent unique affiliations, and the values represent the count of occurrences
-    for each affiliation.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "affiliation" with affiliation information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique affiliations, and the values represent
-        the count of occurrences for each affiliation.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "affiliation" containing categorical data
-    representing different affiliations. The function counts the occurrences of each unique affiliation
-    and returns the result as a dictionary.
-    """
-    return df["affiliation"].value_counts().to_dict()
 
 
 def __get_awards(df):
