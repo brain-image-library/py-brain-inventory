@@ -1,12 +1,17 @@
+import calendar
 import json
+import random
 from datetime import date
 
+import folium
+import geoip2.database
 import humanize
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 import seaborn as sb
 import squarify
+from geopy.geocoders import Nominatim
 from pandarallel import pandarallel
 
 pandarallel.initialize(nb_workers=8, progress_bar=True)
@@ -14,31 +19,103 @@ import matplotlib.pyplot as plt
 import squarify
 
 
-def get_random_sample(df):
+def __get_md5_coverage(df):
     """
-    Get a random sample from the DataFrame and retrieve JSON data from the corresponding link.
-
-    This function takes a pandas DataFrame `df` as input, filters out rows with a score of 0.0, and
-    randomly selects one row from the remaining data. It then constructs a download link for a JSON
-    file using the "json_file" column in the selected row. The function makes a request to the generated
-    link and returns the JSON data as a Python dictionary.
+    Calculate the average MD5256 coverage from a DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing information about JSON files and scores.
+        df (pandas.DataFrame): The DataFrame containing the 'md5_coverage' column.
 
     Returns:
-    --------
-    dict
-        A Python dictionary containing the JSON data retrieved from the randomly selected link.
+        float: The average MD5 coverage.
 
-    Note:
-    -----
-    The input DataFrame `df` should contain a "json_file" column representing links to JSON files and a "score"
-    column representing scores associated with each file. The function filters out rows with a score of 0.0,
-    selects a random row from the remaining data, and retrieves JSON data from the link in that row.
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+    Example:
+        >>> data = {'md5_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_md5_coverage(df)
+        0.79
     """
+    average = df["md5_coverage"].mean()
+    return average
+
+
+def __get_sha256_coverage(df):
+    """
+    Calculate the average SHA256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'sha256_coverage' column.
+
+    Returns:
+        float: The average SHA256 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+
+    Example:
+        >>> data = {'sha256_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_sha256_coverage(df)
+        0.79
+    """
+    average = df["sha256_coverage"].mean()
+    return average
+
+
+def __create_general_modality_plot(df):
+    """
+    Create a bar plot to visualize the frequency of general modalities.
+
+    This function takes a pandas DataFrame as input and generates a bar plot to display the frequency
+    of different general modalities in the 'generalmodality' column of the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a bar plot but does not return any value. The plot is saved as an
+            image file with a filename in the format 'general-modality-YYYYMMDD.png', where 'YYYYMMDD'
+            represents the current date in year-month-day format.
+    """
+
+    modality_counts = df["generalmodality"].value_counts()
+
+    plt.figure(figsize=(10, 6))
+    color = plt.cm.tab20c.colors
+
+    ax = modality_counts.plot(kind="bar", color=color, edgecolor="black")
+    plt.xlabel("General Modality", fontsize=12)
+    plt.ylabel("Frequency", fontsize=12)
+    plt.title("Frequency of General Modality", fontsize=14)
+    plt.xticks(rotation=45, ha="right", fontsize=10)
+    plt.yticks(fontsize=10)
+
+    plt.tight_layout()
+
+    filename = f'general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
+
+
+def get_random_sample(df):
+    """
+    Retrieve a random JSON file from the DataFrame.
+
+    This function takes a pandas DataFrame as input and filters it to keep only the rows that have
+    a non-zero 'score' value. From the filtered rows, it selects a random row using the 'random.randint()'
+    function. It then generates a valid link to the JSON file by replacing '/bil/data' with
+    'https://download.brainimagelibrary.org' in the 'json_file' column of the selected row. The function
+    performs an HTTP GET request to download the JSON file from the generated link, and it returns the
+    JSON data as a Python dictionary.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'score' and 'json_file' columns.
+
+    Returns:
+        dict: A Python dictionary containing the JSON data retrieved from a random row's JSON file.
+    """
+
     isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
     randomRow = isNotZero.iloc[
         random.randint(0, len(isNotZero))
@@ -82,31 +159,23 @@ def __get_lable_dict(name_lst):
     }
 
 
-def __get_general_modality_treemap(df):
+def __create_general_modality_treemap(df):
     """
-    Generate a treemap visualization of general modalities based on their counts.
+    Create a treemap visualization for the general modality data.
 
-    This function takes a pandas DataFrame `df` as input, extracts the counts of each unique value
-    in the "generalmodality" column, and creates a treemap visualization to represent the relative
-    proportions of each modality. The treemap is displayed using the matplotlib and squarify libraries.
+    This function takes a pandas DataFrame as input and generates a treemap visualization based on
+    the counts of different modalities in the 'generalmodality' column of the DataFrame. The function
+    utilizes the Squarify library to create the treemap.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "generalmodality" with general modality information.
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
 
     Returns:
-    --------
-    None
-        The function displays the treemap visualization using matplotlib.pyplot.show().
-
-        Note:
-    -----
-    The function calculates the counts of each unique general modality in the input DataFrame `df` and
-    visualizes the relative proportions using a treemap plot. The size of each rectangle in the treemap
-    is proportional to the count of the corresponding general modality. The treemap is labeled with the
-    abbreviated names of the general modalities, and a legend shows the full names and their associated colors.
+        None: The function generates a treemap and saves it as an image file, but it does not return any value.
+            The treemap is saved with a filename in the format 'treemap-general-modality-YYYYMMDD.png', where
+            'YYYYMMDD' represents the current date in year-month-day format.
     """
+
     modality_counts = df["generalmodality"].value_counts().to_dict()
     plt.figure(figsize=(14, 10))
     values = list(modality_counts.values())
@@ -126,38 +195,29 @@ def __get_general_modality_treemap(df):
     plt.legend(
         legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
     )
-    plt.show()
+
+    filename = f'treemap-general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
 
 
 def __get_pretty_size_statistics(df):
     """
-    Get human-readable size statistics for the data in the DataFrame.
+    Get human-readable size statistics from the DataFrame.
 
-    This function takes a pandas DataFrame `df` as input and calculates size statistics based
-    on the data contained in the DataFrame using the function __get_size_statistics(df). The
-    size statistics are then formatted into human-readable representations using the `humanize`
-    library to display the size in a more understandable format.
+    This method takes a pandas DataFrame as input and calculates size statistics using the '__get_size_statistics()'
+    method. The statistics include the minimum, maximum, mean, and total size of the data in the DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing data for which size statistics are to be calculated.
+        df (pandas.DataFrame): The input DataFrame.
 
     Returns:
-    --------
-    list
-        A list containing human-readable representations of the size statistics in the following order:
-        - Total size (sum of all sizes)
-        - Mean size (average size)
-        - Minimum size
-        - Maximum size
-
-    Note:
-    -----
-    The function calculates the size statistics using __get_size_statistics(df) and converts the size values
-    into human-readable representations using the `humanize` library. The returned list contains the total size,
-    mean size, minimum size, and maximum size in human-readable format.
+        list: A list containing human-readable size statistics in the following order:
+            - Human-readable minimum size.
+            - Human-readable maximum size.
+            - Human-readable mean size.
+            - Human-readable total size.
     """
+
     size_stats = __get_size_statistics(df)
 
     return [
@@ -170,31 +230,20 @@ def __get_pretty_size_statistics(df):
 
 def __get_size_statistics(df):
     """
-    Get basic size statistics from the DataFrame.
+    Calculate basic size statistics from the DataFrame.
 
-    This function takes a pandas DataFrame `df` as input and calculates basic size statistics
-    based on the "size" column in the DataFrame. The statistics computed include the minimum size,
-    maximum size, average size, and standard deviation of the sizes.
+    This method takes a pandas DataFrame as input and calculates basic size statistics, including the minimum,
+    maximum, mean, and standard deviation of the 'size' column in the DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "size" with size information.
+        df (pandas.DataFrame): The input DataFrame containing the 'size' column.
 
     Returns:
-    --------
-    list
-        A list containing basic size statistics in the following order:
-        - Minimum size
-        - Maximum size
-        - Average size
-        - Standard deviation of the sizes
-
-    Note:
-    -----
-    The function calculates basic size statistics using the "size" column in the input DataFrame `df`.
-    The returned list contains the minimum size, maximum size, average size, and standard deviation
-    of the sizes.
+        list: A list containing the size statistics in the following order:
+            - Minimum size.
+            - Maximum size.
+            - Mean size.
+            - Standard deviation of sizes.
     """
     min = df["size"].min()
     max = df["size"].max()
@@ -202,6 +251,65 @@ def __get_size_statistics(df):
     std = df["size"].std()
 
     return [min, max, average, std]
+
+
+def get_jsonFile(df):
+    """
+    Extract and format the date from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the creation date information from
+    the associated JSON file using the 'get_jsonFile()' function. It then processes the date information,
+    reformatting it into the 'year-day-month' format (e.g., '2023-24-Jul').
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame.
+
+    Returns:
+        str: A string representing the formatted date in the 'year-day-month' format.
+    """
+
+    isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
+    randomRow = isNotZero.iloc[
+        random.randint(0, len(isNotZero))
+    ]  # select a random row of random index
+    jsonFileLink = randomRow.json_file.replace(
+        "/bil/data", "https://download.brainimagelibrary.org", 1
+    )  # create the link
+    result = requests.get(jsonFileLink)
+
+    return result.json()
+
+
+def get_date(df):
+    """
+    Get unique genotypes from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
+    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
+    column.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
+    """
+
+    jsonFile = get_jsonFile(
+        df
+    )  # get the jsonFile information with get_jsonFile() function
+    dateList = jsonFile["creation_date"].split()  # get creation_date
+    mntList = dict(
+        (month, index) for index, month in enumerate(calendar.month_abbr) if month
+    )  # month abbr to number
+    yr = dateList[4]  # get year
+    mnt = mntList[dateList[1]]  # get month
+    day = dateList[2]  # get day
+    return f"{yr}-{day}-{mnt}"  # format in year-day-month
+
+
+def __get_affiliations(df):
+    return df["affiliation"].value_counts().keys()
 
 
 def today():
@@ -694,6 +802,23 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
+def __get_genotypes(df):
+    """
+    Get unique genotypes from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
+    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
+    column.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
+    """
+    return df["genotype"].unique()
+
+
 def __get_genotype_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique genotype.
@@ -894,7 +1019,6 @@ def __get_projects(df):
     representing different projects and techniques, respectively. The function counts the occurrences of each
     unique project and technique and returns them as part of a single dictionary.
     """
-    return df["project"].value_counts().to_dict()
     return df["technique"].unique().to_dict()
 
 
@@ -985,7 +1109,7 @@ def __get_contributors(df):
 
 def __get_project_names(df):
     """
-    Get a list of unique project names from the input DataFrame.
+    Gets the unique list of project names.
 
     This function takes a pandas DataFrame `df` as input and extracts the unique values from the
     "project" column. It returns a list containing the names of unique projects.
@@ -1092,7 +1216,24 @@ def get_projects_treemap(df):
     squarify.plot(sizes_list)
 
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig("path/to/save/plot.png")
+    plt.savefig(filename)
+
+
+def __get_modalities(df):
+    """
+    Get the counts of different modalities from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the counts of different modalities
+    from the 'generalmodality' column of the DataFrame. It returns a dictionary where the keys
+    represent the unique modalities, and the values represent their respective counts.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        dict: A dictionary with modalities as keys and their corresponding counts as values.
+    """
+    return (df["generalmodality"].value_counts()).to_dict()
 
 
 def __get__percentage_of_metadata_version_1(df):
@@ -1120,6 +1261,19 @@ def __get__percentage_of_metadata_version_1(df):
     The result is returned as a decimal value representing the percentage.
     """
     return len(df[df["metadata_version"] == 1]) / len(df)
+
+
+def __get__percentage_of_metadata_version_2(df):
+    """
+    Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'metadata_version' column.
+
+    Returns:
+        float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
+    """
+    return len(df[df["metadata_version"] == 2]) / len(df)
 
 
 def report():
