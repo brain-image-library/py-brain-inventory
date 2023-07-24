@@ -208,6 +208,104 @@ def get_projects_treemap(df):
     plt.savefig(filename)
 
 #################################################AFFILIATION
+def __get_affiliations(df):
+    return df["affiliation"].value_counts().keys()
+
+def __clean_affiliations(df):
+    """
+    Clean and aggregate the affiliation data in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and performs some data cleaning
+    and aggregation operations on the "affiliation" column. It addresses issues where there
+    may be multiple variations of the same affiliation name (e.g., with or without trailing
+    spaces) and combines the counts of such variations to have a single representation in
+    the final result.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing affiliation information.
+
+    Returns:
+    --------
+    pandas Series or DataFrame
+        A pandas Series or DataFrame with cleaned and aggregated affiliation data,
+        depending on the specific operations performed on the input DataFrame.
+
+    Note:
+    -----
+    The function aims to address cases where there are multiple variations of the same affiliation name
+    and combines their counts to provide a more accurate representation in the final result. The specific
+    operations and the final result may vary depending on the input DataFrame's content.
+    """
+    # Need to combine the universities so the pie chart shows a single university's total samples under the same area.
+    # right now there is one area of the pie chart that says 'Allen Institute for Brain Science' and 'Allen Instititute for Brain Science ' (with a space!)
+    # we need it to recognize that the Allen Institue for Brain Science has contributed a total number of samples equal to the sum of both those areas in the pie chart
+    Allen = df[df["affiliation"] == "Allen Institute for Brain Science"]
+
+    # ^we set a variable 'Allen' equal to the dataframe limited to the rows where it said 'Allen Institute for Brain Science and asked for the count of those rows
+    # below, we did the same thing but with rows that had Allen with a space
+
+    Allen_with_space = df[df["affiliation"] == "Allen Institute for Brain Science "]
+
+    accurate_Allen = len(Allen) + len(Allen_with_space)
+
+    del affiliations["Allen Institute for Brain Science "]
+
+    # Now we can add the counts we had before. (We deleted Allen with a space, but we still have the number of Allen with a space)
+    # reassign the Allen Institute for Brain Science variable to the actual total number (4715)
+
+    affiliations["Allen Institute for Brain Science"] = len(Allen) + len(
+        Allen_with_space
+    )
+
+    # Now we need to do the same thing with UCLA
+    # 1) limit the dictionary to ones that read 'University of California, Los Angeles' and the one that says 'University of California, Los Angeles (UCLA)'
+
+    No_UCLA = affiliations["University of California, Los Angeles"]
+
+    UCLA_present = affiliations["University of California, Los Angeles (UCLA)"]
+
+    # 2) Now we found the counts of both. We have to set the college equal to the sum of the category with no UCLA and the catgory with UCLA and delete the one we don't want.
+
+    # del affiliations['University of California, Los Angeles (UCLA)']
+    # print(len(affiliations))
+
+    accurate_Uni = (
+        affiliations["University of California, Los Angeles"]
+        + affiliations["University of California, Los Angeles (UCLA)"]
+    )
+
+    del affiliations["University of California, Los Angeles (UCLA)"]
+    return affiliations
+
+def __get_affiliation_frequency(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique affiliation.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "affiliation" column. The result is returned as a dictionary, where
+    the keys represent unique affiliations, and the values represent the count of occurrences
+    for each affiliation.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "affiliation" with affiliation information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique affiliations, and the values represent
+        the count of occurrences for each affiliation.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "affiliation" containing categorical data
+    representing different affiliations. The function counts the occurrences of each unique affiliation
+    and returns the result as a dictionary.
+    """
+    return df["affiliation"].value_counts().to_dict()
 
 
 #################################################################################
@@ -514,8 +612,6 @@ def get_date(df):
     return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
 
-def __get_affiliations(df):
-    return df["affiliation"].value_counts().keys()
 
 
 def today():
@@ -567,102 +663,10 @@ def today():
         return pd.DataFrame()
 
 
-def __clean_affiliations(df):
-    """
-    Clean and aggregate the affiliation data in the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and performs some data cleaning
-    and aggregation operations on the "affiliation" column. It addresses issues where there
-    may be multiple variations of the same affiliation name (e.g., with or without trailing
-    spaces) and combines the counts of such variations to have a single representation in
-    the final result.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing affiliation information.
-
-    Returns:
-    --------
-    pandas Series or DataFrame
-        A pandas Series or DataFrame with cleaned and aggregated affiliation data,
-        depending on the specific operations performed on the input DataFrame.
-
-    Note:
-    -----
-    The function aims to address cases where there are multiple variations of the same affiliation name
-    and combines their counts to provide a more accurate representation in the final result. The specific
-    operations and the final result may vary depending on the input DataFrame's content.
-    """
-    # Need to combine the universities so the pie chart shows a single university's total samples under the same area.
-    # right now there is one area of the pie chart that says 'Allen Institute for Brain Science' and 'Allen Instititute for Brain Science ' (with a space!)
-    # we need it to recognize that the Allen Institue for Brain Science has contributed a total number of samples equal to the sum of both those areas in the pie chart
-    Allen = df[df["affiliation"] == "Allen Institute for Brain Science"]
-
-    # ^we set a variable 'Allen' equal to the dataframe limited to the rows where it said 'Allen Institute for Brain Science and asked for the count of those rows
-    # below, we did the same thing but with rows that had Allen with a space
-
-    Allen_with_space = df[df["affiliation"] == "Allen Institute for Brain Science "]
-
-    accurate_Allen = len(Allen) + len(Allen_with_space)
-
-    del affiliations["Allen Institute for Brain Science "]
-
-    # Now we can add the counts we had before. (We deleted Allen with a space, but we still have the number of Allen with a space)
-    # reassign the Allen Institute for Brain Science variable to the actual total number (4715)
-
-    affiliations["Allen Institute for Brain Science"] = len(Allen) + len(
-        Allen_with_space
-    )
-
-    # Now we need to do the same thing with UCLA
-    # 1) limit the dictionary to ones that read 'University of California, Los Angeles' and the one that says 'University of California, Los Angeles (UCLA)'
-
-    No_UCLA = affiliations["University of California, Los Angeles"]
-
-    UCLA_present = affiliations["University of California, Los Angeles (UCLA)"]
-
-    # 2) Now we found the counts of both. We have to set the college equal to the sum of the category with no UCLA and the catgory with UCLA and delete the one we don't want.
-
-    # del affiliations['University of California, Los Angeles (UCLA)']
-    # print(len(affiliations))
-
-    accurate_Uni = (
-        affiliations["University of California, Los Angeles"]
-        + affiliations["University of California, Los Angeles (UCLA)"]
-    )
-
-    del affiliations["University of California, Los Angeles (UCLA)"]
-    return affiliations
 
 
-def __get_affiliation_frequency(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique affiliation.
 
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "affiliation" column. The result is returned as a dictionary, where
-    the keys represent unique affiliations, and the values represent the count of occurrences
-    for each affiliation.
 
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "affiliation" with affiliation information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique affiliations, and the values represent
-        the count of occurrences for each affiliation.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "affiliation" containing categorical data
-    representing different affiliations. The function counts the occurrences of each unique affiliation
-    and returns the result as a dictionary.
-    """
-    return df["affiliation"].value_counts().to_dict()
 
 
 def __get_number_of_datasets(df):
