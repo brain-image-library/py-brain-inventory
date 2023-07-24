@@ -2,10 +2,14 @@ import json
 from datetime import date
 import calendar
 import pandas as pd
-import urllib.request
 import random
 import requests
 import calendar
+
+import geoip2.database
+from geopy.geocoders import Nominatim
+import folium
+import math
 
 import humanize
 import matplotlib.pyplot as plt
@@ -244,12 +248,6 @@ def get_date(df):
     day = dateList[2]  # get day
     return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
-
-import geoip2.database
-from geopy.geocoders import Nominatim
-import folium
-import math
-import urllib.request
 
 """print(c.get_country_cities(country_code_iso="DE"))"""
 """
@@ -923,7 +921,6 @@ def __get_projects(df):
     representing different projects and techniques, respectively. The function counts the occurrences of each
     unique project and technique and returns them as part of a single dictionary.
     """
-    return df["project"].value_counts().to_dict()
     return df["technique"].unique().to_dict()
 
 
@@ -996,7 +993,7 @@ def __get_contributors(df):
 
 def __get_project_names(df):
     """
-          Gets the unique list of project names.
+    Gets the unique list of project names.
 
     Input: dataframe
     Output: list
@@ -1056,12 +1053,28 @@ def __get_modalities(df):
 
 def __get__percentage_of_metadata_version_1(df):
     """
-    Get the percentage/ratio of metadata version 1 from all datasets
+    Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 1.
 
-    Input: dataframe
-    Output: an integer
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'metadata_version' column.
+
+    Returns:
+        float: The percentage of rows with 'metadata_version' equal to 1 as a decimal value.
     """
     return len(df[df["metadata_version"] == 1]) / len(df)
+
+
+def __get__percentage_of_metadata_version_2(df):
+    """
+    Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'metadata_version' column.
+
+    Returns:
+        float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
+    """
+    return len(df[df["metadata_version"] == 2]) / len(df)
 
 
 def report():
@@ -1098,34 +1111,3 @@ def report():
     get_projects_treemap(df)
 
     return report
-
-
-import pandas as pd
-import urllib.request
-import geoip2.database
-from geopy.geocoders import Nominatim
-import folium
-
-"""
-Import modules that will be used to create the world map, find coordinates of affiliations, and 
-"""
-
-url = "https://download.brainimagelibrary.org/inventory/daily/reports/today.json"
-file_path, _ = urllib.request.urlretrieve(url)
-df = pd.read_json(file_path)
-df
-"""
-Geopy - Input: University Output: Address, lat, lon
-Folium - visual map creator 
-"""
-
-map = folium.Map()
-
-from tqdm import tqdm
-
-for index, row in tqdm(df.iterrows()):
-    city = row["city"]
-    lat = row["lat"]
-    lon = row["lng"]
-    folium.Marker([lat, lon], popup=city).add_to(map)
-map.save("project_map.html")
