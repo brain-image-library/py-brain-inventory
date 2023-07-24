@@ -23,6 +23,49 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+def __get_md5_coverage(df):
+     """
+    Calculate the average MD5256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'md5_coverage' column.
+
+    Returns:
+        float: The average MD5 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+
+    Example:
+        >>> data = {'md5_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_md5_coverage(df)
+        0.79
+    """
+    average = df['md5_coverage'].mean()
+    return average
+
+def __get_sha256_coverage(df):
+     """
+    Calculate the average SHA256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'sha256_coverage' column.
+
+    Returns:
+        float: The average SHA256 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+
+    Example:
+        >>> data = {'sha256_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_sha256_coverage(df)
+        0.79
+    """
+    average = df['sha256_coverage'].mean()
+    return average
 
 def __create_general_modality_plot(df):
     """
