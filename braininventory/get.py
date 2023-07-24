@@ -1154,3 +1154,9 @@ def report():
     get_projects_treemap(df)
 
     return report
+
+
+def species_num(): 
+     #returns number of unique species. currently needs fixing because of capitalization differences
+     return len(df['species'].unique())
+     
