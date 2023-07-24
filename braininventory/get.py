@@ -335,6 +335,89 @@ def __get_affiliation_frequency(df):
     and returns the result as a dictionary.
     """
     return df["affiliation"].value_counts().to_dict()
+###############################################################AWARD_NUMBER
+
+def __get_awards(df):
+    """
+    Get an array containing unique award numbers.
+
+    This function takes a pandas DataFrame `df` as input and returns an array containing
+    the unique values found in the "award_number" column. Each value in the array represents
+    a unique award number associated with the data in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    numpy.ndarray
+        An array of unique award numbers.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function extracts the unique values from the "award_number"
+    column and returns them as an array.
+    """
+    return df["award_number"].unique()
+
+def __get_award_numbers(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique award number.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "award_number" column. The result is returned as a dictionary, where
+    the keys represent unique award numbers, and the values represent the count of occurrences
+    for each award number.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique award numbers, and the values represent
+        the count of occurrences for each award number.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function counts the occurrences of each unique award number
+    and returns the result as a dictionary.
+    """
+    return df["award_number"].value_counts().to_dict()
+
+def __get_award_number(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique award number.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "award_number" column. The result is returned as a dictionary, where
+    the keys represent unique award numbers, and the values represent the count of occurrences
+    for each award number.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "award_number" with award number information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique award numbers, and the values represent
+        the count of occurrences for each award number.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "award_number" containing categorical data
+    representing different award numbers. The function counts the occurrences of each unique award number
+    and returns the result as a dictionary.
+    """
+    return df["award_number"].value_counts().to_dict()
 
 
 #################################################################################
@@ -868,63 +951,6 @@ def __get_contributor(df):
     """
     return df["contributor"].value_counts().to_dict()
 
-
-def __get_awards(df):
-    """
-    Get an array containing unique award numbers.
-
-    This function takes a pandas DataFrame `df` as input and returns an array containing
-    the unique values found in the "award_number" column. Each value in the array represents
-    a unique award number associated with the data in the DataFrame.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
-
-    Returns:
-    --------
-    numpy.ndarray
-        An array of unique award numbers.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function extracts the unique values from the "award_number"
-    column and returns them as an array.
-    """
-    return df["award_number"].unique()
-
-
-def __get_award_number(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique award number.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "award_number" column. The result is returned as a dictionary, where
-    the keys represent unique award numbers, and the values represent the count of occurrences
-    for each award number.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique award numbers, and the values represent
-        the count of occurrences for each award number.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function counts the occurrences of each unique award number
-    and returns the result as a dictionary.
-    """
-    return df["award_number"].value_counts().to_dict()
-
-
 def __get_species(df):
     """
     Get a dictionary containing the count of occurrences of each unique species.
@@ -1084,36 +1110,6 @@ def __get_techniques(df):
     and returns the result as a dictionary.
     """
     return df["technique"].value_counts().to_dict()
-
-
-def __get_award_numbers(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique award number.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "award_number" column. The result is returned as a dictionary, where
-    the keys represent unique award numbers, and the values represent the count of occurrences
-    for each award number.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique award numbers, and the values represent
-        the count of occurrences for each award number.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function counts the occurrences of each unique award number
-    and returns the result as a dictionary.
-    """
-    return df["award_number"].value_counts().to_dict()
-
 
 def __get_affiliations(df):
     """
