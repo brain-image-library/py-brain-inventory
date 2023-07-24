@@ -154,3 +154,28 @@ def report():
     report["locations"] = __get_locations(df)
 
     return report
+
+def create_tree_map(frequency_dict, width, height):
+    """
+    Get a treemap of projects 
+
+    Input parameter: dictionary
+    Output:  treemap image
+    """
+    labels = list(frequency_dict.keys())
+    values = list(frequency_dict.values())
+
+    fig = go.Figure(go.Treemap(
+        labels=labels,
+        parents=[''] * len(labels),
+        values=values,
+        textinfo='label+value'
+    ))
+
+    fig.update_layout(title='Projects', width=width, height=height)
+
+    today = date.today()
+    output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
+    fig.write_image(output_path)
+    fig.show()
+
