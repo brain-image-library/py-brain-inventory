@@ -88,8 +88,9 @@ def __get__percentage_of_metadata_version_2(df):
         float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
     """
     return len(df[df["metadata_version"] == 2]) / len(df)
-  #_projects
-
+    
+#_projects
+################################
 def __get_projects(df):
     """
     Get a dictionary containing the count of occurrences of each unique project.
@@ -205,6 +206,8 @@ def get_projects_treemap(df):
 
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
     plt.savefig(filename)
+
+#################################################AFFILIATION
 
 
 #################################################################################
