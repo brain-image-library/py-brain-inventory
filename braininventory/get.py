@@ -19,8 +19,9 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+
 ############################# METADATA_VERSION
-def __get_metadata_version(df): 
+def __get_metadata_version(df):
     """
     Get a dictionary containing the count of occurrences of each unique metadata version.
 
@@ -49,6 +50,7 @@ def __get_metadata_version(df):
     """
 
     return df["metadata_version"].value_counts().to_dict()
+
 
 def __get__percentage_of_metadata_version_1(df):
     """
@@ -88,8 +90,9 @@ def __get__percentage_of_metadata_version_2(df):
         float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
     """
     return len(df[df["metadata_version"] == 2]) / len(df)
-    
-#_projects
+
+
+# _projects
 ################################
 def __get_projects(df):
     """
@@ -123,6 +126,7 @@ def __get_projects(df):
     """
     return df["technique"].unique().to_dict()
 
+
 def __get_project_names(df):
     """
     Gets the unique list of project names.
@@ -146,6 +150,7 @@ def __get_project_names(df):
     The function extracts the unique project names from the column and returns them as a list.
     """
     return df["project"].unique()
+
 
 def __get_list_of_projects(df):
     """
@@ -172,6 +177,7 @@ def __get_list_of_projects(df):
     the dictionary. The values for all keys are set to None.
     """
     return df["project"].unique().to_dict()
+
 
 def get_projects_treemap(df):
     """
@@ -207,9 +213,11 @@ def get_projects_treemap(df):
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
     plt.savefig(filename)
 
+
 #################################################AFFILIATION
 def __get_affiliations(df):
     return df["affiliation"].value_counts().keys()
+
 
 def __get_affilation(df):
     """
@@ -308,6 +316,7 @@ def __clean_affiliations(df):
     del affiliations["University of California, Los Angeles (UCLA)"]
     return affiliations
 
+
 def __get_affiliation_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique affiliation.
@@ -335,7 +344,10 @@ def __get_affiliation_frequency(df):
     and returns the result as a dictionary.
     """
     return df["affiliation"].value_counts().to_dict()
+
+
 ###############################################################AWARD_NUMBER
+
 
 def __get_awards(df):
     """
@@ -362,6 +374,7 @@ def __get_awards(df):
     column and returns them as an array.
     """
     return df["award_number"].unique()
+
 
 def __get_award_numbers(df):
     """
@@ -391,6 +404,7 @@ def __get_award_numbers(df):
     """
     return df["award_number"].value_counts().to_dict()
 
+
 def __get_award_number(df):
     """
     Get a dictionary containing the count of occurrences of each unique award number.
@@ -419,7 +433,9 @@ def __get_award_number(df):
     """
     return df["award_number"].value_counts().to_dict()
 
+
 ######################################################################SPECIES
+
 
 def __get_number_of_species(df):
     """
@@ -723,8 +739,6 @@ def get_date(df):
     return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
 
-
-
 def today():
     """
     Get the daily inventory report data for today.
@@ -772,12 +786,6 @@ def today():
     else:
         print("Error: Failed to fetch JSON data")
         return pd.DataFrame()
-
-
-
-
-
-
 
 
 def __get_number_of_datasets(df):
@@ -891,8 +899,6 @@ def __are_reachable(df):
     return df["is_reachable"].sum() / len(df)
 
 
-
-
 def __get_genotypes(df):
     """
     Get a dictionary containing the count of occurrences of each unique genotype.
@@ -949,6 +955,7 @@ def __get_contributor(df):
     and returns the result as a dictionary.
     """
     return df["contributor"].value_counts().to_dict()
+
 
 def __get_species(df):
     """
@@ -1110,6 +1117,7 @@ def __get_techniques(df):
     """
     return df["technique"].value_counts().to_dict()
 
+
 def __get_affiliations(df):
     """
     Return a dictionary containing the count of occurrences of each unique value
@@ -1163,8 +1171,6 @@ def __get_contributors(df):
     contributor name and returns the result as a dictionary.
     """
     return df["contributorname"].value_counts().to_dict()
-
-
 
 
 def techniques_frequency(df):
@@ -1252,8 +1258,6 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-
-
 def __get_modalities(df):
     """
     Get the counts of different modalities from the DataFrame.
@@ -1334,9 +1338,10 @@ def report():
 
     return report
 
+
 def create_tree_map(frequency_dict, width, height):
     """
-    Get a treemap of projects 
+    Get a treemap of projects
 
     Input parameter: dictionary
     Output:  treemap image
@@ -1344,17 +1349,18 @@ def create_tree_map(frequency_dict, width, height):
     labels = list(frequency_dict.keys())
     values = list(frequency_dict.values())
 
-    fig = go.Figure(go.Treemap(
-        labels=labels,
-        parents=[''] * len(labels),
-        values=values,
-        textinfo='label+value'
-    ))
+    fig = go.Figure(
+        go.Treemap(
+            labels=labels,
+            parents=[""] * len(labels),
+            values=values,
+            textinfo="label+value",
+        )
+    )
 
-    fig.update_layout(title='Projects', width=width, height=height)
+    fig.update_layout(title="Projects", width=width, height=height)
 
     today = date.today()
     output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
     fig.write_image(output_path)
     fig.show()
-
