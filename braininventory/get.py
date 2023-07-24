@@ -16,6 +16,24 @@ import squarify
 
 
 def __get_sha256_coverage(df):
+     """
+    Calculate the average SHA256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'sha256_coverage' column.
+
+    Returns:
+        float: The average SHA256 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+
+    Example:
+        >>> data = {'sha256_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_sha256_coverage(df)
+        0.79
+    """
     average = df['sha256_coverage'].mean()
     return average
 
