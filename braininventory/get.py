@@ -20,6 +20,19 @@ import matplotlib.pyplot as plt
 import squarify
 
 
+def __get_number_of_species(df):
+    """
+    Calculate the number of unique species in the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the data.
+
+    Returns:
+        int: The number of unique species present in the 'species' column of the DataFrame.
+    """
+    return len(df["species"].unique())
+
+
 def __get_md5_coverage(df):
     """
     Calculate the average MD5256 coverage from a DataFrame.
