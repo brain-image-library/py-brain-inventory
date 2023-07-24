@@ -326,6 +326,24 @@ def __get_affiliations(df):
     return df["affiliation"].value_counts().keys()
 
 
+import urllib.request
+import matplotlib.pyplot as plt
+
+
+url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json' #get library
+file_path, _ = urllib.request.urlretrieve(url) 
+df = pd.read_json(file_path) #the dataframe
+items = df.affiliation #get the category affiliation
+frequency = {} #add affiliation items here
+
+for item in items:
+    if item in frequency:
+        frequency[item] += 1 #if the item is already in frequency, then add one
+    else:
+        frequency[item] = 1 #if the item is not in the frequency, then add that item and set it to onbe
+
+print(frequency)
+
 def today():
     """
     Get the daily inventory report data for today.
