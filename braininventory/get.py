@@ -1,7 +1,6 @@
 import json
 from datetime import date
-import urllib.request
-import matplotlib.pyplot as plt
+
 import humanize
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -847,6 +846,10 @@ def get_projects_treemap(df):
 
     filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
     plt.savefig(filename)
+
+
+def __get_modalities(df):
+    return (df["generalmodality"].value_counts()).to_dict()
 
 
 def __get__percentage_of_metadata_version_1(df):
