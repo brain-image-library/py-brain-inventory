@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import squarify
 
 
-def __get_general_modality_plot(df):
+def __create_general_modality_plot(df):
     modality_counts = df["generalmodality"].value_counts()
 
     plt.figure(figsize=(10, 6))
@@ -70,11 +70,23 @@ def __get_lable_dict(name_lst):
     }
 
 
-def __get_general_modality_treemap(df):
+def __create_general_modality_treemap(df):
     """
-    input: dataframe
-    output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
+    Create a treemap visualization for the general modality data.
+
+    This function takes a pandas DataFrame as input and generates a treemap visualization based on
+    the counts of different modalities in the 'generalmodality' column of the DataFrame. The function
+    utilizes the Squarify library to create the treemap.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a treemap and saves it as an image file, but it does not return any value.
+            The treemap is saved with a filename in the format 'treemap-general-modality-YYYYMMDD.png', where
+            'YYYYMMDD' represents the current date in year-month-day format.
     """
+
     modality_counts = df["generalmodality"].value_counts().to_dict()
     plt.figure(figsize=(14, 10))
     values = list(modality_counts.values())
@@ -94,7 +106,9 @@ def __get_general_modality_treemap(df):
     plt.legend(
         legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
     )
-    plt.show()
+
+    filename = f'treemap-general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
 
 
 def __get_pretty_size_statistics(df):
@@ -184,21 +198,24 @@ def get_date(df):
     day = dateList[2]  # get day
     return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
+
 import geoip2.database
 from geopy.geocoders import Nominatim
 import folium
 import math
 import urllib.request
 
-"""print(c.get_country_cities(country_code_iso="DE"))""" 
+"""print(c.get_country_cities(country_code_iso="DE"))"""
 """
 Geopy: input: University #correct some data (do later) Output: Address, lat, lon
 folium or Ivan's
 Must choose module to make the map
 """
 
+
 def __get_affiliations(df):
-    return df['affiliation'].value_counts().keys()
+    return df["affiliation"].value_counts().keys()
+
 
 def __get_coordin(university):
     geolocator = Nominatim(user_agent="my_geocoding_app")
@@ -207,20 +224,22 @@ def __get_coordin(university):
         if location:
             return location.latitude, location.longitude
         else:
-            return (0,0)
+            return (0, 0)
     except:
         print(f"Geocoding service is unavailable for {university}")
         return 0, 0
+
 
 def get_zero_coords(affiliation_coordinates):
     total = 0
     zeros = 0
     for university in affiliation_coordinates:
-        if affiliation_coordinates[university] == (0 ,0):
-            zeros +=1
-            print(affiliation_coordinates[university],university,"ain't working")
+        if affiliation_coordinates[university] == (0, 0):
+            zeros += 1
+            print(affiliation_coordinates[university], university, "ain't working")
         total += 1
-    return zeros, total, math.ceil(zeros/total*100)/100
+    return zeros, total, math.ceil(zeros / total * 100) / 100
+
 
 def __get_affilation_coordinates(df):
     affiliations_dict = {}
@@ -229,6 +248,7 @@ def __get_affilation_coordinates(df):
         if latitude is not None and longitude is not None:
             affiliations_dict[university] = (latitude, longitude)
     return affiliations_dict
+
 
 if __name__ == "__main__":
     affiliation_coordinates = __get_affilation_coordinates(df)
@@ -1033,16 +1053,18 @@ def report():
 
     return report
 
+
 import pandas as pd
 import urllib.request
 import geoip2.database
 from geopy.geocoders import Nominatim
 import folium
-'''
-Import modules that will be used to create the world map, find coordinates of affiliations, and 
-''' 
 
-url = 'https://download.brainimagelibrary.org/inventory/daily/reports/today.json'
+"""
+Import modules that will be used to create the world map, find coordinates of affiliations, and 
+"""
+
+url = "https://download.brainimagelibrary.org/inventory/daily/reports/today.json"
 file_path, _ = urllib.request.urlretrieve(url)
 df = pd.read_json(file_path)
 df
@@ -1056,8 +1078,8 @@ map = folium.Map()
 from tqdm import tqdm
 
 for index, row in tqdm(df.iterrows()):
-  city = row['city']
-  lat = row['lat']
-  lon = row['lng']
-  folium.Marker([lat, lon], popup=city).add_to(map)
-map.save('project_map.html')
+    city = row["city"]
+    lat = row["lat"]
+    lon = row["lng"]
+    folium.Marker([lat, lon], popup=city).add_to(map)
+map.save("project_map.html")
