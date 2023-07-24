@@ -21,6 +21,21 @@ import squarify
 
 
 def __create_general_modality_plot(df):
+    """
+    Create a bar plot to visualize the frequency of general modalities.
+
+    This function takes a pandas DataFrame as input and generates a bar plot to display the frequency
+    of different general modalities in the 'generalmodality' column of the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a bar plot but does not return any value. The plot is saved as an
+            image file with a filename in the format 'general-modality-YYYYMMDD.png', where 'YYYYMMDD'
+            represents the current date in year-month-day format.
+    """
+
     modality_counts = df["generalmodality"].value_counts()
 
     plt.figure(figsize=(10, 6))
@@ -123,11 +138,22 @@ def __create_general_modality_treemap(df):
 
 def __get_pretty_size_statistics(df):
     """
-    Pretty version of __get_size_statistics
+    Get human-readable size statistics from the DataFrame.
 
-    Input: dataframe
-    Output: list of strings
+    This method takes a pandas DataFrame as input and calculates size statistics using the '__get_size_statistics()'
+    method. The statistics include the minimum, maximum, mean, and total size of the data in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame.
+
+    Returns:
+        list: A list containing human-readable size statistics in the following order:
+            - Human-readable minimum size.
+            - Human-readable maximum size.
+            - Human-readable mean size.
+            - Human-readable total size.
     """
+
     size_stats = __get_size_statistics(df)
 
     return [
@@ -140,10 +166,20 @@ def __get_pretty_size_statistics(df):
 
 def __get_size_statistics(df):
     """
-    Helper method that returns size statistics from size column.
+    Calculate basic size statistics from the DataFrame.
 
-    Input: dataframe
-    Output: list of numbers
+    This method takes a pandas DataFrame as input and calculates basic size statistics, including the minimum,
+    maximum, mean, and standard deviation of the 'size' column in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'size' column.
+
+    Returns:
+        list: A list containing the size statistics in the following order:
+            - Minimum size.
+            - Maximum size.
+            - Mean size.
+            - Standard deviation of sizes.
     """
 
     min = df["size"].min()
