@@ -122,6 +122,30 @@ def __get_projects(df):
     """
     return df["technique"].unique().to_dict()
 
+def __get_project_names(df):
+    """
+    Gets the unique list of project names.
+
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a list containing the names of unique projects.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    list
+        A list containing the names of unique projects present in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as a list.
+    """
+    return df["project"].unique()
+
 #################################################################################
 
 def __get_number_of_species(df):
@@ -1165,29 +1189,7 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-def __get_project_names(df):
-    """
-    Gets the unique list of project names.
 
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a list containing the names of unique projects.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    list
-        A list containing the names of unique projects present in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as a list.
-    """
-    return df["project"].unique()
 
 
 def __get_list_of_projects(df):
