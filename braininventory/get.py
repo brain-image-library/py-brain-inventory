@@ -16,8 +16,8 @@ import squarify
 
 
 def __get_sha256_coverage(df):
-    raise NotImplementedError()
-
+    #raise NotImplementedError()
+    average = df['sha256_coverage'].mean()
 
 def __get_general_modality_plot(df):
     modality_counts = df["generalmodality"].value_counts()
