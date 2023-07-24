@@ -774,33 +774,33 @@ def __get_species(df):
     return df["species"].value_counts().to_dict()
 
 
-def __get_cnbtaxonomy(df):
+def __get_ncbitaxonomy(df):
     """
-    Get a dictionary containing the count of occurrences of each unique CNB taxonomy.
+    Get a dictionary containing the count of occurrences of each unique NCBI taxonomy.
 
     This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "cnbtaxonomy" column. The result is returned as a dictionary, where
-    the keys represent unique CNB taxonomies, and the values represent the count of occurrences
+    unique value in the "ncbitaxonomy" column. The result is returned as a dictionary, where
+    the keys represent unique NCBI taxonomies, and the values represent the count of occurrences
     for each taxonomy.
 
     Parameters:
     -----------
     df : pandas DataFrame
-        The input DataFrame containing a column named "cnbtaxonomy" with CNB taxonomy information.
+        The input DataFrame containing a column named "ncbitaxonomy" with CNB taxonomy information.
 
     Returns:
     --------
     dict
-        A dictionary where the keys represent unique CNB taxonomies, and the values represent
+        A dictionary where the keys represent unique NCBI taxonomies, and the values represent
         the count of occurrences for each taxonomy.
 
     Note:
     -----
-    The input DataFrame `df` should have a column named "cnbtaxonomy" containing categorical data
-    representing different CNB taxonomies. The function counts the occurrences of each unique CNB taxonomy
+    The input DataFrame `df` should have a column named "ncbitaxonomy" containing categorical data
+    representing different NCBI taxonomies. The function counts the occurrences of each unique CNB taxonomy
     and returns the result as a dictionary.
     """
-    return df["cnbtaxonomy"].value_counts().to_dict()
+    return df["ncbitaxonomy"].value_counts().to_dict()
 
 
 def __get_genotypes(df):
@@ -1326,7 +1326,7 @@ def report():
     report["affiliation"] = __get_affilation(df)
     report["award_number"] = __get_award_number(df)
     report["species"] = __get_species(df)
-    report["cnbtaxonomy"] = __get_cnbtaxonomy(df)
+    report["ncbitaxonomy"] = __get_ncbitaxonomy(df)
     report["samplelocalid"] = __get_samplelocalid(df)
     report["genotype"] = __get_genotype(df)
     report["generalmodality"] = __get_generalmodality(df)
