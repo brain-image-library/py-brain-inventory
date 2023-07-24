@@ -19,6 +19,77 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+############################# METADATA_VERSION
+def __get_metadata_version(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique metadata version.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "metadata_version" column. The result is returned as a dictionary,
+    where the keys represent unique metadata versions, and the values represent the count
+    of occurrences for each metadata version.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "metadata_version" with metadata version information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique metadata versions, and the values
+        represent the count of occurrences for each metadata version.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "metadata_version" containing
+    categorical data representing different versions of metadata. The function counts
+    the occurrences of each unique metadata version and returns the result as a dictionary.
+    """
+
+    return df["metadata_version"].value_counts().to_dict()
+
+def __get__percentage_of_metadata_version_1(df):
+    """
+    Get the percentage of metadata version 1 samples in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and calculates the percentage of samples
+    in the DataFrame that have a metadata version equal to 1.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing metadata information.
+
+    Returns:
+    --------
+    float
+        The percentage of samples with metadata version 1 as a decimal value.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "metadata_version" containing numeric values
+    representing the metadata version for each sample. The function calculates the percentage of samples
+    with metadata version 1 by dividing the count of samples with version 1 by the total number of samples.
+    The result is returned as a decimal value representing the percentage.
+    """
+    return len(df[df["metadata_version"] == 1]) / len(df)
+
+
+def __get__percentage_of_metadata_version_2(df):
+    """
+    Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'metadata_version' column.
+
+    Returns:
+        float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
+    """
+    return len(df[df["metadata_version"] == 2]) / len(df)
+
+#################################################################################
 
 def __get_number_of_species(df):
     """
@@ -584,35 +655,6 @@ def __are_reachable(df):
     return df["is_reachable"].sum() / len(df)
 
 
-def __get_metadata_version(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique metadata version.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "metadata_version" column. The result is returned as a dictionary,
-    where the keys represent unique metadata versions, and the values represent the count
-    of occurrences for each metadata version.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "metadata_version" with metadata version information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique metadata versions, and the values
-        represent the count of occurrences for each metadata version.
-
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "metadata_version" containing
-    categorical data representing different versions of metadata. The function counts
-    the occurrences of each unique metadata version and returns the result as a dictionary.
-    """
-
-    return df["metadata_version"].value_counts().to_dict()
 
 
 def __get_genotypes(df):
@@ -1248,46 +1290,6 @@ def __get_modalities(df):
         dict: A dictionary with modalities as keys and their corresponding counts as values.
     """
     return (df["generalmodality"].value_counts()).to_dict()
-
-
-def __get__percentage_of_metadata_version_1(df):
-    """
-    Get the percentage of metadata version 1 samples in the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and calculates the percentage of samples
-    in the DataFrame that have a metadata version equal to 1.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing metadata information.
-
-    Returns:
-    --------
-    float
-        The percentage of samples with metadata version 1 as a decimal value.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "metadata_version" containing numeric values
-    representing the metadata version for each sample. The function calculates the percentage of samples
-    with metadata version 1 by dividing the count of samples with version 1 by the total number of samples.
-    The result is returned as a decimal value representing the percentage.
-    """
-    return len(df[df["metadata_version"] == 1]) / len(df)
-
-
-def __get__percentage_of_metadata_version_2(df):
-    """
-    Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'metadata_version' column.
-
-    Returns:
-        float: The percentage of rows with 'metadata_version' equal to 2 as a decimal value.
-    """
-    return len(df[df["metadata_version"] == 2]) / len(df)
 
 
 def report():
