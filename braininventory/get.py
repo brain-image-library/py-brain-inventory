@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import squarify
 
 
-############################# METADATA_VERSION
+############################# METADATA_VERSION #############################
 def __get_metadata_version(df):
     """
     Get a dictionary containing the count of occurrences of each unique metadata version.
@@ -92,8 +92,7 @@ def __get__percentage_of_metadata_version_2(df):
     return len(df[df["metadata_version"] == 2]) / len(df)
 
 
-# _projects
-################################
+############################# PROJECTS #############################
 def __get_projects(df):
     """
     Get a dictionary containing the count of occurrences of each unique project.
@@ -214,7 +213,7 @@ def get_projects_treemap(df):
     plt.savefig(filename)
 
 
-#################################################AFFILIATION
+############################# PROJECTS #############################
 def __get_affiliations(df):
     return df["affiliation"].value_counts().keys()
 
@@ -346,9 +345,7 @@ def __get_affiliation_frequency(df):
     return df["affiliation"].value_counts().to_dict()
 
 
-###############################################################AWARD_NUMBER
-
-
+############################# AWARD NUMBER #############################
 def __get_awards(df):
     """
     Get an array containing unique award numbers.
@@ -434,9 +431,7 @@ def __get_award_number(df):
     return df["award_number"].value_counts().to_dict()
 
 
-######################################################################SPECIES
-
-
+############################# SPECIES #############################
 def __get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
@@ -448,6 +443,17 @@ def __get_number_of_species(df):
         int: The number of unique species present in the 'species' column of the DataFrame.
     """
     return len(df["species"].unique())
+
+
+############################# NCBI TAXONOMY #############################
+############################# GENOTYPE #############################
+############################# GENERAL MODALITY #############################
+############################# TECHNIQUE #############################
+############################# LOCATIONS #############################
+############################# SIZE #############################
+############################# MD5 COVERAGE #############################
+############################# SHA256 COVERAGE #############################
+############################# SCORE #############################
 
 
 def __get_md5_coverage(df):
