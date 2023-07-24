@@ -11,6 +11,9 @@ This open-source code repository consists of contributions from a diverse group 
 
 For a full list of authors explore the `AUTHORS` file.
 
+## Reminder
+The file `today.json` was built in `vm013`.
+
 ---
 Copyright © 2023 Pittsburgh Supercomputing Center. All Rights Reserved.
 
