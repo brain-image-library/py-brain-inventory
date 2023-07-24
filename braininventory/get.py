@@ -850,6 +850,19 @@ def get_projects_treemap(df):
 
 
 def __get_modalities(df):
+    """
+    Get the counts of different modalities from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the counts of different modalities
+    from the 'generalmodality' column of the DataFrame. It returns a dictionary where the keys
+    represent the unique modalities, and the values represent their respective counts.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        dict: A dictionary with modalities as keys and their corresponding counts as values.
+    """
     return (df["generalmodality"].value_counts()).to_dict()
 
 
