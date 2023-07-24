@@ -786,7 +786,7 @@ def __get_ncbitaxonomy(df):
     Parameters:
     -----------
     df : pandas DataFrame
-        The input DataFrame containing a column named "ncbitaxonomy" with CNB taxonomy information.
+        The input DataFrame containing a column named "ncbitaxonomy" with NCBI taxonomy information.
 
     Returns:
     --------
@@ -797,7 +797,7 @@ def __get_ncbitaxonomy(df):
     Note:
     -----
     The input DataFrame `df` should have a column named "ncbitaxonomy" containing categorical data
-    representing different NCBI taxonomies. The function counts the occurrences of each unique CNB taxonomy
+    representing different NCBI taxonomies. The function counts the occurrences of each unique NCBI taxonomy
     and returns the result as a dictionary.
     """
     return df["ncbitaxonomy"].value_counts().to_dict()
@@ -1285,7 +1285,7 @@ def report():
     It retrieves today's date, collects data information for today using the `today()` function,
     and computes various statistics related to the datasets. The statistics include the number
     of datasets, number of unique projects, completeness score, metadata versions count,
-    contributor count, affiliation count, award numbers count, species count, CNB taxonomy count,
+    contributor count, affiliation count, award numbers count, species count, NCBI taxonomy count,
     sample local ID count, genotype count, general modality count, technique count, location count,
     and the percentage of datasets with metadata version 1. Additionally, it creates a treemap
     visualization for project counts.
@@ -1301,7 +1301,7 @@ def report():
     the required data using various helper functions and creates a dictionary containing the
     computed statistics. The report includes information on the number of datasets, number of unique
     projects, completeness score, metadata versions count, contributor count, affiliation count,
-    award numbers count, species count, CNB taxonomy count, sample local ID count, genotype count,
+    award numbers count, species count, NCBI taxonomy count, sample local ID count, genotype count,
     general modality count, technique count, location count, and the percentage of datasets with
     metadata version 1. The treemap visualization for project counts is also generated as part of the
     report.
