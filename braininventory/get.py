@@ -146,6 +146,67 @@ def __get_project_names(df):
     """
     return df["project"].unique()
 
+def __get_list_of_projects(df):
+    """
+    Get a dictionary of unique project names from the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a dictionary where the keys represent the unique project names,
+    and the values are set to None.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the unique project names as keys and None as values.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as keys in
+    the dictionary. The values for all keys are set to None.
+    """
+    return df["project"].unique().to_dict()
+
+def get_projects_treemap(df):
+    """
+    Generate a treemap visualization for project counts in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and creates a treemap visualization
+    to represent the relative proportions of each project based on their counts in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    None
+        The function displays the treemap visualization using matplotlib.pyplot.
+
+    Note:
+    -----
+    The function calculates the counts of each unique project in the input DataFrame `df` and
+    visualizes the relative proportions using a treemap plot. The size of each rectangle in the
+    treemap is proportional to the count of the corresponding project. The treemap is displayed
+    using the `squarify` and `matplotlib.pyplot` libraries. The plot is saved as a PNG file with a
+    filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
+    date when the function is executed.
+    """
+    df = df["project"].value_counts().to_dict()
+    sizes_list = list(df.values())
+    names_list = list(df.keys())
+    squarify.plot(sizes_list)
+
+    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
+
+
 #################################################################################
 
 def __get_number_of_species(df):
@@ -1189,94 +1250,6 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-
-
-
-def __get_list_of_projects(df):
-    """
-    Get a dictionary of unique project names from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a dictionary where the keys represent the unique project names,
-    and the values are set to None.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    dict
-        A dictionary containing the unique project names as keys and None as values.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as keys in
-    the dictionary. The values for all keys are set to None.
-    """
-    return df["project"].unique().to_dict()
-
-
-def __get_number_of_projects(df):
-    """
-    Get the number of unique projects from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and calculates the number of unique
-    project names present in the "project" column.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    int
-        The number of unique projects in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function calculates the number of unique project names in the column and returns the count as an integer.
-    """
-    return len(df["project"].unique())
-
-
-def get_projects_treemap(df):
-    """
-    Generate a treemap visualization for project counts in the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and creates a treemap visualization
-    to represent the relative proportions of each project based on their counts in the DataFrame.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    None
-        The function displays the treemap visualization using matplotlib.pyplot.
-
-    Note:
-    -----
-    The function calculates the counts of each unique project in the input DataFrame `df` and
-    visualizes the relative proportions using a treemap plot. The size of each rectangle in the
-    treemap is proportional to the count of the corresponding project. The treemap is displayed
-    using the `squarify` and `matplotlib.pyplot` libraries. The plot is saved as a PNG file with a
-    filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
-    date when the function is executed.
-    """
-    df = df["project"].value_counts().to_dict()
-    sizes_list = list(df.values())
-    names_list = list(df.keys())
-    squarify.plot(sizes_list)
-
-    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig(filename)
 
 
 def __get_modalities(df):
