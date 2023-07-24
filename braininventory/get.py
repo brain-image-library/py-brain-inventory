@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import squarify
 
 
-def get_species(df):
+def __get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
 
