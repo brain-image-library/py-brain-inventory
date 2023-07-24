@@ -528,6 +528,13 @@ def __get_cnbtaxonomy(df):
     return df["cnbtaxonomy"].value_counts().to_dict()
 
 
+def __get_genotypes(df):
+    """
+    Write documentation here.
+    """
+    return df["genotype"].unique()
+
+
 def __get_genotype_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique genotype.
@@ -811,24 +818,18 @@ def __get_project_names(df):
 
 def __get_list_of_projects(df):
     """
-    Get the list of names for unique projects
-
-    Input parameter: dataframe
-    Output:  list of projects
+    Retrieve the json_file from the Brain Image Library of a dataset.
     """
 
-    return df["project"].unique().to_dict()
+    # Make sure there is data to request
+    if df["score"].values[0] != 0:
+        # Create working link
+        url = df["json_file"].values[0].replace("/bil/data", link)
+        response = requests.get(url)
 
-
-def __get_number_of_projects(df):
-    """
-    Get the number of unique projects
-
-    Input parameter: dataframe
-    Output:  number of projects
-    """
-
-    return len(df["project"].unique())
+        return response.json()
+    else:
+        return None
 
 
 def get_projects_treemap(df):
