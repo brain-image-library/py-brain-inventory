@@ -20,7 +20,22 @@ import matplotlib.pyplot as plt
 import squarify
 
 
-def __get_general_modality_plot(df):
+def __create_general_modality_plot(df):
+    """
+    Create a bar plot to visualize the frequency of general modalities.
+
+    This function takes a pandas DataFrame as input and generates a bar plot to display the frequency
+    of different general modalities in the 'generalmodality' column of the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a bar plot but does not return any value. The plot is saved as an
+            image file with a filename in the format 'general-modality-YYYYMMDD.png', where 'YYYYMMDD'
+            represents the current date in year-month-day format.
+    """
+
     modality_counts = df["generalmodality"].value_counts()
 
     plt.figure(figsize=(10, 6))
@@ -41,10 +56,20 @@ def __get_general_modality_plot(df):
 
 def get_random_sample(df):
     """
-    Returns a random sample from the dataframe from a dataset with non-zero score.
+    Retrieve a random JSON file from the DataFrame.
 
-    Input: dataframe
-    Output:open the json file that was located in datasets Brain Image Library dataframe
+    This function takes a pandas DataFrame as input and filters it to keep only the rows that have
+    a non-zero 'score' value. From the filtered rows, it selects a random row using the 'random.randint()'
+    function. It then generates a valid link to the JSON file by replacing '/bil/data' with
+    'https://download.brainimagelibrary.org' in the 'json_file' column of the selected row. The function
+    performs an HTTP GET request to download the JSON file from the generated link, and it returns the
+    JSON data as a Python dictionary.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'score' and 'json_file' columns.
+
+    Returns:
+        dict: A Python dictionary containing the JSON data retrieved from a random row's JSON file.
     """
 
     isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
@@ -70,11 +95,23 @@ def __get_lable_dict(name_lst):
     }
 
 
-def __get_general_modality_treemap(df):
+def __create_general_modality_treemap(df):
     """
-    input: dataframe
-    output: tree map that displays the frequencies of "generalmodality" that occur in dataframe
+    Create a treemap visualization for the general modality data.
+
+    This function takes a pandas DataFrame as input and generates a treemap visualization based on
+    the counts of different modalities in the 'generalmodality' column of the DataFrame. The function
+    utilizes the Squarify library to create the treemap.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a treemap and saves it as an image file, but it does not return any value.
+            The treemap is saved with a filename in the format 'treemap-general-modality-YYYYMMDD.png', where
+            'YYYYMMDD' represents the current date in year-month-day format.
     """
+
     modality_counts = df["generalmodality"].value_counts().to_dict()
     plt.figure(figsize=(14, 10))
     values = list(modality_counts.values())
@@ -94,16 +131,29 @@ def __get_general_modality_treemap(df):
     plt.legend(
         legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
     )
-    plt.show()
+
+    filename = f'treemap-general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
 
 
 def __get_pretty_size_statistics(df):
     """
-    Pretty version of __get_size_statistics
+    Get human-readable size statistics from the DataFrame.
 
-    Input: dataframe
-    Output: list of strings
+    This method takes a pandas DataFrame as input and calculates size statistics using the '__get_size_statistics()'
+    method. The statistics include the minimum, maximum, mean, and total size of the data in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame.
+
+    Returns:
+        list: A list containing human-readable size statistics in the following order:
+            - Human-readable minimum size.
+            - Human-readable maximum size.
+            - Human-readable mean size.
+            - Human-readable total size.
     """
+
     size_stats = __get_size_statistics(df)
 
     return [
@@ -116,10 +166,20 @@ def __get_pretty_size_statistics(df):
 
 def __get_size_statistics(df):
     """
-    Helper method that returns size statistics from size column.
+    Calculate basic size statistics from the DataFrame.
 
-    Input: dataframe
-    Output: list of numbers
+    This method takes a pandas DataFrame as input and calculates basic size statistics, including the minimum,
+    maximum, mean, and standard deviation of the 'size' column in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'size' column.
+
+    Returns:
+        list: A list containing the size statistics in the following order:
+            - Minimum size.
+            - Maximum size.
+            - Mean size.
+            - Standard deviation of sizes.
     """
 
     min = df["size"].min()
@@ -183,6 +243,63 @@ def get_date(df):
     mnt = mntList[dateList[1]]  # get month
     day = dateList[2]  # get day
     return f"{yr}-{day}-{mnt}"  # format in year-day-month
+
+
+import geoip2.database
+from geopy.geocoders import Nominatim
+import folium
+import math
+import urllib.request
+
+"""print(c.get_country_cities(country_code_iso="DE"))"""
+"""
+Geopy: input: University #correct some data (do later) Output: Address, lat, lon
+folium or Ivan's
+Must choose module to make the map
+"""
+
+
+def __get_affiliations(df):
+    return df["affiliation"].value_counts().keys()
+
+
+def __get_coordin(university):
+    geolocator = Nominatim(user_agent="my_geocoding_app")
+    try:
+        location = geolocator.geocode(university)
+        if location:
+            return location.latitude, location.longitude
+        else:
+            return (0, 0)
+    except:
+        print(f"Geocoding service is unavailable for {university}")
+        return 0, 0
+
+
+def get_zero_coords(affiliation_coordinates):
+    total = 0
+    zeros = 0
+    for university in affiliation_coordinates:
+        if affiliation_coordinates[university] == (0, 0):
+            zeros += 1
+            print(affiliation_coordinates[university], university, "ain't working")
+        total += 1
+    return zeros, total, math.ceil(zeros / total * 100) / 100
+
+
+def __get_affilation_coordinates(df):
+    affiliations_dict = {}
+    for university in __get_affiliations(df):
+        latitude, longitude = __get_coordin(university)
+        if latitude is not None and longitude is not None:
+            affiliations_dict[university] = (latitude, longitude)
+    return affiliations_dict
+
+
+if __name__ == "__main__":
+    affiliation_coordinates = __get_affilation_coordinates(df)
+    print(affiliation_coordinates)
+    print(get_zero_coords(affiliation_coordinates))
 
 
 def today():
@@ -981,3 +1098,34 @@ def report():
     get_projects_treemap(df)
 
     return report
+
+
+import pandas as pd
+import urllib.request
+import geoip2.database
+from geopy.geocoders import Nominatim
+import folium
+
+"""
+Import modules that will be used to create the world map, find coordinates of affiliations, and 
+"""
+
+url = "https://download.brainimagelibrary.org/inventory/daily/reports/today.json"
+file_path, _ = urllib.request.urlretrieve(url)
+df = pd.read_json(file_path)
+df
+"""
+Geopy - Input: University Output: Address, lat, lon
+Folium - visual map creator 
+"""
+
+map = folium.Map()
+
+from tqdm import tqdm
+
+for index, row in tqdm(df.iterrows()):
+    city = row["city"]
+    lat = row["lat"]
+    lon = row["lng"]
+    folium.Marker([lat, lon], popup=city).add_to(map)
+map.save("project_map.html")
