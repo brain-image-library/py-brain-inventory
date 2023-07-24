@@ -41,10 +41,20 @@ def __create_general_modality_plot(df):
 
 def get_random_sample(df):
     """
-    Returns a random sample from the dataframe from a dataset with non-zero score.
+    Retrieve a random JSON file from the DataFrame.
 
-    Input: dataframe
-    Output:open the json file that was located in datasets Brain Image Library dataframe
+    This function takes a pandas DataFrame as input and filters it to keep only the rows that have
+    a non-zero 'score' value. From the filtered rows, it selects a random row using the 'random.randint()'
+    function. It then generates a valid link to the JSON file by replacing '/bil/data' with
+    'https://download.brainimagelibrary.org' in the 'json_file' column of the selected row. The function
+    performs an HTTP GET request to download the JSON file from the generated link, and it returns the
+    JSON data as a Python dictionary.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'score' and 'json_file' columns.
+
+    Returns:
+        dict: A Python dictionary containing the JSON data retrieved from a random row's JSON file.
     """
 
     isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
