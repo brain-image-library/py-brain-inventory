@@ -89,6 +89,39 @@ def __get__percentage_of_metadata_version_2(df):
     """
     return len(df[df["metadata_version"] == 2]) / len(df)
   #_projects
+
+def __get_projects(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique project.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "project" column. The result is returned as a dictionary, where the
+    keys represent unique projects, and the values represent the count of occurrences for
+    each project. Additionally, the unique values in the "technique" column are also added
+    to the same dictionary as a separate entry.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "project" with project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing two entries:
+        - "project": A dictionary where the keys represent unique projects, and the values
+                     represent the count of occurrences for each project.
+        - "technique": A dictionary where the keys represent unique techniques, and the values
+                       represent the count of occurrences for each technique.
+
+    Note:
+    -----
+    The input DataFrame `df` should have columns named "project" and "technique" containing categorical data
+    representing different projects and techniques, respectively. The function counts the occurrences of each
+    unique project and technique and returns them as part of a single dictionary.
+    """
+    return df["technique"].unique().to_dict()
+
 #################################################################################
 
 def __get_number_of_species(df):
@@ -1045,37 +1078,6 @@ def __get_contributors(df):
     return df["contributorname"].value_counts().to_dict()
 
 
-def __get_projects(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique project.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "project" column. The result is returned as a dictionary, where the
-    keys represent unique projects, and the values represent the count of occurrences for
-    each project. Additionally, the unique values in the "technique" column are also added
-    to the same dictionary as a separate entry.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "project" with project information.
-
-    Returns:
-    --------
-    dict
-        A dictionary containing two entries:
-        - "project": A dictionary where the keys represent unique projects, and the values
-                     represent the count of occurrences for each project.
-        - "technique": A dictionary where the keys represent unique techniques, and the values
-                       represent the count of occurrences for each technique.
-
-    Note:
-    -----
-    The input DataFrame `df` should have columns named "project" and "technique" containing categorical data
-    representing different projects and techniques, respectively. The function counts the occurrences of each
-    unique project and technique and returns them as part of a single dictionary.
-    """
-    return df["technique"].unique().to_dict()
 
 
 def techniques_frequency(df):
