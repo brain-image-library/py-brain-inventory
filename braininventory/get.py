@@ -2,6 +2,7 @@ import calendar
 import json
 import random
 from datetime import date
+from difflib import SequenceMatcher
 from pathlib import Path
 
 import folium
@@ -1277,6 +1278,36 @@ def __get__percentage_of_metadata_version_1(df):
     return len(df[df["metadata_version"] == 1]) / len(df)
 
 
+def __get_similar_columns(df, column):
+    """
+      Return a list of similar column values. For example, the "affiliation" column might include
+
+       ['University of California, Los Angeles',
+    'University of California, Los Angeles (UCLA)',
+    0.9135802469135802]]
+
+    """
+
+    df = df.dropna(subset=[column])  # drop null values
+    unique_values = df[column].unique()
+
+    completed_pairs = []
+    similar_pairs = []
+    for value in unique_values:
+        for compare_value in [
+            v for v in unique_values if v != value and (value, v) not in completed_pairs
+        ]:
+            similarity = SequenceMatcher(
+                None, value.lower(), compare_value.lower()
+            ).ratio()
+            if similarity > 0.85:
+                similar_pairs.append([value, compare_value, similarity])
+
+            completed_pairs.append((compare_value, value))
+
+    return similar_pairs
+
+
 def __get__percentage_of_metadata_version_2(df):
     """
     Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
@@ -1353,9 +1384,10 @@ def report():
 
     return report
 
+
 def create_tree_map(frequency_dict, width, height):
     """
-    Get a treemap of projects 
+    Get a treemap of projects
 
     Input parameter: dictionary
     Output:  treemap image
@@ -1363,17 +1395,18 @@ def create_tree_map(frequency_dict, width, height):
     labels = list(frequency_dict.keys())
     values = list(frequency_dict.values())
 
-    fig = go.Figure(go.Treemap(
-        labels=labels,
-        parents=[''] * len(labels),
-        values=values,
-        textinfo='label+value'
-    ))
+    fig = go.Figure(
+        go.Treemap(
+            labels=labels,
+            parents=[""] * len(labels),
+            values=values,
+            textinfo="label+value",
+        )
+    )
 
-    fig.update_layout(title='Projects', width=width, height=height)
+    fig.update_layout(title="Projects", width=width, height=height)
 
     today = date.today()
     output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
     fig.write_image(output_path)
     fig.show()
-
