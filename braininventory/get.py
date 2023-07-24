@@ -1322,7 +1322,7 @@ def report():
     report["number_of_project"] = __get_number_of_projects(df)
     report["completeness_score"] = __get_completeness_score(df)
     report["metadata_version"] = __get_metadata_version(df)
-    report["contributor"] = __get_contributor(df)
+    report["contributor"] = __get_contributors(df)
     report["affiliation"] = __get_affilation(df)
     report["award_number"] = __get_award_number(df)
     report["species"] = __get_species(df)
