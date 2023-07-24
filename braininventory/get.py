@@ -1,5 +1,11 @@
 import json
 from datetime import date
+import calendar
+import pandas as pd
+import urllib.request
+import random
+import requests
+import calendar
 
 import humanize
 import matplotlib.pyplot as plt
@@ -122,6 +128,61 @@ def __get_size_statistics(df):
     std = df["size"].std()
 
     return [min, max, average, std]
+
+
+def get_jsonFile(df):
+    """
+    Extract and format the date from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the creation date information from
+    the associated JSON file using the 'get_jsonFile()' function. It then processes the date information,
+    reformatting it into the 'year-day-month' format (e.g., '2023-24-Jul').
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame.
+
+    Returns:
+        str: A string representing the formatted date in the 'year-day-month' format.
+    """
+
+    isNotZero = df[df["score"] != 0.0]  # only have files with the correct data
+    randomRow = isNotZero.iloc[
+        random.randint(0, len(isNotZero))
+    ]  # select a random row of random index
+    jsonFileLink = randomRow.json_file.replace(
+        "/bil/data", "https://download.brainimagelibrary.org", 1
+    )  # create the link
+    result = requests.get(jsonFileLink)
+
+    return result.json()
+
+
+def get_date(df):
+    """
+    Get unique genotypes from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
+    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
+    column.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
+    """
+
+    jsonFile = get_jsonFile(
+        df
+    )  # get the jsonFile information with get_jsonFile() function
+    dateList = jsonFile["creation_date"].split()  # get creation_date
+    mntList = dict(
+        (month, index) for index, month in enumerate(calendar.month_abbr) if month
+    )  # month abbr to number
+    yr = dateList[4]  # get year
+    mnt = mntList[dateList[1]]  # get month
+    day = dateList[2]  # get day
+    return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
 
 def today():
@@ -530,7 +591,17 @@ def __get_cnbtaxonomy(df):
 
 def __get_genotypes(df):
     """
-    Write documentation here.
+    Get unique genotypes from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
+    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
+    column.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
     """
     return df["genotype"].unique()
 
