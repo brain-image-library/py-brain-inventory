@@ -21,7 +21,7 @@ import squarify
 
 
 ############################# METADATA_VERSION #############################
-def __get_metadata_version(df):
+def __get_metadata_version_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique metadata version.
 
@@ -126,59 +126,11 @@ def __get_projects(df):
     return df["technique"].unique().to_dict()
 
 
-def __get_project_names(df):
-    """
-    Gets the unique list of project names.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a list containing the names of unique projects.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    list
-        A list containing the names of unique projects present in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as a list.
-    """
-    return df["project"].unique()
+def get_projects_frequency(df):
+    return df["project"]
 
 
-def __get_list_of_projects(df):
-    """
-    Get a dictionary of unique project names from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a dictionary where the keys represent the unique project names,
-    and the values are set to None.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    dict
-        A dictionary containing the unique project names as keys and None as values.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as keys in
-    the dictionary. The values for all keys are set to None.
-    """
-    return df["project"].unique().to_dict()
-
-
-def get_projects_treemap(df):
+def create_projects_plot(df):
     """
     Generate a treemap visualization for project counts in the input DataFrame.
 
@@ -1322,10 +1274,12 @@ def report():
     # Build report
     report = {}
     report["date"] = tdate
+    report["metadata"] = __get_metadata_frequency(df)
+    report["metadata_version_1_coverage"] = __get__percentage_of_metadata_version_1(df)
+    report["metadata_version_2_coverage"] = __get__percentage_of_metadata_version_2(df)
     report["number_of_datasets"] = __get_number_of_datasets(df)
     report["number_of_project"] = __get_number_of_projects(df)
     report["completeness_score"] = __get_completeness_score(df)
-    report["metadata_version"] = __get_metadata_version(df)
     report["contributor"] = __get_contributors(df)
     report["affiliation"] = __get_affilation(df)
     report["award_number"] = __get_award_number(df)
