@@ -153,7 +153,7 @@ def get_projects(df):
     representing different projects and techniques, respectively. The function counts the occurrences of each
     unique project and technique and returns them as part of a single dictionary.
     """
-    return df["project"].unique()
+    return df["project"].unique().tolist()
 
 
 def get_projects_frequency(df):
@@ -237,7 +237,7 @@ def get_affilations(df):
     Returns:
         numpy.ndarray: An array containing the unique affiliations.
     """
-    return df["affiliation"].unique()
+    return df["affiliation"].unique().tolist()
 
 
 def __clean_affiliations(df):
@@ -349,7 +349,7 @@ def get_award_numbers(df):
     Returns:
         numpy.ndarray: An array containing the unique award numbers.
     """
-    return df["award_number"].unique()
+    return df["award_number"].unique().tolist()
 
 
 def get_award_number_frequency(df):
@@ -376,7 +376,7 @@ def get_number_of_species(df):
     Returns:
         int: The number of unique species present in the 'species' column of the DataFrame.
     """
-    return len(df["species"].unique())
+    return len(df["species"].unique().tolist())
 
 
 def get_species(df):
@@ -389,7 +389,7 @@ def get_species(df):
     Returns:
         numpy.ndarray: An array containing the unique names of species.
     """
-    return df["species"].unique()
+    return df["species"].unique().tolist()
 
 
 def get_species_frequency(df):
@@ -406,9 +406,50 @@ def get_species_frequency(df):
 
 
 ############################# NCBI TAXONOMY #############################
+def get_ncbitaxonomy(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique NCBI taxonomy.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "ncbitaxonomy" column. The result is returned as a dictionary, where
+    the keys represent unique NCBI taxonomies, and the values represent the count of occurrences
+    for each taxonomy.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "ncbitaxonomy" with NCBI taxonomy information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique NCBI taxonomies, and the values represent
+        the count of occurrences for each taxonomy.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "ncbitaxonomy" containing categorical data
+    representing different NCBI taxonomies. The function counts the occurrences of each unique NCBI taxonomy
+    and returns the result as a dictionary.
+    """
+    return df["ncbitaxonomy"].value_counts().to_dict()
+
+
+def ncbitaxonomy_frequency(df):
+    """
+    Get the unique NCBI taxonomy IDs and their frequencies from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing an 'ncbitaxonomy' column.
+
+    Returns:
+        list: A list containing the unique NCBI taxonomy IDs.
+    """
+    return df["ncbitaxonomy"].unique().tolist()
+
 
 ############################# CONTRIBUTOR #############################
-def __get_contributors(df):
+def get_contributors(df):
     """
     Get the unique contributors' names from the given DataFrame.
 
@@ -419,10 +460,10 @@ def __get_contributors(df):
         numpy.ndarray: An array containing the unique names of contributors.
     """
 
-    return df["contributorname"].unique()
+    return df["contributorname"].unique().tolist()
 
 
-def __get_contributor_frequency(df):
+def get_contributor_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique contributor.
 
@@ -546,6 +587,23 @@ def __create_general_modality_treemap(df):
 
 
 ############################# TECHNIQUE #############################
+def get_techniques(df):
+    """
+    Get the unique techniques from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'technique' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique techniques.
+    """
+    return df["technique"].unique().tolist()
+
+
+def get_technique_frequency(df):
+    return df["technique"].value_counts().to_dict()
+
+
 ############################# LOCATIONS #############################
 ############################# SIZE #############################
 def __get_pretty_size_statistics(df):
@@ -928,35 +986,6 @@ def __get_genotypes(df):
     return df["genotype"].value_counts().to_dict()
 
 
-def __get_ncbitaxonomy(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique NCBI taxonomy.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "ncbitaxonomy" column. The result is returned as a dictionary, where
-    the keys represent unique NCBI taxonomies, and the values represent the count of occurrences
-    for each taxonomy.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "ncbitaxonomy" with NCBI taxonomy information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique NCBI taxonomies, and the values represent
-        the count of occurrences for each taxonomy.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "ncbitaxonomy" containing categorical data
-    representing different NCBI taxonomies. The function counts the occurrences of each unique NCBI taxonomy
-    and returns the result as a dictionary.
-    """
-    return df["ncbitaxonomy"].value_counts().to_dict()
-
-
 def __get_genotypes(df):
     """
     Get unique genotypes from the DataFrame.
@@ -971,7 +1000,7 @@ def __get_genotypes(df):
     Returns:
         numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
     """
-    return df["genotype"].unique()
+    return df["genotype"].unique().tolist()
 
 
 def __get_genotype_frequency(df):
@@ -1001,34 +1030,6 @@ def __get_genotype_frequency(df):
     and returns the result as a dictionary.
     """
     return df["genotypes"].value_counts().to_dict()
-
-
-def __get_techniques(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique technique.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "technique" column. The result is returned as a dictionary, where the
-    keys represent unique techniques, and the values represent the count of occurrences for
-    each technique.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "technique" with technique information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique techniques, and the values represent
-        the count of occurrences for each technique.
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "technique" containing categorical data
-    representing different techniques. The function counts the occurrences of each unique technique
-    and returns the result as a dictionary.
-    """
-    return df["technique"].value_counts().to_dict()
 
 
 def __get_affiliations(df):
@@ -1116,31 +1117,6 @@ def __get_locations(df):
     return df["locations"].value_counts().to_dict()
 
 
-def __get_contributors(df):
-    """
-    Get a list of unique contributors from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "contributorname" column. It returns a list containing the names of unique contributors.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing contributor information.
-
-    Returns:
-    --------
-    list
-        A list containing the names of unique contributors present in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "contributorname" containing names of contributors.
-    The function extracts the unique names from the column and returns them as a list.
-    """
-    return df["contributorname"].unique()
-
-
 def report():
     """
     Generate a report summarizing data statistics for today's datasets.
@@ -1199,6 +1175,7 @@ def report():
 
     # contributors
     report["contributors"] = get_contributors(df)
+    report["contributors_frequency"] = get_contributor_frequency(df)
 
     # affiliations
     report["affiliation"] = get_affilations(df)
@@ -1212,12 +1189,19 @@ def report():
     report["species"] = get_species(df)
     report["species_frequency"] = get_species_frequency(df)
 
+    # ncbi taxonomy
     report["ncbitaxonomy"] = __get_ncbitaxonomy(df)
+    report["ncbitaxonomy_frequency"] = __get_ncbitaxonomy_frequency(df)
+
     report["genotype"] = __get_genotype(df)
     report["generalmodality"] = __get_generalmodality(df)
-    report["technique"] = __get_technique(df)
+
+    # techniques
+    report["techniques"] = __get_techniques(df)
+
+    # locatiomns
     report["locations"] = __get_locations(df)
-    report["percentage_of_version_1"] = __get__percentage_of_metadata_version_1(df)
+
     # report["is_reachable"] = df["URL"].apply(__is_reachable)
 
     # plots
