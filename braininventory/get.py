@@ -3,6 +3,7 @@ import json
 import random
 from datetime import date
 from pathlib import Path
+from datetime import datetime
 
 import folium
 import geoip2.database
@@ -21,7 +22,7 @@ import squarify
 
 
 ############################# METADATA_VERSION #############################
-def __get_metadata_version_frequency(df):
+def get_metadata_version_frequency(df):
     """
     Get a dictionary containing the count of occurrences of each unique metadata version.
 
@@ -52,7 +53,7 @@ def __get_metadata_version_frequency(df):
     return df["metadata_version"].value_counts().to_dict()
 
 
-def __get__percentage_of_metadata_version_1(df):
+def get__percentage_of_metadata_version_1(df):
     """
     Get the percentage of metadata version 1 samples in the input DataFrame.
 
@@ -79,7 +80,7 @@ def __get__percentage_of_metadata_version_1(df):
     return len(df[df["metadata_version"] == 1]) / len(df)
 
 
-def __get__percentage_of_metadata_version_2(df):
+def get__percentage_of_metadata_version_2(df):
     """
     Calculates the percentage of rows in the DataFrame that have 'metadata_version' equal to 2.
 
@@ -92,8 +93,37 @@ def __get__percentage_of_metadata_version_2(df):
     return len(df[df["metadata_version"] == 2]) / len(df)
 
 
+############################# DATE #############################
+def get_date(df):
+    """
+    Get unique genotypes from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
+    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
+    column.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
+    """
+
+    jsonFile = get_jsonFile(
+        df
+    )  # get the jsonFile information with get_jsonFile() function
+    dateList = jsonFile["creation_date"].split()  # get creation_date
+    mntList = dict(
+        (month, index) for index, month in enumerate(calendar.month_abbr) if month
+    )  # month abbr to number
+    yr = dateList[4]  # get year
+    mnt = mntList[dateList[1]]  # get month
+    day = dateList[2]  # get day
+    return f"{yr}-{day}-{mnt}"  # format in year-day-month
+
+
 ############################# PROJECTS #############################
-def __get_projects(df):
+def get_projects(df):
     """
     Get a dictionary containing the count of occurrences of each unique project.
 
@@ -123,14 +153,32 @@ def __get_projects(df):
     representing different projects and techniques, respectively. The function counts the occurrences of each
     unique project and technique and returns them as part of a single dictionary.
     """
-    return df["technique"].unique().to_dict()
+    return df["project"].unique()
 
 
 def get_projects_frequency(df):
-    return df["project"]
+    """
+    Calculate the frequency of each project in the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'project' column.
+
+    Returns:
+        dict: A dictionary where keys are unique project names, and values are their corresponding frequencies.
+
+    Example:
+        >>> import pandas as pd
+        >>> data = {
+        ...     'project': ['Project A', 'Project B', 'Project A', 'Project C', 'Project B', 'Project A']
+        ... }
+        >>> df = pd.DataFrame(data)
+        >>> get_projects_frequency(df)
+        {'Project A': 3, 'Project B': 2, 'Project C': 1}
+    """
+    return df["project"].value_counts().to_dict()
 
 
-def create_projects_plot(df):
+def create_project_plot(df):
     """
     Generate a treemap visualization for project counts in the input DataFrame.
 
@@ -166,37 +214,30 @@ def create_projects_plot(df):
 
 
 ############################# PROJECTS #############################
-def __get_affiliations(df):
+def get_affiliations_frequency(df):
+    """
+    Get the unique affiliations and their frequencies from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing an 'affiliation' column.
+
+    Returns:
+        pandas.Index: An index containing unique affiliations as its elements with their corresponding frequencies.
+    """
     return df["affiliation"].value_counts().keys()
 
 
-def __get_affilation(df):
+def get_affilations(df):
     """
-    Get a dictionary containing the count of occurrences of each unique affiliation.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "affiliation" column. The result is returned as a dictionary, where
-    the keys represent unique affiliations, and the values represent the count of occurrences
-    for each affiliation.
+    Get the unique affiliations from the given DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "affiliation" with affiliation information.
+        df (pandas.DataFrame): The input DataFrame containing an 'affiliation' column.
 
     Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique affiliations, and the values represent
-        the count of occurrences for each affiliation.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "affiliation" containing categorical data
-    representing different affiliations. The function counts the occurrences of each unique affiliation
-    and returns the result as a dictionary.
+        numpy.ndarray: An array containing the unique affiliations.
     """
-    return df["affiliation"].value_counts().to_dict()
+    return df["affiliation"].unique()
 
 
 def __clean_affiliations(df):
@@ -298,93 +339,34 @@ def __get_affiliation_frequency(df):
 
 
 ############################# AWARD NUMBER #############################
-def __get_awards(df):
+def get_award_numbers(df):
     """
-    Get an array containing unique award numbers.
-
-    This function takes a pandas DataFrame `df` as input and returns an array containing
-    the unique values found in the "award_number" column. Each value in the array represents
-    a unique award number associated with the data in the DataFrame.
+    Get the unique award numbers from the given DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
+        df (pandas.DataFrame): The input DataFrame containing an 'award_number' column.
 
     Returns:
-    --------
-    numpy.ndarray
-        An array of unique award numbers.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function extracts the unique values from the "award_number"
-    column and returns them as an array.
+        numpy.ndarray: An array containing the unique award numbers.
     """
     return df["award_number"].unique()
 
 
-def __get_award_numbers(df):
+def get_award_number_frequency(df):
     """
-    Get a dictionary containing the count of occurrences of each unique award number.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "award_number" column. The result is returned as a dictionary, where
-    the keys represent unique award numbers, and the values represent the count of occurrences
-    for each award number.
+    Calculate the frequency of each award number in the given DataFrame.
 
     Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
+        df (pandas.DataFrame): The input DataFrame containing an 'award_number' column.
 
     Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique award numbers, and the values represent
-        the count of occurrences for each award number.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function counts the occurrences of each unique award number
-    and returns the result as a dictionary.
-    """
-    return df["award_number"].value_counts().to_dict()
-
-
-def __get_award_number(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique award number.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "award_number" column. The result is returned as a dictionary, where
-    the keys represent unique award numbers, and the values represent the count of occurrences
-    for each award number.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "award_number" with award number information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique award numbers, and the values represent
-        the count of occurrences for each award number.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "award_number" containing categorical data
-    representing different award numbers. The function counts the occurrences of each unique award number
-    and returns the result as a dictionary.
+        dict: A dictionary where keys are unique award numbers, and values are their corresponding frequencies.
     """
     return df["award_number"].value_counts().to_dict()
 
 
 ############################# SPECIES #############################
-def __get_number_of_species(df):
+def get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
 
@@ -397,60 +379,95 @@ def __get_number_of_species(df):
     return len(df["species"].unique())
 
 
+def get_species(df):
+    """
+    Get the unique species names from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'species' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique names of species.
+    """
+    return df["species"].unique()
+
+
+def get_species_frequency(df):
+    """
+    Calculate the frequency of each species in the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'species' column.
+
+    Returns:
+        dict: A dictionary where keys are unique species names, and values are their corresponding frequencies.
+    """
+    return df["species"].value_counts().to_dict()
+
+
 ############################# NCBI TAXONOMY #############################
+
+############################# CONTRIBUTOR #############################
+def __get_contributors(df):
+    """
+    Get the unique contributors' names from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'contributorname' column.
+
+    Returns:
+        numpy.ndarray: An array containing the unique names of contributors.
+    """
+
+    return df["contributorname"].unique()
+
+
+def __get_contributor_frequency(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique contributor.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "contributor" column. The result is returned as a dictionary, where
+    the keys represent unique contributors, and the values represent the count of occurrences
+    for each contributor.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "contributor" with contributor information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique contributors, and the values represent
+        the count of occurrences for each contributor.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "contributor" containing categorical data
+    representing different contributors. The function counts the occurrences of each unique contributor
+    and returns the result as a dictionary.
+    """
+    return df["contributor"].value_counts().to_dict()
+
+
 ############################# GENOTYPE #############################
 ############################# GENERAL MODALITY #############################
-############################# TECHNIQUE #############################
-############################# LOCATIONS #############################
-############################# SIZE #############################
-############################# MD5 COVERAGE #############################
-############################# SHA256 COVERAGE #############################
-############################# SCORE #############################
-
-
-def __get_md5_coverage(df):
+def __get_general_modalities(df):
     """
-    Calculate the average MD5256 coverage from a DataFrame.
+    Get the counts of different modalities from the DataFrame.
+
+    This function takes a pandas DataFrame as input and extracts the counts of different modalities
+    from the 'generalmodality' column of the DataFrame. It returns a dictionary where the keys
+    represent the unique modalities, and the values represent their respective counts.
 
     Parameters:
-        df (pandas.DataFrame): The DataFrame containing the 'md5_coverage' column.
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
 
     Returns:
-        float: The average MD5 coverage.
-
-    Raises:
-        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
-    Example:
-        >>> data = {'md5_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
-        >>> df = pd.DataFrame(data)
-        >>> __get_md5_coverage(df)
-        0.79
+        dict: A dictionary with modalities as keys and their corresponding counts as values.
     """
-    average = df["md5_coverage"].mean()
-    return average
-
-
-def __get_sha256_coverage(df):
-    """
-    Calculate the average SHA256 coverage from a DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The DataFrame containing the 'sha256_coverage' column.
-
-    Returns:
-        float: The average SHA256 coverage.
-
-    Raises:
-        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
-
-    Example:
-        >>> data = {'sha256_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
-        >>> df = pd.DataFrame(data)
-        >>> __get_sha256_coverage(df)
-        0.79
-    """
-    average = df["sha256_coverage"].mean()
-    return average
+    return (df["generalmodality"].value_counts()).to_dict()
 
 
 def __create_general_modality_plot(df):
@@ -487,6 +504,153 @@ def __create_general_modality_plot(df):
     plt.savefig(filename)
 
 
+def __create_general_modality_treemap(df):
+    """
+    Create a treemap visualization for the general modality data.
+
+    This function takes a pandas DataFrame as input and generates a treemap visualization based on
+    the counts of different modalities in the 'generalmodality' column of the DataFrame. The function
+    utilizes the Squarify library to create the treemap.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+
+    Returns:
+        None: The function generates a treemap and saves it as an image file, but it does not return any value.
+            The treemap is saved with a filename in the format 'treemap-general-modality-YYYYMMDD.png', where
+            'YYYYMMDD' represents the current date in year-month-day format.
+    """
+
+    modality_counts = df["generalmodality"].value_counts().to_dict()
+    plt.figure(figsize=(14, 10))
+    values = list(modality_counts.values())
+    name = list(modality_counts.keys())
+    abbrName = __get_lable_dict(name)
+    colors = sb.color_palette("ocean", len(values))
+
+    num_labels = len(df.keys())
+    print(num_labels)
+
+    ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
+    ax.axis("off")
+    ax.invert_xaxis()
+    ax.set_aspect("equal")
+
+    legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
+    plt.legend(
+        legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
+    )
+
+    filename = f'treemap-general-modality-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
+
+
+############################# TECHNIQUE #############################
+############################# LOCATIONS #############################
+############################# SIZE #############################
+def __get_pretty_size_statistics(df):
+    """
+    Get human-readable size statistics from the DataFrame.
+
+    This method takes a pandas DataFrame as input and calculates size statistics using the '__get_size_statistics()'
+    method. The statistics include the minimum, maximum, mean, and total size of the data in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame.
+
+    Returns:
+        list: A list containing human-readable size statistics in the following order:
+            - Human-readable minimum size.
+            - Human-readable maximum size.
+            - Human-readable mean size.
+            - Human-readable total size.
+    """
+
+    size_stats = __get_size_statistics(df)
+
+    return [
+        humanize.naturalsize(size_stats[0]),
+        humanize.naturalsize(size_stats[1]),
+        humanize.naturalsize(size_stats[2]),
+        humanize.naturalsize(size_stats[3]),
+    ]
+
+
+def __get_size_statistics(df):
+    """
+    Calculate basic size statistics from the DataFrame.
+
+    This method takes a pandas DataFrame as input and calculates basic size statistics, including the minimum,
+    maximum, mean, and standard deviation of the 'size' column in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing the 'size' column.
+
+    Returns:
+        list: A list containing the size statistics in the following order:
+            - Minimum size.
+            - Maximum size.
+            - Mean size.
+            - Standard deviation of sizes.
+    """
+    min = df["size"].min()
+    max = df["size"].max()
+    average = df["size"].mean()
+    std = df["size"].std()
+
+    return [min, max, average, std]
+
+
+############################# MD5 COVERAGE #############################
+def __get_md5_coverage(df):
+    """
+    Calculate the average MD5256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'md5_coverage' column.
+
+    Returns:
+        float: The average MD5 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+    Example:
+        >>> data = {'md5_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_md5_coverage(df)
+        0.79
+    """
+    average = df["md5_coverage"].mean()
+    return average
+
+
+############################# SHA256 COVERAGE #############################
+def __get_sha256_coverage(df):
+    """
+    Calculate the average SHA256 coverage from a DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'sha256_coverage' column.
+
+    Returns:
+        float: The average SHA256 coverage.
+
+    Raises:
+        KeyError: If the 'sha256_coverage' column is not present in the DataFrame.
+
+    Example:
+        >>> data = {'sha256_coverage': [0.75, 0.82, 0.91, 0.68, 0.79]}
+        >>> df = pd.DataFrame(data)
+        >>> __get_sha256_coverage(df)
+        0.79
+    """
+    average = df["sha256_coverage"].mean()
+    return average
+
+
+############################# SCORE #############################
+
+############################# OTHER #############################
 def get_random_sample(df):
     """
     Retrieve a random JSON file from the DataFrame.
@@ -548,100 +712,6 @@ def __get_lable_dict(name_lst):
     }
 
 
-def __create_general_modality_treemap(df):
-    """
-    Create a treemap visualization for the general modality data.
-
-    This function takes a pandas DataFrame as input and generates a treemap visualization based on
-    the counts of different modalities in the 'generalmodality' column of the DataFrame. The function
-    utilizes the Squarify library to create the treemap.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
-
-    Returns:
-        None: The function generates a treemap and saves it as an image file, but it does not return any value.
-            The treemap is saved with a filename in the format 'treemap-general-modality-YYYYMMDD.png', where
-            'YYYYMMDD' represents the current date in year-month-day format.
-    """
-
-    modality_counts = df["generalmodality"].value_counts().to_dict()
-    plt.figure(figsize=(14, 10))
-    values = list(modality_counts.values())
-    name = list(modality_counts.keys())
-    abbrName = __get_lable_dict(name)
-    colors = sb.color_palette("ocean", len(values))
-
-    num_labels = len(df.keys())
-    print(num_labels)
-
-    ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
-    ax.axis("off")
-    ax.invert_xaxis()
-    ax.set_aspect("equal")
-
-    legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
-    plt.legend(
-        legend_patches, name, loc="upper left", bbox_to_anchor=(1, 1), fontsize="medium"
-    )
-
-    filename = f'treemap-general-modality-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig(filename)
-
-
-def __get_pretty_size_statistics(df):
-    """
-    Get human-readable size statistics from the DataFrame.
-
-    This method takes a pandas DataFrame as input and calculates size statistics using the '__get_size_statistics()'
-    method. The statistics include the minimum, maximum, mean, and total size of the data in the DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame.
-
-    Returns:
-        list: A list containing human-readable size statistics in the following order:
-            - Human-readable minimum size.
-            - Human-readable maximum size.
-            - Human-readable mean size.
-            - Human-readable total size.
-    """
-
-    size_stats = __get_size_statistics(df)
-
-    return [
-        humanize.naturalsize(size_stats[0]),
-        humanize.naturalsize(size_stats[1]),
-        humanize.naturalsize(size_stats[2]),
-        humanize.naturalsize(size_stats[3]),
-    ]
-
-
-def __get_size_statistics(df):
-    """
-    Calculate basic size statistics from the DataFrame.
-
-    This method takes a pandas DataFrame as input and calculates basic size statistics, including the minimum,
-    maximum, mean, and standard deviation of the 'size' column in the DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'size' column.
-
-    Returns:
-        list: A list containing the size statistics in the following order:
-            - Minimum size.
-            - Maximum size.
-            - Mean size.
-            - Standard deviation of sizes.
-    """
-    min = df["size"].min()
-    max = df["size"].max()
-    average = df["size"].mean()
-    std = df["size"].std()
-
-    return [min, max, average, std]
-
-
 def get_jsonFile(df):
     """
     Extract and format the date from the DataFrame.
@@ -667,34 +737,6 @@ def get_jsonFile(df):
     result = requests.get(jsonFileLink)
 
     return result.json()
-
-
-def get_date(df):
-    """
-    Get unique genotypes from the DataFrame.
-
-    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
-    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
-    column.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
-
-    Returns:
-        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
-    """
-
-    jsonFile = get_jsonFile(
-        df
-    )  # get the jsonFile information with get_jsonFile() function
-    dateList = jsonFile["creation_date"].split()  # get creation_date
-    mntList = dict(
-        (month, index) for index, month in enumerate(calendar.month_abbr) if month
-    )  # month abbr to number
-    yr = dateList[4]  # get year
-    mnt = mntList[dateList[1]]  # get month
-    day = dateList[2]  # get day
-    return f"{yr}-{day}-{mnt}"  # format in year-day-month
 
 
 def today():
@@ -886,64 +928,6 @@ def __get_genotypes(df):
     return df["genotype"].value_counts().to_dict()
 
 
-def __get_contributor(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique contributor.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "contributor" column. The result is returned as a dictionary, where
-    the keys represent unique contributors, and the values represent the count of occurrences
-    for each contributor.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "contributor" with contributor information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique contributors, and the values represent
-        the count of occurrences for each contributor.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "contributor" containing categorical data
-    representing different contributors. The function counts the occurrences of each unique contributor
-    and returns the result as a dictionary.
-    """
-    return df["contributor"].value_counts().to_dict()
-
-
-def __get_species(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique species.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "species" column. The result is returned as a dictionary, where the
-    keys represent unique species, and the values represent the count of occurrences for
-    each species.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "species" with species information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique species, and the values represent
-        the count of occurrences for each species.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "species" containing categorical data
-    representing different species. The function counts the occurrences of each unique species
-    and returns the result as a dictionary.
-    """
-    return df["species"].value_counts().to_dict()
-
-
 def __get_ncbitaxonomy(df):
     """
     Get a dictionary containing the count of occurrences of each unique NCBI taxonomy.
@@ -1019,35 +1003,6 @@ def __get_genotype_frequency(df):
     return df["genotypes"].value_counts().to_dict()
 
 
-def __get_generalmodality(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique general modality.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "generalmodality" column. The result is returned as a dictionary,
-    where the keys represent unique general modalities, and the values represent the count
-    of occurrences for each general modality.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "generalmodality" with general modality information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique general modalities, and the values represent
-        the count of occurrences for each general modality.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "generalmodality" containing categorical data
-    representing different general modalities. The function counts the occurrences of each unique general
-    modality and returns the result as a dictionary.
-    """
-    return df["generalmodality"].value_counts().to_dict()
-
-
 def __get_techniques(df):
     """
     Get a dictionary containing the count of occurrences of each unique technique.
@@ -1099,36 +1054,6 @@ def __get_affiliations(df):
     categorical data, where the function will count the occurrences of each unique value.
     """
     return df["affiliation"].value_counts().to_dict()
-
-
-def __get_contributors(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique contributor name.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "contributorname" column. The result is returned as a dictionary,
-    where the keys represent unique contributor names, and the values represent the count
-    of occurrences for each contributor name.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "contributorname" with contributor name information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique contributor names, and the values represent
-        the count of occurrences for each contributor name.
-
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "contributorname" containing categorical data
-    representing different contributor names. The function counts the occurrences of each unique
-    contributor name and returns the result as a dictionary.
-    """
-    return df["contributorname"].value_counts().to_dict()
 
 
 def techniques_frequency(df):
@@ -1216,23 +1141,6 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-def __get_modalities(df):
-    """
-    Get the counts of different modalities from the DataFrame.
-
-    This function takes a pandas DataFrame as input and extracts the counts of different modalities
-    from the 'generalmodality' column of the DataFrame. It returns a dictionary where the keys
-    represent the unique modalities, and the values represent their respective counts.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
-
-    Returns:
-        dict: A dictionary with modalities as keys and their corresponding counts as values.
-    """
-    return (df["generalmodality"].value_counts()).to_dict()
-
-
 def report():
     """
     Generate a report summarizing data statistics for today's datasets.
@@ -1274,18 +1182,37 @@ def report():
     # Build report
     report = {}
     report["date"] = tdate
-    report["metadata"] = __get_metadata_frequency(df)
-    report["metadata_version_1_coverage"] = __get__percentage_of_metadata_version_1(df)
-    report["metadata_version_2_coverage"] = __get__percentage_of_metadata_version_2(df)
+
+    # metadata version
+    report["metadata"] = get_metadata_version_frequency(df)
+    report["metadata_version_1_coverage"] = get__percentage_of_metadata_version_1(df)
+    report["metadata_version_2_coverage"] = get__percentage_of_metadata_version_2(df)
+
+    # projects
+    report["projects"] = get_projects(df)
+    report["projects_frequency"] = get_projects_frequency(df)
+    create_project_plot(df)
+
+    # datasets and scores
     report["number_of_datasets"] = __get_number_of_datasets(df)
-    report["number_of_project"] = __get_number_of_projects(df)
     report["completeness_score"] = __get_completeness_score(df)
-    report["contributor"] = __get_contributors(df)
-    report["affiliation"] = __get_affilation(df)
-    report["award_number"] = __get_award_number(df)
-    report["species"] = __get_species(df)
+
+    # contributors
+    report["contributors"] = get_contributors(df)
+
+    # affiliations
+    report["affiliation"] = get_affilations(df)
+    report["affiliation_frequency"] = get_affiliations_frequency(df)
+
+    # award numbers
+    report["award_numbers"] = get_award_numbers(df)
+    report["award_numbers_frequency"] = get_award_number_frequency(df)
+
+    # species
+    report["species"] = get_species(df)
+    report["species_frequency"] = get_species_frequency(df)
+
     report["ncbitaxonomy"] = __get_ncbitaxonomy(df)
-    report["samplelocalid"] = __get_samplelocalid(df)
     report["genotype"] = __get_genotype(df)
     report["generalmodality"] = __get_generalmodality(df)
     report["technique"] = __get_technique(df)
@@ -1324,3 +1251,49 @@ def create_tree_map(frequency_dict, width, height):
     output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
     fig.write_image(output_path)
     fig.show()
+
+
+# def __are_reachable(df):
+# def __clean_affiliations(df):
+# def __create_general_modality_plot(df):
+# def __create_general_modality_treemap(df):
+# def __get__percentage_of_metadata_version_1(df):
+# def __get__percentage_of_metadata_version_2(df):
+# def __get_affilation(df):
+# def __get_affiliation_frequency(df):
+# def __get_affiliations(df):
+# def __get_affiliations(df):
+# def __get_award_number(df):
+# def __get_award_numbers(df):
+# def __get_awards(df):
+# def __get_completeness_score(df):
+# def __get_contributor(df):
+# def __get_contributors(df):
+# def __get_contributors(df):
+# def __get_general_modalities(df):
+# def __get_genotype_frequency(df):
+# def __get_genotypes(df):
+# def __get_genotypes(df):
+# def __get_lable_dict(name_lst):
+# def __get_locations(df):
+# def __get_md5_coverage(df):
+# def __get_metadata_version_frequency(df):
+# def __get_ncbitaxonomy(df):
+# def __get_number_of_datasets(df):
+# def __get_number_of_species(df):
+# def __get_pretty_size_statistics(df):
+# def __get_projects(df):
+# def __get_sha256_coverage(df):
+# def __get_size_statistics(df):
+# def __get_species(df):
+# def __get_techniques(df):
+# def __is_reachable(url):
+# def create_projects_plot(df):
+# def create_tree_map(frequency_dict, width, height):
+# def get_date(df):
+# def get_jsonFile(df):
+# def get_projects_frequency(df):
+# def get_random_sample(df):
+# def report():
+# def techniques_frequency(df):
+# def today():
