@@ -1,9 +1,8 @@
 import calendar
 import json
 import random
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
-from datetime import datetime
 
 import folium
 import geoip2.database
@@ -165,15 +164,6 @@ def get_projects_frequency(df):
 
     Returns:
         dict: A dictionary where keys are unique project names, and values are their corresponding frequencies.
-
-    Example:
-        >>> import pandas as pd
-        >>> data = {
-        ...     'project': ['Project A', 'Project B', 'Project A', 'Project C', 'Project B', 'Project A']
-        ... }
-        >>> df = pd.DataFrame(data)
-        >>> get_projects_frequency(df)
-        {'Project A': 3, 'Project B': 2, 'Project C': 1}
     """
     return df["project"].value_counts().to_dict()
 
@@ -204,6 +194,7 @@ def create_project_plot(df):
     filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
     date when the function is executed.
     """
+
     df = df["project"].value_counts().to_dict()
     sizes_list = list(df.values())
     names_list = list(df.keys())
@@ -408,36 +399,7 @@ def get_species_frequency(df):
 ############################# NCBI TAXONOMY #############################
 def get_ncbitaxonomy(df):
     """
-    Get a dictionary containing the count of occurrences of each unique NCBI taxonomy.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "ncbitaxonomy" column. The result is returned as a dictionary, where
-    the keys represent unique NCBI taxonomies, and the values represent the count of occurrences
-    for each taxonomy.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "ncbitaxonomy" with NCBI taxonomy information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique NCBI taxonomies, and the values represent
-        the count of occurrences for each taxonomy.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "ncbitaxonomy" containing categorical data
-    representing different NCBI taxonomies. The function counts the occurrences of each unique NCBI taxonomy
-    and returns the result as a dictionary.
-    """
-    return df["ncbitaxonomy"].value_counts().to_dict()
-
-
-def ncbitaxonomy_frequency(df):
-    """
-    Get the unique NCBI taxonomy IDs and their frequencies from the given DataFrame.
+    Get the unique NCBI taxonomy IDs from the given DataFrame.
 
     Parameters:
         df (pandas.DataFrame): The input DataFrame containing an 'ncbitaxonomy' column.
@@ -446,6 +408,19 @@ def ncbitaxonomy_frequency(df):
         list: A list containing the unique NCBI taxonomy IDs.
     """
     return df["ncbitaxonomy"].unique().tolist()
+
+
+def get_ncbitaxonomy_frequency(df):
+    """
+    Calculate the frequency of each NCBI taxonomy ID in the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing an 'ncbitaxonomy' column.
+
+    Returns:
+        dict: A dictionary where keys are unique NCBI taxonomy IDs, and values are their corresponding frequencies.
+    """
+    return df["ncbitaxonomy"].value_counts().to_dict()
 
 
 ############################# CONTRIBUTOR #############################
@@ -489,26 +464,77 @@ def get_contributor_frequency(df):
     representing different contributors. The function counts the occurrences of each unique contributor
     and returns the result as a dictionary.
     """
-    return df["contributor"].value_counts().to_dict()
+    return df["contributorname"].value_counts().to_dict()
 
 
 ############################# GENOTYPE #############################
-############################# GENERAL MODALITY #############################
-def __get_general_modalities(df):
+def get_genotypes(df):
     """
-    Get the counts of different modalities from the DataFrame.
-
-    This function takes a pandas DataFrame as input and extracts the counts of different modalities
-    from the 'generalmodality' column of the DataFrame. It returns a dictionary where the keys
-    represent the unique modalities, and the values represent their respective counts.
+    Get the unique genotypes from the given DataFrame.
 
     Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'generalmodality' column.
+        df (pandas.DataFrame): The input DataFrame containing a 'genotype' column.
 
     Returns:
-        dict: A dictionary with modalities as keys and their corresponding counts as values.
+        list: A list containing the unique genotypes.
     """
-    return (df["generalmodality"].value_counts()).to_dict()
+    return df["genotype"].unique().tolist()
+
+
+def get_genotype_frequency(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique genotype.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "genotype" column. The result is returned as a dictionary, where the
+    keys represent unique genotypes, and the values represent the count of occurrences for
+    each genotype.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "genotype" with genotype information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique genotypes, and the values represent
+        the count of occurrences for each genotype.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "genotype" containing categorical data
+    representing different genotypes. The function counts the occurrences of each unique genotype
+    and returns the result as a dictionary.
+    """
+    return df["genotype"].value_counts().to_dict()
+
+
+############################# GENERAL MODALITY #############################
+def get_general_modalities(df):
+    """
+    Get the unique general modalities from the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'generalmodality' column.
+
+    Returns:
+        list: A list containing the unique general modalities.
+    """
+    return df["generalmodality"].unique().tolist()
+
+
+def get_general_modality_frequency(df):
+    """
+    Calculate the frequency of each general modality in the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame containing a 'generalmodality' column.
+
+    Returns:
+        dict: A dictionary where keys are unique general modalities, and values are their corresponding frequencies.
+    """
+    return df["generalmodality"].value_counts().to_dict()
 
 
 def __create_general_modality_plot(df):
@@ -797,6 +823,33 @@ def get_jsonFile(df):
     return result.json()
 
 
+def create_tree_map(frequency_dict, width, height):
+    """
+    Get a treemap of projects
+
+    Input parameter: dictionary
+    Output:  treemap image
+    """
+    labels = list(frequency_dict.keys())
+    values = list(frequency_dict.values())
+
+    fig = go.Figure(
+        go.Treemap(
+            labels=labels,
+            parents=[""] * len(labels),
+            values=values,
+            textinfo="label+value",
+        )
+    )
+
+    fig.update_layout(title="Projects", width=width, height=height)
+
+    today = date.today()
+    output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
+    fig.write_image(output_path)
+    fig.show()
+
+
 def today():
     """
     Get the daily inventory report data for today.
@@ -846,7 +899,7 @@ def today():
         return pd.DataFrame()
 
 
-def __get_number_of_datasets(df):
+def get_number_of_datasets(df):
     """
     Get the total number of datasets in the input DataFrame.
 
@@ -871,7 +924,7 @@ def __get_number_of_datasets(df):
     return len(df)
 
 
-def __get_completeness_score(df):
+def get_completeness_score(df):
     """
     Calculate the completeness score for a given DataFrame.
 
@@ -957,81 +1010,6 @@ def __are_reachable(df):
     return df["is_reachable"].sum() / len(df)
 
 
-def __get_genotypes(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique genotype.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "genotype" column. The result is returned as a dictionary, where the
-    keys represent unique genotypes, and the values represent the count of occurrences for
-    each genotype.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "genotype" with genotype information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique genotypes, and the values represent
-        the count of occurrences for each genotype.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "genotype" containing categorical data
-    representing different genotypes. The function counts the occurrences of each unique genotype
-    and returns the result as a dictionary.
-    """
-    return df["genotype"].value_counts().to_dict()
-
-
-def __get_genotypes(df):
-    """
-    Get unique genotypes from the DataFrame.
-
-    This function takes a pandas DataFrame as input and extracts the unique values from the 'genotype'
-    column of the DataFrame. It returns an array containing the unique genotypes present in the 'genotype'
-    column.
-
-    Parameters:
-        df (pandas.DataFrame): The input DataFrame containing the 'genotype' column.
-
-    Returns:
-        numpy.ndarray: An array containing the unique genotypes found in the 'genotype' column.
-    """
-    return df["genotype"].unique().tolist()
-
-
-def __get_genotype_frequency(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique genotype.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "genotypes" column. The result is returned as a dictionary, where the
-    keys represent unique genotypes, and the values represent the count of occurrences for
-    each genotype.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "genotypes" with genotype information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique genotypes, and the values represent
-        the count of occurrences for each genotype.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "genotypes" containing categorical data
-    representing different genotypes. The function counts the occurrences of each unique genotype
-    and returns the result as a dictionary.
-    """
-    return df["genotypes"].value_counts().to_dict()
-
-
 def __get_affiliations(df):
     """
     Return a dictionary containing the count of occurrences of each unique value
@@ -1087,7 +1065,7 @@ def techniques_frequency(df):
     return df["technique"].value_counts().to_dict()
 
 
-def __get_locations(df):
+def get_locations(df):
     """
     Get a dictionary containing the count of occurrences of each unique location.
 
@@ -1170,8 +1148,8 @@ def report():
     create_project_plot(df)
 
     # datasets and scores
-    report["number_of_datasets"] = __get_number_of_datasets(df)
-    report["completeness_score"] = __get_completeness_score(df)
+    report["number_of_datasets"] = get_number_of_datasets(df)
+    report["completeness_score"] = get_completeness_score(df)
 
     # contributors
     report["contributors"] = get_contributors(df)
@@ -1190,94 +1168,23 @@ def report():
     report["species_frequency"] = get_species_frequency(df)
 
     # ncbi taxonomy
-    report["ncbitaxonomy"] = __get_ncbitaxonomy(df)
-    report["ncbitaxonomy_frequency"] = __get_ncbitaxonomy_frequency(df)
+    report["ncbitaxonomy"] = get_ncbitaxonomy(df)
+    report["ncbitaxonomy_frequency"] = get_ncbitaxonomy_frequency(df)
 
-    report["genotype"] = __get_genotype(df)
-    report["generalmodality"] = __get_generalmodality(df)
+    # genotype
+    report["genotype"] = get_genotypes(df)
+    report["genotype_frequency"] = get_genotype_frequency(df)
+
+    # general modality
+    report["generalmodality"] = get_general_modalities(df)
 
     # techniques
-    report["techniques"] = __get_techniques(df)
+    report["techniques"] = get_techniques(df)
 
-    # locatiomns
-    report["locations"] = __get_locations(df)
-
-    # report["is_reachable"] = df["URL"].apply(__is_reachable)
+    # locations
+    report["locations"] = get_locations(df)
 
     # plots
-    get_projects_treemap(df)
+    create_project_plot(df)
 
     return report
-
-
-def create_tree_map(frequency_dict, width, height):
-    """
-    Get a treemap of projects
-
-    Input parameter: dictionary
-    Output:  treemap image
-    """
-    labels = list(frequency_dict.keys())
-    values = list(frequency_dict.values())
-
-    fig = go.Figure(
-        go.Treemap(
-            labels=labels,
-            parents=[""] * len(labels),
-            values=values,
-            textinfo="label+value",
-        )
-    )
-
-    fig.update_layout(title="Projects", width=width, height=height)
-
-    today = date.today()
-    output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
-    fig.write_image(output_path)
-    fig.show()
-
-
-# def __are_reachable(df):
-# def __clean_affiliations(df):
-# def __create_general_modality_plot(df):
-# def __create_general_modality_treemap(df):
-# def __get__percentage_of_metadata_version_1(df):
-# def __get__percentage_of_metadata_version_2(df):
-# def __get_affilation(df):
-# def __get_affiliation_frequency(df):
-# def __get_affiliations(df):
-# def __get_affiliations(df):
-# def __get_award_number(df):
-# def __get_award_numbers(df):
-# def __get_awards(df):
-# def __get_completeness_score(df):
-# def __get_contributor(df):
-# def __get_contributors(df):
-# def __get_contributors(df):
-# def __get_general_modalities(df):
-# def __get_genotype_frequency(df):
-# def __get_genotypes(df):
-# def __get_genotypes(df):
-# def __get_lable_dict(name_lst):
-# def __get_locations(df):
-# def __get_md5_coverage(df):
-# def __get_metadata_version_frequency(df):
-# def __get_ncbitaxonomy(df):
-# def __get_number_of_datasets(df):
-# def __get_number_of_species(df):
-# def __get_pretty_size_statistics(df):
-# def __get_projects(df):
-# def __get_sha256_coverage(df):
-# def __get_size_statistics(df):
-# def __get_species(df):
-# def __get_techniques(df):
-# def __is_reachable(url):
-# def create_projects_plot(df):
-# def create_tree_map(frequency_dict, width, height):
-# def get_date(df):
-# def get_jsonFile(df):
-# def get_projects_frequency(df):
-# def get_random_sample(df):
-# def report():
-# def techniques_frequency(df):
-# def today():
