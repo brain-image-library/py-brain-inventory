@@ -184,3 +184,28 @@ def report():
     get_projects_treemap(df)
 
     return report
+
+# Creates a segmented bar graph that shows the proportion of general modalities over the years. 
+# Dropped the null values (no creation dates)
+df[~df['creation_date'].isnull()]
+df['dates'] = pd.to_datetime(df['creation_date'])
+df['year'] = df['dates'].dt.year
+df = df.dropna(subset=['year'])
+df['year'] = df['year'].astype(int)
+grouped = df.groupby(df['dates'].dt.year)
+
+import matplotlib.pyplot as plt
+
+grouped = df.groupby(['year', 'generalmodality']).size().reset_index(name='count')
+
+pivot_df = grouped.pivot(index='year', columns='generalmodality', values='count').fillna(0)
+
+pivot_df.plot(kind='bar', stacked=True)
+
+plt.title('General Modalities')
+plt.ylabel('Number of Datasets')
+plt.xlabel('Year')
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+plt.show()
