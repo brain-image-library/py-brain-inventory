@@ -18,6 +18,7 @@ setuptools.setup(
         "pandarallel",
         "humanize",
         "geoip2",
+        "geopy",
         "seaborn",
         "matplotlib",
         "folium",
