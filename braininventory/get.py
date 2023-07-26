@@ -20,7 +20,158 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+#############################################PROJECTS 
 
+def __get_projects(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique project.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "project" column. The result is returned as a dictionary, where the
+    keys represent unique projects, and the values represent the count of occurrences for
+    each project. Additionally, the unique values in the "technique" column are also added
+    to the same dictionary as a separate entry.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "project" with project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing two entries:
+        - "project": A dictionary where the keys represent unique projects, and the values
+                     represent the count of occurrences for each project.
+        - "technique": A dictionary where the keys represent unique techniques, and the values
+                       represent the count of occurrences for each technique.
+
+    Note:
+    -----
+    The input DataFrame `df` should have columns named "project" and "technique" containing categorical data
+    representing different projects and techniques, respectively. The function counts the occurrences of each
+    unique project and technique and returns them as part of a single dictionary.
+    """ 
+    return df["technique"].unique().to_dict()
+
+
+def __get_project_names(df):
+    """
+    Gets the unique list of project names.
+
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a list containing the names of unique projects.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    list
+        A list containing the names of unique projects present in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as a list.
+    """
+    return df["project"].unique()
+
+
+def __get_list_of_projects(df):
+    """
+    Get a dictionary of unique project names from the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
+    "project" column. It returns a dictionary where the keys represent the unique project names,
+    and the values are set to None.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the unique project names as keys and None as values.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function extracts the unique project names from the column and returns them as keys in
+    the dictionary. The values for all keys are set to None.
+    """
+    return df["project"].unique().to_dict()
+
+
+def __get_number_of_projects(df):
+    """
+    Get the number of unique projects from the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and calculates the number of unique
+    project names present in the "project" column.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    int
+        The number of unique projects in the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "project" containing names of projects.
+    The function calculates the number of unique project names in the column and returns the count as an integer.
+    """
+    return len(df["project"].unique())
+
+
+def get_projects_treemap(df):
+    """
+    Generate a treemap visualization for project counts in the input DataFrame.
+
+    This function takes a pandas DataFrame `df` as input and creates a treemap visualization
+    to represent the relative proportions of each project based on their counts in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing project information.
+
+    Returns:
+    --------
+    None
+        The function displays the treemap visualization using matplotlib.pyplot.
+
+    Note:
+    -----
+    The function calculates the counts of each unique project in the input DataFrame `df` and
+    visualizes the relative proportions using a treemap plot. The size of each rectangle in the
+    treemap is proportional to the count of the corresponding project. The treemap is displayed
+    using the `squarify` and `matplotlib.pyplot` libraries. The plot is saved as a PNG file with a
+    filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
+    date when the function is executed.
+    """
+    df = df["project"].value_counts().to_dict()
+    sizes_list = list(df.values())
+    names_list = list(df.keys())
+    squarify.plot(sizes_list)
+
+    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
+    plt.savefig(filename)
+
+
+
+##############################################TECHNIQUE
+
+
+############################################LOCATIONS
 def __get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
@@ -1004,37 +1155,7 @@ def __get_contributors(df):
     return df["contributorname"].value_counts().to_dict()
 
 
-def __get_projects(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique project.
 
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "project" column. The result is returned as a dictionary, where the
-    keys represent unique projects, and the values represent the count of occurrences for
-    each project. Additionally, the unique values in the "technique" column are also added
-    to the same dictionary as a separate entry.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "project" with project information.
-
-    Returns:
-    --------
-    dict
-        A dictionary containing two entries:
-        - "project": A dictionary where the keys represent unique projects, and the values
-                     represent the count of occurrences for each project.
-        - "technique": A dictionary where the keys represent unique techniques, and the values
-                       represent the count of occurrences for each technique.
-
-    Note:
-    -----
-    The input DataFrame `df` should have columns named "project" and "technique" containing categorical data
-    representing different projects and techniques, respectively. The function counts the occurrences of each
-    unique project and technique and returns them as part of a single dictionary.
-    """
-    return df["technique"].unique().to_dict()
 
 
 def techniques_frequency(df):
@@ -1122,116 +1243,6 @@ def __get_contributors(df):
     return df["contributorname"].unique()
 
 
-def __get_project_names(df):
-    """
-    Gets the unique list of project names.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a list containing the names of unique projects.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    list
-        A list containing the names of unique projects present in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as a list.
-    """
-    return df["project"].unique()
-
-
-def __get_list_of_projects(df):
-    """
-    Get a dictionary of unique project names from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and extracts the unique values from the
-    "project" column. It returns a dictionary where the keys represent the unique project names,
-    and the values are set to None.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    dict
-        A dictionary containing the unique project names as keys and None as values.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function extracts the unique project names from the column and returns them as keys in
-    the dictionary. The values for all keys are set to None.
-    """
-    return df["project"].unique().to_dict()
-
-
-def __get_number_of_projects(df):
-    """
-    Get the number of unique projects from the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and calculates the number of unique
-    project names present in the "project" column.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    int
-        The number of unique projects in the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "project" containing names of projects.
-    The function calculates the number of unique project names in the column and returns the count as an integer.
-    """
-    return len(df["project"].unique())
-
-
-def get_projects_treemap(df):
-    """
-    Generate a treemap visualization for project counts in the input DataFrame.
-
-    This function takes a pandas DataFrame `df` as input and creates a treemap visualization
-    to represent the relative proportions of each project based on their counts in the DataFrame.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing project information.
-
-    Returns:
-    --------
-    None
-        The function displays the treemap visualization using matplotlib.pyplot.
-
-    Note:
-    -----
-    The function calculates the counts of each unique project in the input DataFrame `df` and
-    visualizes the relative proportions using a treemap plot. The size of each rectangle in the
-    treemap is proportional to the count of the corresponding project. The treemap is displayed
-    using the `squarify` and `matplotlib.pyplot` libraries. The plot is saved as a PNG file with a
-    filename formatted as "treemap-projects-YYYYMMDD.png", where "YYYYMMDD" represents the current
-    date when the function is executed.
-    """
-    df = df["project"].value_counts().to_dict()
-    sizes_list = list(df.values())
-    names_list = list(df.keys())
-    squarify.plot(sizes_list)
-
-    filename = f'treemap-projects-{datetime.now().strftime("%Y%m%d")}.png'
-    plt.savefig(filename)
 
 
 def __get_modalities(df):
