@@ -155,6 +155,11 @@ def report():
 
     return report
 
+df[~df['creation_data'].isnull()]
+df['dates'] = pd.to_datetime(df['creation_date'])
+df['year'] = df['dates'].dt.year
+df['year']
+
 # Create the positions and label on the timeline
 positions = [1, 3, 4, 7, 8]
 labels = ['Event A', 'Event B', 'Event C', 'Event D', 'Event E']
