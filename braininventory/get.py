@@ -26,30 +26,27 @@ import squarify
 """
 
 def __get_lable_dict(namelst): #return affiliation abbr (first letter of each word)
-    return {name: ''.join(word[0].upper() for word in name.split()) for name in namelst}
+        return {name: ''.join(word[0].upper() for word in name.split()) if count > threshold else ''
+            for name, count in namelst.items()}
 
 
-def __get_affiliation_treemap(df):
+def __get_affiliation_treemap(df, threshold=8): #makes sure not to display lable on map if size is too small to display abbr
     affiliation = df['affiliation'].value_counts().to_dict() #create affiliation:frequency dictionary
     
     plt.figure(figsize=(14,10))
-    values = list(affiliation.values()) #list affiliation
-    name = list(affiliation.keys()) #list frequencies
-    abbrName = __get_lable_dict(name) #get abbr
-    colors = sb.color_palette("ocean", len(values)) #color squares based on their values
+    abbrName = __get_lable_dict(affiliation, threshold) #gets abbreviated affiliation name thats size is smaller than the threshold
+    colors = sb.color_palette("ocean", len(affiliation))
 
-    num_labels = len(df.keys())
-
-    ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
+    ax = squarify.plot(sizes=list(affiliation.values()), color=colors, label=abbrName.values(), alpha=0.8)
     ax.axis('off')
     ax.invert_xaxis()
     ax.set_aspect('equal')
 
     legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
-    plt.legend(legend_patches, name, loc='upper left', bbox_to_anchor=(1, 1), fontsize='medium')
+    plt.legend(legend_patches, abbrName.keys(), loc='upper left', bbox_to_anchor=(1, 1), fontsize='small')
 
     plt.show()
-
+    
 def __get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
