@@ -20,6 +20,35 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+"""
+    Input: dataframe
+    Output: Tree map of Affiliation frequencies 
+"""
+
+def __get_lable_dict(namelst): #return affiliation abbr (first letter of each word)
+    return {name: ''.join(word[0].upper() for word in name.split()) for name in namelst}
+
+
+def __get_affiliation_treemap(df):
+    affiliation = df['affiliation'].value_counts().to_dict() #create affiliation:frequency dictionary
+    
+    plt.figure(figsize=(14,10))
+    values = list(affiliation.values()) #list affiliation
+    name = list(affiliation.keys()) #list frequencies
+    abbrName = __get_lable_dict(name) #get abbr
+    colors = sb.color_palette("ocean", len(values)) #color squares based on their values
+
+    num_labels = len(df.keys())
+
+    ax = squarify.plot(sizes=values, color=colors, label=abbrName.values(), alpha=0.8)
+    ax.axis('off')
+    ax.invert_xaxis()
+    ax.set_aspect('equal')
+
+    legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
+    plt.legend(legend_patches, name, loc='upper left', bbox_to_anchor=(1, 1), fontsize='medium')
+
+    plt.show()
 
 def __get_number_of_species(df):
     """
