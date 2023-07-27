@@ -1,0 +1,6 @@
+def __get_contributorname(df):
+    contributor_counts = df.groupby('contributorname').size().reset_index(name='number_of_entries')
+    return contributor_counts
+
+contributors_with_entries = __get_contributorname(df)
+print(contributors_with_entries)
