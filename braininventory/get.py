@@ -924,7 +924,7 @@ def get_number_of_datasets(df):
     return len(df)
 
 
-def get_completeness_score(df):
+j get_completeness_score(df):
     """
     Calculate the completeness score for a given DataFrame.
 
