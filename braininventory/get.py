@@ -631,6 +631,36 @@ def get_technique_frequency(df):
 
 
 ############################# LOCATIONS #############################
+
+def get_locations(df):
+    """
+    Get a dictionary containing the count of occurrences of each unique location.
+
+    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
+    unique value in the "locations" column. The result is returned as a dictionary, where the
+    keys represent unique locations, and the values represent the count of occurrences for
+    each location.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "locations" with location information.
+
+    Returns:
+    --------
+    dict
+        A dictionary where the keys represent unique locations, and the values represent
+        the count of occurrences for each location.
+
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "locations" containing categorical data
+    representing different locations. The function counts the occurrences of each unique location
+    and returns the result as a dictionary.
+    """
+    return df["locations"].value_counts().to_dict()
+
 ############################# SIZE #############################
 def __get_pretty_size_statistics(df):
     """
@@ -1061,37 +1091,6 @@ def techniques_frequency(df):
     and returns the result as a dictionary.
     """
     return df["technique"].value_counts().to_dict()
-
-
-def get_locations(df):
-    """
-    Get a dictionary containing the count of occurrences of each unique location.
-
-    This function takes a pandas DataFrame `df` as input and counts the occurrences of each
-    unique value in the "locations" column. The result is returned as a dictionary, where the
-    keys represent unique locations, and the values represent the count of occurrences for
-    each location.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "locations" with location information.
-
-    Returns:
-    --------
-    dict
-        A dictionary where the keys represent unique locations, and the values represent
-        the count of occurrences for each location.
-
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "locations" containing categorical data
-    representing different locations. The function counts the occurrences of each unique location
-    and returns the result as a dictionary.
-    """
-    return df["locations"].value_counts().to_dict()
-
 
 def report():
     """
