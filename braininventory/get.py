@@ -734,6 +734,31 @@ def __get_sha256_coverage(df):
 
 ############################# SCORE #############################
 
+def get_completeness_score(df):
+    """
+    Calculate the completeness score for a given DataFrame.
+
+    The completeness score is computed as the sum of the values in the "score" column
+    divided by the total number of rows in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas DataFrame
+        The input DataFrame containing a column named "score" which holds numerical values.
+
+    Returns:
+    --------
+    float
+        The completeness score of the DataFrame.
+
+    Note:
+    -----
+    The input DataFrame `df` should have a column named "score" containing numerical values.
+    The function calculates the completeness score as the sum of the values in the "score" column
+    divided by the total number of rows in the DataFrame.
+    """
+    return df["score"].sum() / len(df)
+
 ############################# OTHER #############################
 def get_random_sample(df):
     """
@@ -922,33 +947,6 @@ def get_number_of_datasets(df):
     of datasets present in the DataFrame.
     """
     return len(df)
-
-
-j get_completeness_score(df):
-    """
-    Calculate the completeness score for a given DataFrame.
-
-    The completeness score is computed as the sum of the values in the "score" column
-    divided by the total number of rows in the DataFrame.
-
-    Parameters:
-    -----------
-    df : pandas DataFrame
-        The input DataFrame containing a column named "score" which holds numerical values.
-
-    Returns:
-    --------
-    float
-        The completeness score of the DataFrame.
-
-    Note:
-    -----
-    The input DataFrame `df` should have a column named "score" containing numerical values.
-    The function calculates the completeness score as the sum of the values in the "score" column
-    divided by the total number of rows in the DataFrame.
-    """
-    return df["score"].sum() / len(df)
-
 
 def __is_reachable(url):
     """
