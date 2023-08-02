@@ -1435,3 +1435,16 @@ def create_tree_map(frequency_dict, width, height):
     output_path = f'treemap-{today.strftime("%Y%m%d")}.png'
     fig.write_image(output_path)
     fig.show()
+    
+def __get_dates(df):
+    """
+    Get a dictionary that has keys as creation months and values as the number of datasets
+
+    Input: dataframe
+
+    Output: dictionary
+    """
+    df['date'] = pd.to_datetime(df['creation_date'], format='%a %b %d %H:%M:%S %Y')
+    df['year_month'] = df['date'].dt.strftime('%B %Y')
+    grouped_data = df['year_month'].value_counts().to_dict()
+    return grouped_data
