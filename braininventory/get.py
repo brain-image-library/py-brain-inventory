@@ -1384,6 +1384,31 @@ def report():
 
     return report
 
+def create_general_modality_plot(df):
+  # Creates a segmented bar graph that shows the proportion of general modalities over the years. 
+  # Dropped the null values (no creation dates)
+  df[~df['creation_date'].isnull()]
+  df['dates'] = pd.to_datetime(df['creation_date'])
+  df['year'] = df['dates'].dt.year
+  df = df.dropna(subset=['year'])
+  df['year'] = df['year'].astype(int)
+  grouped = df.groupby(df['dates'].dt.year)
+
+  import matplotlib.pyplot as plt
+
+  grouped = df.groupby(['year', 'generalmodality']).size().reset_index(name='count')
+
+  pivot_df = grouped.pivot(index='year', columns='generalmodality', values='count').fillna(0)
+
+  pivot_df.plot(kind='bar', stacked=True)
+
+  plt.title('General Modalities')
+  plt.ylabel('Number of Datasets')
+  plt.xlabel('Year')
+  plt.xticks(rotation=45)
+  plt.tight_layout()
+
+  plt.show()
 
 def create_tree_map(frequency_dict, width, height):
     """
@@ -1411,7 +1436,7 @@ def create_tree_map(frequency_dict, width, height):
     fig.write_image(output_path)
     fig.show()
     
-def __get_dates():
+def __get_dates(df):
     """
     Get a dictionary that has keys as creation months and values as the number of datasets
 
