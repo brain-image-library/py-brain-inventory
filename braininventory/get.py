@@ -1448,3 +1448,57 @@ def __get_dates(df):
     df['year_month'] = df['date'].dt.strftime('%B %Y')
     grouped_data = df['year_month'].value_counts().to_dict()
     return grouped_data
+    
+def create_contributor_chart(df):
+    """
+    This function returns a pie chart with the percentage of contributions from each contributor.
+
+    Parameter: dataframe
+
+    Output: A pie chart when the function is called. 
+
+    """
+    df = df["contributorname"].value_counts().to_dict()
+    
+    labels = list(frequency_dict.keys())
+    values = list(frequency_dict.values())
+
+    # Calculate the total sum of values
+    total = sum(values)
+
+    # Calculate the percentage for each value
+    percentages = [(value / total) * 100 for value in values]
+
+    # Create a list to store labels and values for slices above 2%
+    labels_above_threshold = []
+    values_above_threshold = []
+
+    # Create a variable to store the sum of values below 2%
+    sum_below_threshold = 0
+
+    # Iterate over labels, values, and percentages
+    for label, value, percentage in zip(labels, values, percentages):
+        if percentage >= 2:
+            labels_above_threshold.append(label)
+            values_above_threshold.append(value)
+        else:
+            sum_below_threshold += value
+
+    # Append "Other" label and value for slices below 2%
+    if sum_below_threshold > 0:
+        labels_above_threshold.append("Other")
+        values_above_threshold.append(sum_below_threshold)
+
+    # Plot the pie chart with labels and values above the threshold using Seaborn
+    plt.figure(figsize=(8, 6))
+    sb.set_palette("pastel")
+    plt.pie(values_above_threshold, labels=labels_above_threshold, autopct='%1.1f%%', textprops={'fontsize': 7})
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.title('Contributor Percentage')
+
+    today = date.today()
+    output_path = f'pie-chart-{today.strftime("%Y%m%d")}.png'
+    plt.savefig(output_path)
+    plt.show()
+
+
