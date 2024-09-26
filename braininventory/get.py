@@ -20,7 +20,33 @@ pandarallel.initialize(nb_workers=8, progress_bar=True)
 import matplotlib.pyplot as plt
 import squarify
 
+"""
+    Input: dataframe
+    Output: Tree map of Affiliation frequencies 
+"""
 
+def __get_lable_dict(namelst): #return affiliation abbr (first letter of each word)
+        return {name: ''.join(word[0].upper() for word in name.split()) if count > threshold else ''
+            for name, count in namelst.items()}
+
+
+def __get_affiliation_treemap(df, threshold=8): #makes sure not to display lable on map if size is too small to display abbr
+    affiliation = df['affiliation'].value_counts().to_dict() #create affiliation:frequency dictionary
+    
+    plt.figure(figsize=(14,10))
+    abbrName = __get_lable_dict(affiliation, threshold) #gets abbreviated affiliation name thats size is smaller than the threshold
+    colors = sb.color_palette("ocean", len(affiliation))
+
+    ax = squarify.plot(sizes=list(affiliation.values()), color=colors, label=abbrName.values(), alpha=0.8)
+    ax.axis('off')
+    ax.invert_xaxis()
+    ax.set_aspect('equal')
+
+    legend_patches = [plt.Rectangle((0, 0), 1, 1, fc=color) for color in colors]
+    plt.legend(legend_patches, abbrName.keys(), loc='upper left', bbox_to_anchor=(1, 1), fontsize='small')
+
+    plt.show()
+    
 def __get_number_of_species(df):
     """
     Calculate the number of unique species in the given DataFrame.
